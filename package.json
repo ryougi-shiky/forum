@@ -1,0 +1,22 @@
+{
+  "name": "login_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryougi-shiky/web-practice1-mysql.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryougi-shiky/web-practice1-mysql/issues"
+  },
+  "homepage": "https://github.com/ryougi-shiky/web-practice1-mysql#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
