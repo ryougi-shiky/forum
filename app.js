@@ -41,6 +41,13 @@ app.get('/', (req, res) => {
   res.sendFile(homeUrl)
 })
 
+const registerUrl = path.join(__dirname, '/public/register.html')
+
+app.get('/register', (req, res) => {
+  res.sendFile(registerUrl)
+})
+
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
