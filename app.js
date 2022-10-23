@@ -1,4 +1,5 @@
 const express = require('express')
+const http = require('http')
 const path = require('path')
 const app = express()
 const port = 3000
@@ -18,11 +19,9 @@ var conn = mysql.createConnection({
 });
 
 
-var userID = 1;
 app.post('/register', function(req, res){
   var username = req.body.reg_username
   var pwd = req.body.reg_password
-  userID = userID+1
   var query = "INSERT INTO user (userName, pwd) VALUES ('" + 
   username.toString() + "', '" + pwd.toString() + "'" + ");";
   conn.connect(function(err){
@@ -31,22 +30,43 @@ app.post('/register', function(req, res){
     conn.query(query, function(err, result){
       if(err) throw err;
       console.log(path.join('username: ', username.toString(), '  pwd: ', pwd.toString()))
+      console.log("result: " + JSON.stringify(result))
     }) 
   })
   console.log("registration complete")
+  res.sendFile(registerUrl)
+})
+
+app.post('/login', function(req, res){
+  var username = req.body.login_username
+  var pwd = req.body.login_password
+  var query = "SELECT pwd FROM user WHERE userName = '" + username.toString() + "';"
+  conn.connect(function(err){
+    if(err) throw err
+    console.log("start login")
+    conn.query(query, function(err, result){
+      if(err) throw err
+      console.log("result: " + JSON.stringify(result))
+      var retPwd = JSON.parse(JSON.stringify(result))
+      if (retPwd[0].pwd == pwd){
+        console.log("user " + username + " login successfully")
+        res.sendFile(loginUrl)
+      } else {
+        console.log("wrong password: " + retPwd[0].pwd)
+        res.end()
+      }
+    })
+  })
+  
 })
 
 const homeUrl = path.join(__dirname, '/public/home.html')
-app.get('/', (req, res) => {
+app.get('/', function(req, res){
   res.sendFile(homeUrl)
 })
 
 const registerUrl = path.join(__dirname, '/public/register.html')
-
-app.get('/register', (req, res) => {
-  res.sendFile(registerUrl)
-})
-
+const loginUrl = path.join(__dirname, '/public/login.html')
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
