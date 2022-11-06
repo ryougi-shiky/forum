@@ -37,3 +37,25 @@ If use
 $ npx express-generator
 
 May not able to start the server
+
+For heroku hosting.
+
+Deploy MySQL database, go to resource, addon clearDB
+
+Go to setting, config
+
+heroku config | grep CLEARDB_DATABASE_URL
+
+Get database configs get database info
+
+or
+
+heroku config:set DATABASE_URL='mysql://b8ea8ff3653c7b:6c6b9c93@us-cdbr-east-06.cleardb.net/heroku_b623dcfae74a5b4?reconnect=true'
+
+username: b8ea8ff3653c7b
+
+password: 6c6b9c93
+
+host: us-cdbr-east-06.cleardb.net
+
+database: heroku_b623dcfae74a5b4
