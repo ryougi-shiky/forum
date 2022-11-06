@@ -12,10 +12,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static('public'));
 
 var conn = mysql.createConnection({
-  host: 'localhost',
-  user: 'ani',
-  password: 'password',
-  database: 'Ani'
+  host: 'us-cdbr-east-06.cleardb.net',
+  user: 'b8ea8ff3653c7b',
+  password: '6c6b9c93',
+  database: 'heroku_b623dcfae74a5b4'
 });
 
 
