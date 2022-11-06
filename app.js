@@ -20,7 +20,6 @@ var conn = mysql.createConnection({
 conn.connect(function(err){
   if(err) throw err
   console.log("Connected to database Ani")
-  
 })
 
 app.post('/register', function(req, res){
@@ -55,7 +54,6 @@ app.post('/login', function(req, res){
       res.end()
     }
   })
-  
 })
 
 const homeUrl = path.join(__dirname, '/public/home.html')
