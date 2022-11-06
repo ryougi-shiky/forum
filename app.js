@@ -18,31 +18,30 @@ var conn = mysql.createConnection({
   database: 'Ani'
 });
 
-
-app.post('/register', function(req, res){
-  var username = req.body.reg_username
-  var pwd = req.body.reg_password
-  var query = "INSERT INTO user (userName, pwd) VALUES ('" + 
-  username.toString() + "', '" + pwd.toString() + "'" + ");";
-  conn.connect(function(err){
+conn.connect(function(err){
     if(err) throw err
     console.log("Connected to database Ani")
+  })
+  
+app.post('/register', function(req, res){
+    var username = req.body.reg_username
+    var pwd = req.body.reg_password
+    var query = "INSERT INTO user (userName, pwd) VALUES ('" + 
+    username.toString() + "', '" + pwd.toString() + "'" + ");";
+    
     conn.query(query, function(err, result){
       if(err) throw err;
       console.log(path.join('username: ', username.toString(), '  pwd: ', pwd.toString()))
       console.log("result: " + JSON.stringify(result))
     }) 
+    console.log("registration complete")
+    res.sendFile(registerUrl)
   })
-  console.log("registration complete")
-  res.sendFile(registerUrl)
-})
-
+  
 app.post('/login', function(req, res){
-  var username = req.body.login_username
-  var pwd = req.body.login_password
-  var query = "SELECT pwd FROM user WHERE userName = '" + username.toString() + "';"
-  conn.connect(function(err){
-    if(err) throw err
+    var username = req.body.login_username
+    var pwd = req.body.login_password
+    var query = "SELECT pwd FROM user WHERE userName = '" + username.toString() + "';"
     console.log("start login")
     conn.query(query, function(err, result){
       if(err) throw err
@@ -56,8 +55,6 @@ app.post('/login', function(req, res){
         res.end()
       }
     })
-  })
-  
 })
 
 const homeUrl = path.join(__dirname, '/public/home.html')
