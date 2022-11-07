@@ -17,45 +17,45 @@ var conn = mysql.createConnection({
   password: 'password',
   database: 'Ani'
 });
+conn.connect(function (err) {
+  if (err) 
+    throw err;
+  console.log("Connected to database Ani");
+});
+app.post("/register", function (req, res) {
+  var username = req.body.reg_username;
+  var pwd = req.body.reg_password;
+  var query = "INSERT INTO user (userName, pwd) VALUES ('" + username.toString() + "', '" + pwd.toString() + "'" + ");";
 
-conn.connect(function(err){
-    if(err) throw err
-    console.log("Connected to database Ani")
-  })
-  
-app.post('/register', function(req, res){
-    var username = req.body.reg_username
-    var pwd = req.body.reg_password
-    var query = "INSERT INTO user (userName, pwd) VALUES ('" + 
-    username.toString() + "', '" + pwd.toString() + "'" + ");";
-    
-    conn.query(query, function(err, result){
-      if(err) throw err;
-      console.log(path.join('username: ', username.toString(), '  pwd: ', pwd.toString()))
-      console.log("result: " + JSON.stringify(result))
-    }) 
-    console.log("registration complete")
-    res.sendFile(registerUrl)
-  })
-  
-app.post('/login', function(req, res){
-    var username = req.body.login_username
-    var pwd = req.body.login_password
-    var query = "SELECT pwd FROM user WHERE userName = '" + username.toString() + "';"
-    console.log("start login")
-    conn.query(query, function(err, result){
-      if(err) throw err
-      console.log("result: " + JSON.stringify(result))
-      var retPwd = JSON.parse(JSON.stringify(result))
-      if (retPwd[0].pwd == pwd){
-        console.log("user " + username + " login successfully")
-        res.sendFile(loginUrl)
-      } else {
-        console.log("wrong password: " + retPwd[0].pwd)
-        res.end()
-      }
-    })
-})
+  conn.query(query, function (err, result) {
+    if (err) 
+      throw err;
+    console.log(path.join("username: ", username.toString(), "  pwd: ", pwd.toString()));
+    console.log("result: " + JSON.stringify(result));
+  });
+  console.log("registration complete");
+  res.sendFile(registerUrl);
+});
+
+app.post("/login", function (req, res) {
+  var username = req.body.login_username;
+  var pwd = req.body.login_password;
+  var query = "SELECT pwd FROM user WHERE userName = '" + username.toString() + "';";
+  console.log("start login");
+  conn.query(query, function (err, result) {
+    if (err) 
+      throw err;
+    console.log("result: " + JSON.stringify(result));
+    var retPwd = JSON.parse(JSON.stringify(result));
+    if (retPwd[0].pwd == pwd) {
+      console.log("user " + username + " login successfully");
+      res.sendFile(loginUrl);
+    } else {
+      console.log("wrong password: " + retPwd[0].pwd);
+      res.end();
+    }
+  });
+});
 
 const homeUrl = path.join(__dirname, '/public/home.html')
 app.get('/', function(req, res){
