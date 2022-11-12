@@ -4,7 +4,6 @@ const fs = require('fs')
 const path = require('path')
 const app = express()
 
-const MongoClient = require("mongodb").MongoClient;
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
@@ -16,9 +15,8 @@ app.get('/', function(req, res){
   res.sendFile(homeUrl)
 })
 
-const login_register = require('./route/home.js')
+const login_register = require('./route/home.js');
 app.use('/', login_register);
-
 
 const port = process.env.PORT || 3000;
 
