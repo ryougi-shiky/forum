@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path')
-const Vue = require("vue");
+const fs = require('fs');
+const alert = require('alert');
 var jsdom = require("jsdom");
 var JSDOM = jsdom.JSDOM;
 const MongoClient = require("mongodb").MongoClient;
@@ -25,16 +26,7 @@ var hints = new Vue({
     }
 });
 */
-
-function user_exist(){
-    document.getElementById("register_err").innerHTML = "Username already exists! Try another username";
-}
-
-function wrong_password(){
-    document.getElementById("login_err").innerHTML = "Username already exists! Try another username";
-}
-
-router.post('/register', function(req, res){
+router.post('/register', function(req, res, next){
     var username = req.body.reg_username
     var pwd = req.body.reg_password
     var register_obj = [
@@ -51,7 +43,7 @@ router.post('/register', function(req, res){
         if (result.length > 0){
             console.log("account username: ", result[0]["username"]);
             console.log("account exist");
-            user_exist();
+            alert("Username already exists! Try another username");
 			res.redirect(req.get('host'));
         } else {
             console.log("account creating");
@@ -65,7 +57,7 @@ router.post('/register', function(req, res){
 	});
 })
 
-router.post('/login', function(req, res){
+router.post('/login', function(req, res, next){
   var username = req.body.login_username
   var pwd = req.body.login_password
 
@@ -85,7 +77,7 @@ router.post('/login', function(req, res){
 			res.sendFile(loginUrl);
 		} else {
 			console.log("password not equal");
-            hints.wrong_password()
+            alert("Password incorrect! Try again");
 			res.redirect(req.get('host'));
 		}
 	});

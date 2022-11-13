@@ -3,8 +3,11 @@
 <head>
     <title>AniAni</title>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width">
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript" src="../route/home.js"></script>
+    <script type="text/javascript" src="js/home_wrong_input_hints.js"></script>
 </head>
 
 <body>
@@ -16,8 +19,8 @@
         <label for="reg_password">Password</label><br>
         <input type="text" id="reg_password" name="reg_password"><br>
         <input type="submit" value="Register"">
-        <p id="register_err">{{ existsUsername }}</p>
     </form>
+    <div id="register_err">{{ existsUsername }}</div>
     <h2>Login</h2>
     <form action="/login" method="post">
         <label for="login_username">Username</label><br>
@@ -27,7 +30,10 @@
         <input type="submit", value="Login"">
         <p id="login_err">{{ wrongPwd }}</p>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script type="text/javascript" src="../route/home.js"></script>
+    
+    <script>
+        
+    </script>
+    
 </body>
 </html>
