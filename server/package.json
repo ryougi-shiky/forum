@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "watch": "nodemon --ext *"
   },
   "dependencies": {
@@ -11,6 +11,7 @@
     "cookie-parser": "~1.4.4",
     "create-vue": "^3.4.0",
     "debug": "~2.6.9",
+    "ejs": "^3.1.8",
     "express": "~4.16.1",
     "file-loader": "^6.2.0",
     "http-errors": "~1.6.3",
