@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Icon from "../favicon.ico";
 
 class AccountForm extends Component {
     constructor(props){
@@ -6,6 +7,7 @@ class AccountForm extends Component {
         this.state = { 
             username: "",
             password: "",
+            submitted: "Not submitted",
         };
         this.enterUsername = this.enterUsername.bind(this);
         this.enterPassword = this.enterPassword.bind(this);
@@ -23,6 +25,7 @@ class AccountForm extends Component {
     submit(event){
         console.log("username: ", this.state.username, "     password: ", this.state.password);
         alert("username: " + this.state.username + "     password: " + this.state.password);
+        this.setState({submitted: "submitted"});
     }
 
     render() { 
@@ -37,12 +40,13 @@ class AccountForm extends Component {
                     <input id="reg_password" type="text" onChange={this.enterPassword}></input><br></br>
                     <input type="submit" value="Register"></input>
                 </form>
+                <p>{ this.state.submitted }</p>
 
                 <h2>Login</h2>
                 <form onSubmit={this.submit}>
-                    <label for="login_username" id="login_username">Username</label><br></br>
+                    <label htmlFor="login_username" id="login_username">Username</label><br></br>
                     <input type="text" onChange={this.enterUsername}></input><br></br>
-                    <label for="login_password" id="login_password">Password</label><br></br>
+                    <label htmlFor="login_password" id="login_password">Password</label><br></br>
                     <input type="text" onChange={this.enterPassword}></input><br></br>
                     <input type="submit" value="Login"></input>
                 </form>

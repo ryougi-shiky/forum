@@ -1,9 +1,0 @@
-CREATE DATABASE Ani;
-USE Ani;
-
-CREATE TABLE user(
-    userID int NOT NULL AUTO_INCREMENT,
-    userName VARCHAR(20) NOT NULL,
-    pwd VARCHAR(20) NOT NULL,
-    PRIMARY KEY(userID)
-);
