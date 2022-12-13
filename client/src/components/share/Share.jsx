@@ -1,5 +1,5 @@
 import React from 'react'
-import "./css/share.css";
+import "./share.css";
 
 import { PermMedia, Label, Room, EmojiEmotions } from '@mui/icons-material';
 
