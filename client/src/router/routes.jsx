@@ -11,10 +11,10 @@ const BaseRouter = () => {
             <div>
             </div>
             <Routes>
-                <Route path="/" element={<Home />}></Route>
-                <Route path="/profile" element={<Profile />}></Route>
-                <Route path="/login" element={<Login />}></Route>
-                <Route path="/register" element={<Register />}></Route>
+                <Route exact path="/" element={<Home />}></Route>
+                <Route path="/profile/:username" element={<Profile />}></Route>
+                <Route exact path="/login" element={<Login />}></Route>
+                <Route exact path="/register" element={<Register />}></Route>
 
                 {/* <Route path="/login" element={<Login />}></Route>
                 <Route path="/recordlist" element={<RecordList />}></Route>

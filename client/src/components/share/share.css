@@ -33,24 +33,26 @@
 }
 
 .shareHr {
-  margin: 20px 10px 20px 10px;
+  margin: 30px 20px 30px 20px;
 }
 
 .shareBottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 10px;
 }
 
 .shareOptions {
   display: flex;
-  align-items: center;
-  margin: 0 10px;
-  cursor: pointer;
+  margin-left: 20px;
 }
 
 .shareOption {
-  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  cursor: pointer;
 }
 
 .shareIcon {
@@ -65,7 +67,7 @@
 
 .shareButton {
   border: none;
-  padding: 7;
+  padding: 7px;
   border-radius: 5px;
   background-color: green;
   font-weight: 500;
