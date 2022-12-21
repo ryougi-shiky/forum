@@ -2,10 +2,6 @@ const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
-router.get('/', (req, res) => {
-  res.send('Users');
-});
-
 // update users
 router.put("/:id", async (req, res) => {
   if (req.body.id === req.params.id || req.body.isAdmin){
@@ -46,15 +42,21 @@ router.delete("/:id", async (req, res) => {
   }
 });
 // get users
-router.get('/:id', async (req, res) => {
+router.get('/', async (req, res) => {
+	const uid = req.query.uid;
+	const username = req.query.username;
+	console.log("uid: ", uid, " username: ", username);
 	try {
-		const user = await User.findById(req.params.id);
+		const user = uid 
+			? await User.findById(uid)
+			: await User.findOne({username: username});
+		console.log("user: ", user);
 		const {password, updatedAt, ...other} = user._doc;
 		res.status(200).json(other);
 	} catch (err) {
 		return res.status(500).json(err);
 	}
-})
+});
 // follow users
 router.put('/:id/follow', async (req, res) => {
 	// make sure not follow myself

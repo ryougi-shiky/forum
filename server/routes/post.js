@@ -74,10 +74,12 @@ router.get('/getpost/:id', async (req, res) => {
   }
 })
 
-// get timeline posts
-router.get('/timeline', async (req, res) => {
+// get moments posts
+router.get('/moments/:userId', async (req, res) => {
   try {
-    const currentUser = await User.findById(req.body.uid);
+    console.log("req.params.userId: ", req.params.userId);
+    const currentUser = await User.findById(req.params.userId);
+    
     const userPosts = await Post.find({ uid: currentUser._id });
     const friendPosts = await Promise.all(
       currentUser.followings.map(friendID => {
@@ -91,5 +93,16 @@ router.get('/timeline', async (req, res) => {
   }
 })
 
+// get user's all posts
+router.get('/profile/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    const posts = await Post.find({ uid: user._id });
+    res.status(200).json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+})
 
 module.exports = router;
