@@ -26,10 +26,10 @@ export default function Profile() {
 
   var coverImg = "/assets/icon/person/noCover.png";
   var profilePicture = "/assets/icon/person/noAvatar.png";
-  if (user.coverImg != ""){
+  if (user.coverImg !== ""){
     coverImg = user.coverImg;
   }
-  if (user.profilePicture != ""){
+  if (user.profilePicture !== ""){
     profilePicture = user.profilePicture;
   }
   
