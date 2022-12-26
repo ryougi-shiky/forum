@@ -10,15 +10,22 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import axios from 'axios';
 import * as timeago from 'timeago.js';
 import { Link } from 'react-router-dom';
-// import { Link } from '@mui/material';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function Post({post}) {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const [like, setLike] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(false);
-
+  const {user: currentUser} = useContext(AuthContext);
   const [user, setUser] = useState({});
 
+  useEffect(() => {
+    setIsLiked(post.likes.includes(currentUser._id));
+  
+
+  }, [currentUser._id, post.likes]);
+  
   useEffect(()=>{
     const fetchUser = async () => {
       const res = await axios.get(`${backend_url}/users/${post.uid}`);
@@ -28,7 +35,12 @@ export default function Post({post}) {
     fetchUser();
   },[post.uid])
 
-  const likeHandler = () => {
+  const likeHandler = async () => {
+    try {
+      await axios.put(`${backend_url}/users/post/like/${post._id}`, {uid: currentUser._id});
+    } catch (err) {
+      
+    }
     setLike(isLiked ? like-1 : like+1);
     setIsLiked(!isLiked);
   }
@@ -39,7 +51,7 @@ export default function Post({post}) {
         <div className="postTop">
           <div className="postTopLeft">
             <Link to={`profile/${user.username}`}>
-              <img className='postProfileImg' src={user.profilePicture} alt='' />
+              <img className='postProfileImg' src={user.profilePicture ? user.profilePicture : '/assets/icon/person/noAvatar.png'} alt='' />
             </Link>
             <span className="postUsername">
               {user.username}
