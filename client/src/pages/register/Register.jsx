@@ -1,7 +1,46 @@
-import React from 'react'
+import React from 'react';
+import { useRef, useContext } from 'react';
+import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
+
 import "./register.css";
+import { AuthContext } from '../../context/AuthContext';
+import axios from 'axios';
 
 export default function Register() {
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
+  const username = useRef();
+  const email = useRef();
+  const password = useRef();
+  const passwordAgain = useRef();
+  const {user, isFetching, error, dispatch} = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    if (passwordAgain.current.value !== password.current.value){
+      password.current.setCustomValidity("Passwords don't match !");
+    } else {
+      const user = {
+        username: username.current.value,
+        email: email.current.value,
+        password: password.current.value,
+      }
+      try {
+        const res = await axios.post(`${backend_url}/users/auth/register`, user);
+        navigate('/login');
+      } catch (err) {
+        console.log(err);
+      }
+      
+    }
+  }
+  console.log(user);
+
+  const toLogin = () => {
+    navigate('/login');
+  }
+
   return (
     <React.Fragment>
       <div className="register">
@@ -13,15 +52,16 @@ export default function Register() {
             </span>
           </div>
           <div className="registerRight">
-            <div className="registerBox">
-              <input placeholder='Username' type="text" className="registerInput" />
-              <input placeholder='Email' type="text" className="registerInput" />
-              <input placeholder='Password' type="text" className="registerInput" />
-              <input placeholder='Password Again' type="text" className="registerInput" />
-              <button className="registerButton">Sign Up</button>
+            <form className="registerBox" onSubmit={handleClick}>
+              <input placeholder='Username' type="text" className="registerInput" ref={username} required />
+              <input placeholder='Email' type="email" className="registerInput" ref={email} required />
+              <input placeholder='Password' type="password" className="registerInput" ref={password} required minLength={6} />
+              <input placeholder='Password Again' type="password" className="registerInput" ref={passwordAgain} required />
+              <button className="registerButton" type='submit'>Sign Up</button>
               <span className="registerForgot">Already had an account?</span>
-              <button className="registerRegisterButton">Log into Account</button>
-            </div>
+              <Link to='/login'><button className="registerRegisterButton">Log into Account</button></Link>
+            </form>
+            {/* <button className="registerRegisterButton" type='button' onClick={toLogin} >Log into Account</button> */}
           </div>
         </div>
       </div>

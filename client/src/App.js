@@ -3,19 +3,23 @@ import Profile from "./pages/profile/Profile"
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 
-import {BrowserRouter, Routes, Route, useParams} from "react-router-dom";
+import {BrowserRouter, Routes, Route, useParams, Navigate} from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
+  const {user} = useContext(AuthContext);
+
   return (
     <BrowserRouter>
         <div>
             
         </div>
         <Routes>
-            <Route exact path="/" element={<Home />}></Route>
+            <Route exact path="/" element={user ? <Home /> : <Register />}></Route>
+            <Route exact path="/login" element={user ? <Navigate to='/' /> : <Login />}></Route>
+            <Route exact path="/register" element={user ? <Navigate to='/' /> : <Register />}></Route>
             <Route path="/profile/:username" element={<Profile />}></Route>
-            <Route exact path="/login" element={<Login />}></Route>
-            <Route exact path="/register" element={<Register />}></Route>
 
             {/* <Route path="/login" element={<Login />}></Route>
             <Route path="/recordlist" element={<RecordList />}></Route>
