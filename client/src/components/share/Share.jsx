@@ -4,21 +4,36 @@ import "./share.css";
 import { PermMedia, Label, Room, EmojiEmotions } from '@mui/icons-material';
 import { AuthContext } from '../../context/AuthContext';
 import { useState } from 'react';
+import axios from 'axios';
 
 export default function Share() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const {user} = useContext(AuthContext);
   const desc = useRef();
   const [file, setFile] = useState(null);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const newPost = {
+      uid: user._id,
+      desc: desc.current.value
+    }
+    try {
+      await axios.post(`${backend_url}/users/post/create`, newPost);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className='share'>
       <div className="shareWrapper">
         <div className="shareTop">
           <img className='shareProfileImg' src={user.profilePicture ? user.profilePicture : '/assets/icon/person/noAvatar.png'} alt='' />
-          <input placeholder="What's in your mind?" type="text" className="shareInput" />
+          <input placeholder="What's in your mind?" type="text" className="shareInput" ref={desc} />
         </div>
         <hr className="shareHr" />
-        <div className="shareBottom">
+        <form className="shareBottom" onSubmit={submitHandler}>
           <div className="shareOptions">
             <label htmlFor='file' className="shareOption">
               <PermMedia htmlColor='tomato' className='shareIcon' />
@@ -43,8 +58,8 @@ export default function Share() {
               <span className="shareOptionText">Feeling</span>
             </div>
           </div>
-          <button className="shareButton">Share</button>
-        </div>
+          <button className="shareButton" type='submit'>Share</button>
+        </form>
         
       </div>
     </div>
