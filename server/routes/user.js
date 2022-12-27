@@ -3,7 +3,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
 // update users
-router.put("/:id", async (req, res) => {
+router.put("/update/:id", async (req, res) => {
   if (req.body.id === req.params.id || req.body.isAdmin){
 		// set new password
     if (req.body.password){
@@ -28,7 +28,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // delete users
-router.delete("/:id", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   if (req.body.id === req.params.id || req.body.isAdmin){
     
     try {
@@ -57,6 +57,27 @@ router.get('/', async (req, res) => {
 		return res.status(500).json(err);
 	}
 });
+
+// get friends
+router.get('/friends/:id', async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
+		const friends = await Promise.all(
+			user.followings.map(friendId => {
+				return User.findById(friendId);
+			})
+		)
+		let friendList = [];
+		friends.map(friend => {
+			const {_id, username, profilePicture} = friend;
+			friendList.push({_id, username, profilePicture});
+		});
+		res.status(200).json(friendList);
+	} catch (err) {
+		return res.status(500).json(err);
+	}
+})
+
 // follow users
 router.put('/:id/follow', async (req, res) => {
 	// make sure not follow myself

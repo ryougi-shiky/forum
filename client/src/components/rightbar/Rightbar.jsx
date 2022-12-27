@@ -7,18 +7,26 @@ import CakeIcon from "@mui/icons-material/Cake";
 
 import { Users } from "../../dummyData";
 import OnlineFriends from "../onlineFriends/OnlineFriends";
+import { AuthContext } from "../../context/AuthContext";
 
-export default function Rightbar({user}) {
+import { validateProfilePage } from "../../regex/validateUrl";
+
+export default function Rightbar() {
+  // console.log("window.location.href: ", window.location.href);
+  // console.log("validateProfilePage: ", validateProfilePage.test(window.location.href));
+  
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const [friends, setFriends] = useState([]);
+  const { user } = useContext(AuthContext);
+  // console.log("rightbar user: ", user);
 
   useEffect(() => {
-    console.log("rightbar user: ", user);
+    
     const getFriends = async () => {
       try {
-        console.log("user._id: ", user._id);
+        // console.log("user._id: ", user._id);
         const friendList = await axios.get(`${backend_url}/users/friends/${user._id}`);
-        console.log("friends: ", friendList.data);
+        // console.log("friends: ", friendList.data);
         setFriends(friendList.data);
       } catch (err) {
         console.log(err);
@@ -73,7 +81,7 @@ export default function Rightbar({user}) {
         <h4 className="rightbarTitle">Friends</h4>
         <div className="rightbarFollowings">
           {friends.map((friend) => (
-            <Link to={'/profile/'+friend.username}>
+            <Link to={`/profile/${friend.username}`}>
               <div className="rightbarFollowing">
                 <img 
                   src= {friend.profilePicture ? friend.profilePicture : "/assets/icon/person/noAvatar.png"} 
@@ -83,8 +91,6 @@ export default function Rightbar({user}) {
               </div>
             </Link>
           ))}
-          
-          
         </div>
       </React.Fragment>
     )
@@ -92,7 +98,7 @@ export default function Rightbar({user}) {
   return (
     <div className="rightbar">
       <div className="rightbarWrapper">
-        {user ? <ProfileRightbar /> : <HomeRightbar />}
+        {validateProfilePage.test(window.location.href) ? <ProfileRightbar /> : <HomeRightbar />}
       </div>
     </div>
   );
