@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Link } from 'react-router-dom';
+import axios from "axios";
 import "./rightbar.css";
 
 import CakeIcon from "@mui/icons-material/Cake";
@@ -7,6 +9,25 @@ import { Users } from "../../dummyData";
 import OnlineFriends from "../onlineFriends/OnlineFriends";
 
 export default function Rightbar({user}) {
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
+  const [friends, setFriends] = useState([]);
+
+  useEffect(() => {
+    console.log("rightbar user: ", user);
+    const getFriends = async () => {
+      try {
+        console.log("user._id: ", user._id);
+        const friendList = await axios.get(`${backend_url}/users/friends/${user._id}`);
+        console.log("friends: ", friendList.data);
+        setFriends(friendList.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getFriends();
+    
+  }, []);
+  
   const HomeRightbar = () => {
     return (
       <React.Fragment>
@@ -51,18 +72,19 @@ export default function Rightbar({user}) {
         </div>
         <h4 className="rightbarTitle">Friends</h4>
         <div className="rightbarFollowings">
-          <div className="rightbarFollowing">
-            <img src="/assets/icon/person/1.jpeg" alt="" className="rightbarFollowingImg" />
-            <span className="rightbarFollowingName">Tifa Lockhart</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img src="/assets/icon/person/2.jpeg" alt="" className="rightbarFollowingImg" />
-            <span className="rightbarFollowingName">www</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img src="/assets/icon/person/3.jpeg" alt="" className="rightbarFollowingImg" />
-            <span className="rightbarFollowingName">hash</span>
-          </div>
+          {friends.map((friend) => (
+            <Link to={'/profile/'+friend.username}>
+              <div className="rightbarFollowing">
+                <img 
+                  src= {friend.profilePicture ? friend.profilePicture : "/assets/icon/person/noAvatar.png"} 
+                  alt="" 
+                  className="rightbarFollowingImg" />
+                <span className="rightbarFollowingName">{friend.username}</span>
+              </div>
+            </Link>
+          ))}
+          
+          
         </div>
       </React.Fragment>
     )

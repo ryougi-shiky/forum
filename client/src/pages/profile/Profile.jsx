@@ -26,12 +26,6 @@ export default function Profile() {
 
   var coverImg = "/assets/icon/person/noCover.png";
   var profilePicture = "/assets/icon/person/noAvatar.png";
-  if (user.coverImg !== ""){
-    coverImg = user.coverImg;
-  }
-  if (user.profilePicture !== ""){
-    profilePicture = user.profilePicture;
-  }
   
   return (
     <React.Fragment>
@@ -41,8 +35,8 @@ export default function Profile() {
         <div className="profileRight">
           <div className="profileRightTop">
             <div className="profileCover">
-              <img src={coverImg} alt="" className="profileCoverImg" />
-              <img src={profilePicture} alt="" className="profileUserImg" />
+              <img src={user.coverImg ? user.coverImg : coverImg} alt="" className="profileCoverImg" />
+              <img src={user.profilePicture ? user.profilePicture : profilePicture} alt="" className="profileUserImg" />
             </div>
             <div className="profileInfo">
               <h4 className="profileInfoName">{user.username}</h4>
