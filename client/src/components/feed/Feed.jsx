@@ -3,8 +3,9 @@ import "./feed.css";
 import Share from "../share/Share";
 import Post from "../post/Post";
 import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
 
+import { AuthContext } from "../../context/AuthContext";
+import { validateProfilePage } from "../../regex/validateUrl";
 
 export default function Feed({username}) {
   const [posts, setPosts] = useState([]);
@@ -30,7 +31,7 @@ export default function Feed({username}) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        <Share />
+        {(!username || username === user.username) && <Share />}
         {posts && posts.map((p) => (
           <Post key={p._id} post={p} />
         ))}

@@ -4,6 +4,7 @@ import axios from "axios";
 import "./rightbar.css";
 
 import CakeIcon from "@mui/icons-material/Cake";
+import { Add, Remove } from "@mui/icons-material";
 
 import { Users } from "../../dummyData";
 import OnlineFriends from "../onlineFriends/OnlineFriends";
@@ -11,30 +12,43 @@ import { AuthContext } from "../../context/AuthContext";
 
 import { validateProfilePage } from "../../regex/validateUrl";
 
-export default function Rightbar() {
-  // console.log("window.location.href: ", window.location.href);
-  // console.log("validateProfilePage: ", validateProfilePage.test(window.location.href));
-  
+export default function Rightbar({user}) {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const [friends, setFriends] = useState([]);
-  const { user } = useContext(AuthContext);
-  // console.log("rightbar user: ", user);
+  const [followed, setFollowed] = useState(false);
+  const { user:currentUser, dispatch } = useContext(AuthContext);
 
+  // useEffect(() => {
+  //   // if no user, it will be an error
+  //   setFollowed(currentUser.followings.includes(user?.id));
+  // }, [currentUser, user.id])
+  
   useEffect(() => {
-    
     const getFriends = async () => {
       try {
-        // console.log("user._id: ", user._id);
-        const friendList = await axios.get(`${backend_url}/users/friends/${user._id}`);
-        // console.log("friends: ", friendList.data);
+        const friendList = await axios.get(`${backend_url}/users/friends/${currentUser._id}`);
         setFriends(friendList.data);
       } catch (err) {
         console.log(err);
       }
     };
     getFriends();
-    
-  }, []);
+  }, [currentUser._id]);
+
+  const handleClick = async () => {
+    try {
+      if (followed){
+        await axios.put(`${backend_url}/users/${user._id}/unfollow`, {id: currentUser._id});
+        // dispatch({type: 'UNFOLLOW', payload:user._id});
+      } else {
+        await axios.put(`${backend_url}/users/${user._id}/follow`, {id: currentUser._id});
+        // dispatch({type: 'FOLLOW', payload:user._id});
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setFollowed(!followed);
+  }
   
   const HomeRightbar = () => {
     return (
@@ -63,19 +77,25 @@ export default function Rightbar() {
   const ProfileRightbar = () => {
     return (
       <React.Fragment>
+        {user.username !== currentUser.username && (
+          <button className="rightbarFollowButton" onClick={handleClick}>
+            {followed ? 'Unfollow' : 'Follow'}
+            {followed ? <Remove /> : <Add />}
+          </button>
+        )}
         <h4 className="rightbarTitle">User Info</h4>
         <div className="rightbarInfo">
           <div className="rightbarInfoItem">
-            <soan className="rightbarInfoKey">City: </soan>
-            <soan className="rightbarInfoValue">{user.city}</soan>
+            <span className="rightbarInfoKey">City: </span>
+            <span className="rightbarInfoValue">{user.city}</span>
           </div>
           <div className="rightbarInfoItem">
-            <soan className="rightbarInfoKey">From: </soan>
-            <soan className="rightbarInfoValue">{user.from}</soan>
+            <span className="rightbarInfoKey">From: </span>
+            <span className="rightbarInfoValue">{user.from}</span>
           </div>
           <div className="rightbarInfoItem">
-            <soan className="rightbarInfoKey">Relationship: </soan>
-            <soan className="rightbarInfoValue">{user.relation}</soan>
+            <span className="rightbarInfoKey">Relationship: </span>
+            <span className="rightbarInfoValue">{user.relation}</span>
           </div>
         </div>
         <h4 className="rightbarTitle">Friends</h4>
