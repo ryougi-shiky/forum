@@ -1,12 +1,16 @@
 import React, { useContext } from 'react'
 import "./topbar.css";
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
-import { Link } from 'react-router-dom';
+import { Link, Navigate, redirect } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
 export default function Topbar() {
-  const { user } = useContext(AuthContext);
+  const { user:currentUser } = useContext(AuthContext);
   const backend_url = process.env.REACT_APP_BACKEND_URL;
+
+  const chatButton = () => {
+    redirect('/messenger');
+  }
 
   return (
     <div className='topbarContainer'>
@@ -31,16 +35,18 @@ export default function Topbar() {
             <Person/>
             <span className="topbarIconBadge">1</span>
           </div>
-          <div className="topbarIconItem">
-            <Chat/>
-            <span className="topbarIconBadge">3</span>
-          </div>
+          <Link to={'/messenger'}>
+            <div className="topbarIconItem">
+              <Chat />
+              <span className="topbarIconBadge">3</span>
+            </div>
+          </Link>
           <div className="topbarIconItem">
             <Notifications/>
             <span className="topbarIconBadge">2</span>
           </div>
         </div>
-        <Link to={`/profile/${user.username}`}>
+        <Link to={`/profile/${currentUser.username}`}>
           <img src={ /*user.profilePicture ? user.profilePicture :*/ '/assets/icon/person/noAvatar.png'} alt="" className="topbarImg" />
         </Link>
       </div>
