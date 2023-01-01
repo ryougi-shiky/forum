@@ -8,6 +8,8 @@ const cors = require('cors');
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
+const conversationRouter = require("./routes/conversation");
+const messageRouter = require("./routes/message");
 
 const app = express();
 dotenv.config({path: "./config.env"});
@@ -29,6 +31,8 @@ app.use(cors());
 app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);
+app.use("/conversation", conversationRouter);
+app.use("/message", messageRouter);
 
 app.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);
