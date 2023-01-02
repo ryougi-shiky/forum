@@ -8,6 +8,7 @@ import ChatOnline from '../../components/chatOnline/ChatOnline';
 
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { io } from "socket.io-client";
 
 export default function Messenger() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
@@ -16,6 +17,8 @@ export default function Messenger() {
   const [currentChat, setCurrentChat] = useState();
   const [messages, setMessages] = useState();
   const [newMessage, setNewMessage] = useState("");
+  // const socket = useRef(io(`ws://localhost:${process.env.REACT_APP_SOCKET_SERVER_PORT}`));
+  const socket = io(`ws://localhost:${process.env.REACT_APP_SOCKET_SERVER_PORT}`);
   const scrollRef = useRef();
 
   useEffect(() => {
@@ -46,6 +49,21 @@ export default function Messenger() {
     getMessages();
   },[currentChat])
   console.log("get message: ", messages);
+
+  useEffect(() => {
+    socket.current?.emit("addClient", currentUser._id);
+    socket.current?.on("getClients", (clients) =>{
+      console.log(clients);
+    });
+  }, [currentUser]);
+
+  useEffect(() => {
+    socket?.on('welcome', message=>{
+      console.log(message);
+    });
+  }, [socket])
+  
+  
 
   const submitMessage = async (e) => {
     e.preventDefault();
