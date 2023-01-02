@@ -11,15 +11,32 @@ import axios from 'axios';
 import { io } from "socket.io-client";
 
 export default function Messenger() {
+  const socket_server_port = process.env.REACT_APP_SOCKET_SERVER_PORT;
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const { user:currentUser } = useContext(AuthContext);
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState();
   const [messages, setMessages] = useState();
   const [newMessage, setNewMessage] = useState("");
+  const [socket, setSocket] = useState(null);
   // const socket = useRef(io(`ws://localhost:${process.env.REACT_APP_SOCKET_SERVER_PORT}`));
-  const socket = io(`ws://localhost:${process.env.REACT_APP_SOCKET_SERVER_PORT}`);
+  // const socket = io(`ws://localhost:${process.env.REACT_APP_SOCKET_SERVER_PORT}`);
   const scrollRef = useRef();
+
+  // useEffect(() => {
+  //   socket.current?.emit("addClient", currentUser._id);
+  //   socket.current?.on("getClients", (clients) =>{
+  //     console.log(clients);
+  //   });
+  // }, [currentUser]);
+
+  useEffect(() => {
+    console.log("connecting to ws://localhost:"+socket_server_port);
+    setSocket(io('ws://localhost:'+socket_server_port));
+    // socket?.on('welcome', message=>{
+    //   console.log(message);
+    // });
+  }, []);
 
   useEffect(() => {
     const getConversation = async () => {
@@ -49,20 +66,6 @@ export default function Messenger() {
     getMessages();
   },[currentChat])
   console.log("get message: ", messages);
-
-  useEffect(() => {
-    socket.current?.emit("addClient", currentUser._id);
-    socket.current?.on("getClients", (clients) =>{
-      console.log(clients);
-    });
-  }, [currentUser]);
-
-  useEffect(() => {
-    socket?.on('welcome', message=>{
-      console.log(message);
-    });
-  }, [socket])
-  
   
 
   const submitMessage = async (e) => {
