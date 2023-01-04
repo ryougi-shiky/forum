@@ -26,6 +26,8 @@ app.use(helmet());
 app.use(morgan("common"));
 app.use(cors());
 
+app.use(express.static("./client/build"));
+
 app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);

@@ -1,9 +1,4 @@
 node_modules
 .DS_Store
-Archived_client_1       
-Archived_server_1       
-Archived_server_2       
-test
-./client/node_modules
-./client/build
+./server/client/node_modules
 ./server/node_modules
