@@ -8,8 +8,6 @@ const cors = require('cors');
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
-const conversationRouter = require("./routes/conversation");
-const messageRouter = require("./routes/message");
 
 const app = express();
 dotenv.config({path: "./config.env"});
