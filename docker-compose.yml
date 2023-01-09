@@ -10,6 +10,10 @@ services:
       NODE_ENV: production
     ports:
       - 3000:3000
+    depends_on:
+      - server
+    env_file:
+      - ./client/.env
   server:
     image: server
     build:
@@ -19,3 +23,5 @@ services:
       NODE_ENV: production
     ports:
       - 5000:5000
+    env_file:
+      - ./server/config.env
