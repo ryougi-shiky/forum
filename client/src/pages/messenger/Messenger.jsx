@@ -10,9 +10,10 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
+const socket_server_port = process.env.REACT_APP_SOCKET_SERVER_PORT;
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Messenger() {
-  const socket_server_port = process.env.REACT_APP_SOCKET_SERVER_PORT;
-  const backend_url = process.env.REACT_APP_BACKEND_URL;
   const { user: currentUser } = useContext(AuthContext);
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState();

@@ -5,8 +5,9 @@ import axios from "axios";
 
 import { AuthContext } from "../../context/AuthContext";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Conversation({conversation}) {
-  const backend_url = process.env.REACT_APP_BACKEND_URL;
   const {user:currentUser} = useContext(AuthContext);
   const [user, setUser] = useState(null);
 

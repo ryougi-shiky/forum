@@ -13,3 +13,8 @@ test
 ./client/node_modules
 ./client/build
 .vscode/
+server/models/Conversation.js
+server/models/Message.js
+server/routes/conversation.js
+server/routes/message.js
+socket/

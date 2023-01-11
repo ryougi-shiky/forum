@@ -12,8 +12,9 @@ import { AuthContext } from "../../context/AuthContext";
 
 import { validateProfilePage } from "../../regex/validateUrl";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Rightbar({user}) {
-  const backend_url = process.env.REACT_APP_BACKEND_URL;
   const [friends, setFriends] = useState([]);
   const [followed, setFollowed] = useState(false);
   const { user:currentUser, dispatch } = useContext(AuthContext);

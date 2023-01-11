@@ -7,10 +7,11 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { validateProfilePage } from "../../regex/validateUrl";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Feed({username}) {
   const [posts, setPosts] = useState([]);
   const {user} = useContext(AuthContext);
-  const backend_url = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(()=>{
     const fetchPosts = async () => {

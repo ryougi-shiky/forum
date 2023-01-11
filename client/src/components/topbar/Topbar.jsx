@@ -4,9 +4,10 @@ import { Search, Person, Chat, Notifications } from "@mui/icons-material";
 import { Link, Navigate, redirect } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Topbar() {
   const { user:currentUser } = useContext(AuthContext);
-  const backend_url = process.env.REACT_APP_BACKEND_URL;
 
   const chatButton = () => {
     redirect('/messenger');

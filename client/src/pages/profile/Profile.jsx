@@ -9,8 +9,10 @@ import Sidebar from "../../components/sidebar/Sidebar";
 
 import axios from "axios";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Profile() {
-  const backend_url = process.env.REACT_APP_BACKEND_URL;
+  
   const [user, setUser] = useState({});
   const params = useParams();
   console.log("params: ", params);

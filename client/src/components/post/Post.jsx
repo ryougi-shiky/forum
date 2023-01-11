@@ -13,8 +13,9 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Post({post}) {
-  const backend_url = process.env.REACT_APP_BACKEND_URL;
   const [like, setLike] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(false);
   const {user: currentUser} = useContext(AuthContext);
