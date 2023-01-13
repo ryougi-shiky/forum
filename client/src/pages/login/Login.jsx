@@ -33,7 +33,7 @@ export default function Login() {
     if (cookies){
       loginCall({email: cookies.email, password: cookies.password}, dispatch);
     }
-  }, []);
+  }, [cookies]);
   
   console.log("login page cookie: ", cookies);
   console.log("login dispatch: ", dispatch);

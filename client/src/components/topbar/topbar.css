@@ -11,6 +11,8 @@
 
 .topbarLeft {
   flex: 3;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
@@ -19,6 +21,29 @@
   font-weight: bold;
   color: white;
   cursor: pointer;
+}
+
+.topbarMenu {
+  margin-left: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5%;
+  border: none;
+  background-color: #1877f2;
+  color: white;
+  font-size: 20px;
+}
+
+.topbarMenuButton {
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+}
+
+.topbarMenuButton:hover {
+  background-color: rgb(26, 110, 234);
+  opacity: 0.7;
+  color: rgb(0, 112, 182);
 }
 
 .topbarCenter {
@@ -43,7 +68,7 @@
   border: none;
   width: 90%;
   height: 200%;
-  padding: 5px;
+  padding: 3px;
 }
 
 .searchInput:focus {

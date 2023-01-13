@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from "axios";
+
 import "./profile.css";
 
 import Topbar from "../../components/topbar/Topbar";
 import Rightbar from "../../components/rightbar/Rightbar";
 import Feed from "../../components/feed/Feed";
 import Sidebar from "../../components/sidebar/Sidebar";
-
-import axios from "axios";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 

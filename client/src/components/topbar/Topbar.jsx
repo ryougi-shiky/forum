@@ -1,17 +1,68 @@
-import React, { useContext } from 'react'
-import "./topbar.css";
+import React, { useContext } from 'react';
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
 import { Link, Navigate, redirect } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+
+// import Dropdown from 'react-dropdown';
+// import Dropdown from 'react-bootstrap/Dropdown';
+// import DropdownButton from 'react-bootstrap/DropdownButton';
+// import SplitButton from 'react-bootstrap/SplitButton';
+// import ButtonGroup from 'react-bootstrap/ButtonGroup';
+// import { MenuItem } from '@mui/material';
+
+import Dropdown from 'rc-dropdown';
+import Menu, { Item as MenuItem, Divider } from 'rc-menu';
+import 'rc-dropdown/assets/index.css';
+
+import "./topbar.css";
+
 import { AuthContext } from '../../context/AuthContext';
+import { Button } from '@mui/material';
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
+const menuOptions = [
+  'Account', 'Log out'
+];
+
+const defaultOption = menuOptions[0];
+
+const onSelect = ({ key }) => {
+  console.log(`${key} selected`);
+}
+
+const onVisibleChange = (visible) => {
+  console.log(visible);
+}
+
+
+
 export default function Topbar() {
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const { user:currentUser } = useContext(AuthContext);
 
-  const chatButton = () => {
-    redirect('/messenger');
+  // const chatButton = () => {
+  //   redirect('/messenger');
+  // }
+
+  console.log("topbar cookie: ", cookies);
+
+  const logout = () => {
+    setCookie(null, {path: '/'}); 
   }
+  const menu = (
+    <Menu onSelect={onSelect}>
+      <Button className='topbarMenuButton'>
+        <MenuItem key="1" >Account</MenuItem>
+      </Button>
+
+      <Divider />
+
+      <Button className='topbarMenuButton' >
+        <MenuItem key="2" >Log Out</MenuItem>
+      </Button>
+    </Menu>
+  );
 
   return (
     <div className='topbarContainer'>
@@ -19,7 +70,18 @@ export default function Topbar() {
         <Link to="/" style={{ textDecoration:"none" }}>
           <span className="logo">Ani Ani</span>
         </Link>
+        {/* <Dropdown ClassName="topbarMenu" options={menuOptions} placeholder="Menu"  /> */}
+        <Dropdown
+          trigger={['hover']}
+          overlay={menu}
+          animation="slide-up"
+          onVisibleChange={onVisibleChange}
+          className="topbarMenu"
+        >
+          <button style={{ width: 50 }}>Menu</button>
+        </Dropdown>
       </div>
+      
       <div className="topbarCenter">
         <div className="searchBar">
           <Search className="searchIcon"/>
@@ -36,12 +98,10 @@ export default function Topbar() {
             <Person/>
             <span className="topbarIconBadge">1</span>
           </div>
-          <Link to={'/messenger'}>
-            <div className="topbarIconItem">
-              <Chat />
-              <span className="topbarIconBadge">3</span>
-            </div>
-          </Link>
+          <div className="topbarIconItem">
+            <Chat />
+            <span className="topbarIconBadge">3</span>
+          </div>
           <div className="topbarIconItem">
             <Notifications/>
             <span className="topbarIconBadge">2</span>

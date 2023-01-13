@@ -48,7 +48,7 @@ export default function Register() {
     if (cookies){
       loginCall({email: cookies.email, password: cookies.password}, dispatch);
     }
-  }, []);
+  }, [cookies]);
 
   console.log("register page cookie: ", cookies);
 

@@ -20,7 +20,7 @@ function App() {
             <Route exact path="/" element={user ? <Home /> : <Register />}></Route>
             <Route exact path="/login" element={user ? <Navigate to='/' /> : <Login />}></Route>
             <Route exact path="/register" element={user ? <Navigate to='/' /> : <Register />}></Route>
-            <Route path="/profile/:username" element={<Profile />}></Route>
+            <Route path="/profile/:username" element={user ? <Navigate to='/login' /> :<Profile />}></Route>
             <Route exact path="/messenger" element= {user ? <Messenger /> : <Navigate to='/' /> }></Route>
             {/* <Route exact path="/messenger" element= { <Messenger /> }></Route> */}
 
