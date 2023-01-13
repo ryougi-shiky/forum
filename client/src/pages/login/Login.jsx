@@ -1,12 +1,13 @@
-import React, { useContext, useRef, useReducer } from 'react';
+import React, { useContext, useRef, useReducer, useEffect } from 'react';
 
 import { AuthContext } from '../../context/AuthContext';
 import AuthReducer from '../../context/AuthReducer';
-import { loginCall } from '../../apiCalls';
+import { useCookies } from 'react-cookie';
 
 import "./login.css";
 
 import axios from "axios";
+import { loginCall } from '../../apiCall';
 // import { CircularProgress } from '@chakra-ui/react'
 import { CircularProgress } from '@mui/material';
 
@@ -15,14 +16,26 @@ export default function Login() {
   const email = useRef();
   const password = useRef();
   const {user, isFetching, error, dispatch} = useContext(AuthContext);
-  
-  const handleClick = (e) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
+  const loginSetCookie = (e) => {
     e.preventDefault();
     console.log("email: ", email.current.value, " password: ", password.current.value, " dispatch: ", dispatch);
-    loginCall({email: email.current.value, password: password.current.value}, dispatch)
+
+    loginCall({email: email.current.value, password: password.current.value}, dispatch);
+    setCookie("email", email.current.value, {path: '/'});
+    setCookie("password", password.current.value, {path: '/'});
   }
 
   console.log("user: ", user);
+  
+  useEffect(() => {
+    if (cookies){
+      loginCall({email: cookies.email, password: cookies.password}, dispatch);
+    }
+  }, []);
+  
+  console.log("cookie: ", cookies);
 
   return (
     <React.Fragment>
@@ -35,7 +48,7 @@ export default function Login() {
             </span>
           </div>
           <div className="loginRight">
-            <form className="loginBox" onSubmit={handleClick}>
+            <form className="loginBox" onSubmit={loginSetCookie}>
               <input 
                 placeholder='Email' 
                 required 
