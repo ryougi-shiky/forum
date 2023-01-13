@@ -35,7 +35,8 @@ export default function Login() {
     }
   }, []);
   
-  console.log("cookie: ", cookies);
+  console.log("login page cookie: ", cookies);
+  console.log("login dispatch: ", dispatch);
 
   return (
     <React.Fragment>

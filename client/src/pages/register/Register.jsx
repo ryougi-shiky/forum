@@ -1,10 +1,12 @@
 import React from 'react';
-import { useRef, useContext } from 'react';
+import { useRef, useContext, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 import "./register.css";
 import { AuthContext } from '../../context/AuthContext';
+import { loginCall } from '../../apiCall';
 import axios from 'axios';
 
 export default function Register() {
@@ -14,6 +16,7 @@ export default function Register() {
   const password = useRef();
   const passwordAgain = useRef();
   const {user, isFetching, error, dispatch} = useContext(AuthContext);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
@@ -35,11 +38,19 @@ export default function Register() {
       
     }
   }
-  console.log(user);
+  console.log("register page user: ", user);
 
   const toLogin = () => {
     navigate('/login');
   }
+
+  useEffect(() => {
+    if (cookies){
+      loginCall({email: cookies.email, password: cookies.password}, dispatch);
+    }
+  }, []);
+
+  console.log("register page cookie: ", cookies);
 
   return (
     <React.Fragment>

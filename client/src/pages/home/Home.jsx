@@ -15,15 +15,9 @@ import { useCookies } from 'react-cookie';
 export default function Home() {
   // const { user:currentUser, isFetching, error, dispatch } = useContext(AuthContext);
   const { user:currentUser } = useContext(AuthContext);
-  // const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  
 
   console.log("currentUser: ", currentUser);
-
-  // useEffect(() => {
-  //   if (cookies && currentUser){
-  //     loginCall({email: currentUser.email, password: currentUser.password}, dispatch);
-  //   }
-  // }, []);
 
   return (
     <React.Fragment>
