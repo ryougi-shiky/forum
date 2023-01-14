@@ -34,9 +34,6 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   console.log("login req.body: ", req.body);
-  if (!req.body){
-    res.status(400).json("request body empty!");
-  }
   try {
     const user = await User.findOne({email: req.body.email});
     if (!user){

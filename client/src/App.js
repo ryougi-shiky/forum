@@ -19,9 +19,9 @@ function App() {
             
         </div>
         <Routes>
-            <Route exact path="/" element={(user && cookies) ? <Home /> : <Register />}></Route>
-            <Route exact path="/login" element={user ? <Navigate to='/' /> : <Login />}></Route>
-            <Route exact path="/register" element={user ? <Navigate to='/login' /> : <Register />}></Route>
+            <Route exact path="/" element={(user && cookies.user) ? <Home /> : <Register />}></Route>
+            <Route exact path="/login" element={(user && cookies.user) ? <Navigate to='/' /> : <Login />}></Route>
+            <Route exact path="/register" element={cookies.user ? <Navigate to='/' /> : <Register />}></Route>
             <Route path="/profile/:username" element={<Profile />}></Route>
             <Route exact path="/messenger" element= {user ? <Messenger /> : <Navigate to='/' /> }></Route>
             {/* <Route exact path="/messenger" element= { <Messenger /> }></Route> */}

@@ -32,7 +32,6 @@ export default function Login() {
   }
   
   useEffect(() => {
-    
     if (cookies.user && !currentUser){
       loginCall({email: cookies.user.email, password: cookies.user.password}, dispatch);
     }
@@ -41,6 +40,10 @@ export default function Login() {
   console.log("currentUser: ", currentUser);
   console.log("login page cookie: ", cookies);
   console.log("login dispatch: ", dispatch);
+
+  const redirectToRegister = () => {
+    navigate('/register');
+  }
 
   return (
     <React.Fragment>
@@ -73,7 +76,7 @@ export default function Login() {
                 : ("Log In") }
               </button>
               <span className="loginForgot">Forgot Password?</span>
-              <button className="loginRegisterButton">Register</button>
+              <button className="loginRegisterButton" onClick={redirectToRegister} >Register</button>
             </form>
           </div>
         </div>

@@ -40,10 +40,6 @@ export default function Register() {
   }
   console.log("register page user: ", user);
 
-  const toLogin = () => {
-    navigate('/login');
-  }
-
   useEffect(() => {
     if (cookies.user){
       loginCall({email: cookies.user.email, password: cookies.user.password}, dispatch);
