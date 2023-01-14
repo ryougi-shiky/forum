@@ -1,6 +1,7 @@
 import {BrowserRouter, Routes, Route, useParams, Navigate} from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import { useCookies } from 'react-cookie';
 
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile"
@@ -10,17 +11,18 @@ import Messenger from "./pages/messenger/Messenger";
 
 function App() {
   const { user } = useContext(AuthContext);
-  
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
   return (
     <BrowserRouter>
         <div>
             
         </div>
         <Routes>
-            <Route exact path="/" element={user ? <Home /> : <Register />}></Route>
+            <Route exact path="/" element={(user && cookies) ? <Home /> : <Register />}></Route>
             <Route exact path="/login" element={user ? <Navigate to='/' /> : <Login />}></Route>
-            <Route exact path="/register" element={user ? <Navigate to='/' /> : <Register />}></Route>
-            <Route path="/profile/:username" element={user ? <Navigate to='/login' /> :<Profile />}></Route>
+            <Route exact path="/register" element={user ? <Navigate to='/login' /> : <Register />}></Route>
+            <Route path="/profile/:username" element={<Profile />}></Route>
             <Route exact path="/messenger" element= {user ? <Messenger /> : <Navigate to='/' /> }></Route>
             {/* <Route exact path="/messenger" element= { <Messenger /> }></Route> */}
 

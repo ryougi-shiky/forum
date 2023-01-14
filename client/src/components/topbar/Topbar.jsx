@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
-import { Link, Navigate, redirect } from 'react-router-dom';
+import { Link, useNavigate, redirect } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 // import Dropdown from 'react-dropdown';
@@ -40,6 +40,7 @@ const onVisibleChange = (visible) => {
 export default function Topbar() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const { user:currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   // const chatButton = () => {
   //   redirect('/messenger');
@@ -48,8 +49,13 @@ export default function Topbar() {
   console.log("topbar cookie: ", cookies);
 
   const logout = () => {
-    setCookie(null, {path: '/'}); 
+    removeCookie("user", {path: '/'}); 
+    console.log("topbar removed cookie");
+    // setCookie(null);
+    navigate('/login');
+    console.log("topbar redirect to login page");
   }
+
   const menu = (
     <Menu onSelect={onSelect}>
       <Button className='topbarMenuButton'>
@@ -58,7 +64,7 @@ export default function Topbar() {
 
       <Divider />
 
-      <Button className='topbarMenuButton' >
+      <Button className='topbarMenuButton' onClick={logout} >
         <MenuItem key="2" >Log Out</MenuItem>
       </Button>
     </Menu>

@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useReducer, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
 import AuthReducer from '../../context/AuthReducer';
@@ -15,26 +16,29 @@ export default function Login() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const email = useRef();
   const password = useRef();
-  const {user, isFetching, error, dispatch} = useContext(AuthContext);
+  const {user: currentUser, isFetching, error, dispatch} = useContext(AuthContext);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const navigate = useNavigate();
 
-  const loginSetCookie = (e) => {
+  const loginSetCookie = async (e) => {
     e.preventDefault();
-    console.log("email: ", email.current.value, " password: ", password.current.value, " dispatch: ", dispatch);
+    console.log("login email: ", email.current.value, " login password: ", password.current.value, " dispatch: ", dispatch);
 
-    loginCall({email: email.current.value, password: password.current.value}, dispatch);
-    setCookie("email", email.current.value, {path: '/'});
-    setCookie("password", password.current.value, {path: '/'});
+    await loginCall({email: email.current.value, password: password.current.value}, dispatch);
+    let user = {email: email.current.value, password: password.current.value };
+    // setCookie("email", email.current.value, {path: '/'});
+    // setCookie("password", password.current.value, {path: '/'});
+    setCookie("user", user, {path: '/'});
   }
-
-  console.log("user: ", user);
   
   useEffect(() => {
-    if (cookies){
-      loginCall({email: cookies.email, password: cookies.password}, dispatch);
+    
+    if (cookies.user && !currentUser){
+      loginCall({email: cookies.user.email, password: cookies.user.password}, dispatch);
     }
-  }, [cookies]);
-  
+  }, []);
+
+  console.log("currentUser: ", currentUser);
   console.log("login page cookie: ", cookies);
   console.log("login dispatch: ", dispatch);
 

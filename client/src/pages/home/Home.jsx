@@ -11,13 +11,22 @@ import { loginCall } from '../../apiCall';
 import { AuthContext } from "../../context/AuthContext";
 import AuthReducer from '../../context/AuthReducer';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   // const { user:currentUser, isFetching, error, dispatch } = useContext(AuthContext);
   const { user:currentUser } = useContext(AuthContext);
-  
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const navigate = useNavigate();
 
   console.log("currentUser: ", currentUser);
+
+  useEffect(() => {
+    if (!cookies){
+      navigate('/login');
+    }
+  }, [])
+  
 
   return (
     <React.Fragment>

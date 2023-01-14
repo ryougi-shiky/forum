@@ -45,10 +45,10 @@ export default function Register() {
   }
 
   useEffect(() => {
-    if (cookies){
-      loginCall({email: cookies.email, password: cookies.password}, dispatch);
+    if (cookies.user){
+      loginCall({email: cookies.user.email, password: cookies.user.password}, dispatch);
     }
-  }, [cookies]);
+  }, []);
 
   console.log("register page cookie: ", cookies);
 
