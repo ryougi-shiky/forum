@@ -2,6 +2,8 @@ import React, { useContext, useRef, useReducer } from 'react';
 
 import { AuthContext } from '../../context/AuthContext';
 import AuthReducer from '../../context/AuthReducer';
+import { useNavigate } from "react-router-dom";
+
 import { loginCall } from '../../apiCalls';
 
 import "./login.css";
@@ -15,7 +17,8 @@ export default function Login() {
   const email = useRef();
   const password = useRef();
   const {user, isFetching, error, dispatch} = useContext(AuthContext);
-  
+  const navigate = useNavigate();
+
   const handleClick = (e) => {
     e.preventDefault();
     console.log("email: ", email.current.value, " password: ", password.current.value, " dispatch: ", dispatch);
@@ -23,6 +26,10 @@ export default function Login() {
   }
 
   console.log("user: ", user);
+
+  const toRegisterPage = () => {
+    navigate('/register');
+  }
 
   return (
     <React.Fragment>
@@ -55,7 +62,7 @@ export default function Login() {
                 : ("Log In") }
               </button>
               <span className="loginForgot">Forgot Password?</span>
-              <button className="loginRegisterButton">Register</button>
+              <button className="loginRegisterButton" onClick={toRegisterPage}>Register</button>
             </form>
           </div>
         </div>
