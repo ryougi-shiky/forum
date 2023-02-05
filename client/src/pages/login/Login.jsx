@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
 import AuthReducer from '../../context/AuthReducer';
-import { useNavigate } from "react-router-dom";
-
-import { loginCall } from '../../apiCalls';
+import { useCookies } from 'react-cookie';
 
 import "./login.css";
 
@@ -18,9 +16,11 @@ export default function Login() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const email = useRef();
   const password = useRef();
-  const {user, isFetching, error, dispatch} = useContext(AuthContext);
-  
-  const handleClick = (e) => {
+  const {user: currentUser, isFetching, error, dispatch} = useContext(AuthContext);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const navigate = useNavigate();
+
+  const loginSetCookie = async (e) => {
     e.preventDefault();
     console.log("login email: ", email.current.value, " login password: ", password.current.value, " dispatch: ", dispatch);
 
@@ -30,8 +30,20 @@ export default function Login() {
     // setCookie("password", password.current.value, {path: '/'});
     setCookie("user", user, {path: '/'});
   }
+  
+  useEffect(() => {
+    if (cookies.user && !currentUser){
+      loginCall({email: cookies.user.email, password: cookies.user.password}, dispatch);
+    }
+  }, []);
 
-  console.log("user: ", user);
+  console.log("currentUser: ", currentUser);
+  console.log("login page cookie: ", cookies);
+  console.log("login dispatch: ", dispatch);
+
+  const redirectToRegister = () => {
+    navigate('/register');
+  }
 
   return (
     <React.Fragment>
@@ -64,7 +76,7 @@ export default function Login() {
                 : ("Log In") }
               </button>
               <span className="loginForgot">Forgot Password?</span>
-              <button className="loginRegisterButton">Register</button>
+              <button className="loginRegisterButton" onClick={redirectToRegister} >Register</button>
             </form>
           </div>
         </div>
