@@ -14,10 +14,10 @@ dotenv.config({path: "./config.env"});
 const port = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGO, {
+  dbName: `ani`,
   useNewUrlParser: true,
   useUnifiedTopology: true
-}, (err) => {
-  if (err) return err;
+}, () => {
   console.log("Backend Server Connected to MongoDB");
 });
 
