@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   user: null,
   isFetching: false,
   error: false,
+  feed_display_moments: false,
 };
 
 export const AuthContext = createContext(INITIAL_STATE);
@@ -21,7 +22,8 @@ export const AuthContextProvider = ({children}) => {
       user: state.user, 
       isFetching: state.isFetching,
       error: state.error,
-      dispatch
+      dispatch,
+      feed_display_moments: false
     }} >
       {children}
     </AuthContext.Provider>

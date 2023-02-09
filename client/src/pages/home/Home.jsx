@@ -14,7 +14,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  // const { user:currentUser, isFetching, error, dispatch } = useContext(AuthContext);
+  // const { user:currentUser, isFetching, error, dispatch, feed_display_moments } = useContext(AuthContext);
   const { user:currentUser } = useContext(AuthContext);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export default function Home() {
       <Topbar />
       <div className="homeContainer">
         <Sidebar />
-        <Feed username={currentUser.username}/>
+        <Feed />
         <Rightbar />
       </div>
     </React.Fragment>

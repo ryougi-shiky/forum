@@ -8,7 +8,6 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 
 import axios from 'axios';
-import * as timeago from 'timeago.js';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
@@ -20,18 +19,22 @@ export default function Post({post}) {
   const [isLiked, setIsLiked] = useState(false);
   const {user: currentUser} = useContext(AuthContext);
   const [user, setUser] = useState({});
+  const postTime = new Date(post.createdAt);
 
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser._id));
-  
-
   }, [currentUser._id, post.likes]);
   
   useEffect(()=>{
     const fetchUser = async () => {
-      const res = await axios.get(`${backend_url}/users/${post.uid}`);
-      console.log(res);
-      setUser(res.data);
+      try {
+        const res = await axios.get(`${backend_url}/users/${post.uid}`);
+        console.log(res);
+        setUser(res.data);
+      } catch (err) {
+        console.log("Post component: retriving user info error !");
+        console.log(err);
+      }
     };
     fetchUser();
   },[post.uid])
@@ -40,7 +43,7 @@ export default function Post({post}) {
     try {
       await axios.put(`${backend_url}/users/post/like/${post._id}`, {uid: currentUser._id});
     } catch (err) {
-      
+      console.log(err);
     }
     setLike(isLiked ? like-1 : like+1);
     setIsLiked(!isLiked);
@@ -51,13 +54,13 @@ export default function Post({post}) {
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            <Link to={`profile/${user.username}`}>
+            <Link to={`profile/${post.username}`}>
               <img className='postProfileImg' src={user.profilePicture ? user.profilePicture : '/assets/icon/person/noAvatar.png'} alt='' />
             </Link>
             <span className="postUsername">
-              {user.username}
+              {post.username}
             </span>
-            <span className="postDate">{timeago.format(post.createdAt)}</span>
+            <span className="postDate">{postTime.toDateString()}</span>
           </div>
           <div className="postTopRight">
             <MoreVert />

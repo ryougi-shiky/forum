@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
-import { Link, useNavigate, redirect } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 // import Dropdown from 'react-dropdown';
@@ -39,7 +39,7 @@ const onVisibleChange = (visible) => {
 
 export default function Topbar() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  const { user:currentUser } = useContext(AuthContext);
+  const { user:currentUser, feed_display_moments } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // const chatButton = () => {
@@ -70,6 +70,20 @@ export default function Topbar() {
     </Menu>
   );
 
+  // click moments, feed display moments posts
+  const displayMoments = () => {
+    navigate('/moments');
+    // feed_display_moments = true;
+    // console.log("clicked moments, feed_display_moments: ", feed_display_moments);
+  }
+  
+  // click home, feed display all posts
+  // const displayHome = () => {
+  //   // navigate('/moments');
+  //   feed_display_moments = false;
+  //   console.log("clicked home, feed_display_moments: ", feed_display_moments);
+  // }
+
   return (
     <div className='topbarContainer'>
       <div className="topbarLeft">
@@ -97,7 +111,7 @@ export default function Topbar() {
       <div className="topbarRight">
         <div className="topbarLinks">
           <span className="topbarLink">Home</span>
-          <span className="topbarLink">Moments</span>
+          <span className="topbarLink" onClick={ displayMoments }>Moments</span>
         </div>
         <div className="topbarIcons">
           <div className="topbarIconItem">
