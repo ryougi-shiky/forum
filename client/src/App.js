@@ -8,6 +8,7 @@ import Profile from "./pages/profile/Profile"
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Messenger from "./pages/messenger/Messenger";
+import Moments from "./pages/moments/Moments";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -24,6 +25,7 @@ function App() {
             <Route exact path="/register" element={cookies.user ? <Navigate to='/' /> : <Register />}></Route>
             <Route path="/profile/:username" element={<Profile />}></Route>
             <Route exact path="/messenger" element= {user ? <Messenger /> : <Navigate to='/' /> }></Route>
+            <Route exact path="/moments" element= {user ? <Moments /> : <Navigate to='/' /> }></Route>
             {/* <Route exact path="/messenger" element= { <Messenger /> }></Route> */}
 
             {/* <Route path="/login" element={<Login />}></Route>

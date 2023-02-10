@@ -16,6 +16,7 @@ export default function Share() {
     e.preventDefault();
     const newPost = {
       uid: user._id,
+      username: user.username,
       desc: desc.current.value
     }
     try {

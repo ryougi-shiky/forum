@@ -25,3 +25,8 @@ services:
       - 5000:5000
     env_file:
       - ./server/config.env
+networks:
+  client:
+    driver: bridge
+  server:
+    driver: bridge

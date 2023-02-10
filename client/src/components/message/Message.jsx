@@ -1,9 +1,10 @@
 import './message.css'
 
 import React from 'react'
-import {format} from 'timeago.js'
 
 export default function Message({myside, message}) {
+  const messageTime = new Date(message.createdAt);
+  // const messageTime = { $dateToString: { format: "%Y-%m-%d-%H:%M:%S", date: `${message.createdAt}` } };
   return (
     <div className={myside ? "message myside" : "message"}>
       <div className="messageTop">
@@ -11,7 +12,7 @@ export default function Message({myside, message}) {
         <p className="messageText">{message?.text}</p>
       </div>
       <div className="messageBottom">
-        {format(message?.createdAt)}
+        {messageTime}
       </div>
     </div>
   )
