@@ -22,15 +22,15 @@ export default function Feed({username}) {
       
       
 
-      console.log("posts: ", res.data);
-      console.log("username: ", username);
+      // console.log("posts: ", res.data);
+      // console.log("username: ", username);
       setPosts(res.data);
       // setPosts(res.data.sort((p1, p2) => {
       //   return new Date(p2.createdAt) - new Date(p1.createdAt);
       // }));
     };
     fetchPosts();
-  },[username, user._id])
+  },[username, user._id, posts])
 
   return (
     <div className="feed">
