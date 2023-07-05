@@ -45,7 +45,7 @@
 .registerInput {
   height: 50px;
   border-radius: 10px;
-  border: 1px solide grey;
+  border: 1px solid grey;
   font-size: 18px;
   padding-left: 20px;
 }
