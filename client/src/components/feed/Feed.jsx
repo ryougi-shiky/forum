@@ -21,7 +21,12 @@ export default function Feed({username}) {
     
     // console.log("posts: ", res.data);
     // console.log("username: ", username);
-    setPosts(res.data);
+
+    // Sort the posts in descending order by 'createdAt' (latest first)
+    const sortedPosts = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    setPosts(sortedPosts);
+    
     // setPosts(res.data.sort((p1, p2) => {
     //   return new Date(p2.createdAt) - new Date(p1.createdAt);
     // }));
@@ -31,10 +36,12 @@ export default function Feed({username}) {
     fetchPosts();
   },[username, user._id])
 
+  // When delete a post, let the feed to filter the deleted post in the displayed posts.
   const handlePostDelete = (postId) => {
     setPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
   };
 
+  // When create a new post, notify the frontend to refresh the page once.
   const handlePostCreate = () => {
     fetchPosts();
   };
