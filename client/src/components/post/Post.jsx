@@ -15,7 +15,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
-export default function Post({ post }) {
+export default function Post({ post, onPostDelete }) {
   const [like, setLike] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(false);
   const { user: currentUser } = useContext(AuthContext);
@@ -67,7 +67,8 @@ export default function Post({ post }) {
       await axios.delete(`${backend_url}/users/post/delete/${post._id}`, {
         data: { uid: currentUser._id },
       });
-      // force a rerender, or remove this post from your posts array in the parent component
+      onPostDelete(post._id); // notify the parent component to remove this post
+      handleClose();
     } catch (err) {
       console.log(err);
     }

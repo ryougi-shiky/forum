@@ -6,7 +6,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function Share() {
+export default function Share({ onPostCreate }) {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const {user} = useContext(AuthContext);
   const desc = useRef();
@@ -21,6 +21,7 @@ export default function Share() {
     }
     try {
       await axios.post(`${backend_url}/users/post/create`, newPost);
+      onPostCreate(); // notify the parent component to refresh posts
     } catch (err) {
       console.log(err);
     }

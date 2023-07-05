@@ -14,30 +14,37 @@ export default function Feed({username}) {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
 
+  const fetchPosts = async () => {
+    const res = username 
+      ? await axios.get(`${backend_url}/users/post/profile/${username}`)
+      : await axios.get(`${backend_url}/users/post/allposts`);
+    
+    // console.log("posts: ", res.data);
+    // console.log("username: ", username);
+    setPosts(res.data);
+    // setPosts(res.data.sort((p1, p2) => {
+    //   return new Date(p2.createdAt) - new Date(p1.createdAt);
+    // }));
+  };
+
   useEffect(()=>{
-    const fetchPosts = async () => {
-      const res = username 
-        ? await axios.get(`${backend_url}/users/post/profile/${username}`)
-        : await axios.get(`${backend_url}/users/post/allposts`);
-      
-      
-
-      // console.log("posts: ", res.data);
-      // console.log("username: ", username);
-      setPosts(res.data);
-      // setPosts(res.data.sort((p1, p2) => {
-      //   return new Date(p2.createdAt) - new Date(p1.createdAt);
-      // }));
-    };
     fetchPosts();
-  },[username, user._id, posts])
+  },[username, user._id])
 
+  const handlePostDelete = (postId) => {
+    setPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
+  };
+
+  const handlePostCreate = () => {
+    fetchPosts();
+  };
+  
   return (
     <div className="feed">
       <div className="feedWrapper">
-        {(!username || username === user.username) && <Share />}
+        {(!username || username === user.username) && <Share onPostCreate={handlePostCreate} />}
         {posts && posts.map((p) => (
-          <Post key={p.id} post={p} />
+          <Post key={p.id} post={p} onPostDelete={handlePostDelete} />
         ))}
       </div>
     </div>
