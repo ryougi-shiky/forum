@@ -120,4 +120,20 @@ router.get('/allposts', async (req, res) => {
   }
 })
 
+// Post a comment
+router.put('/postcomment/:postId', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    post.comments.push({
+      commenterId: req.body.commenterId,
+      commenterName: req.body.commenterName,
+      text: req.body.text,
+    });
+    await post.save();
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
