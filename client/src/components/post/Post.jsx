@@ -149,17 +149,17 @@ export default function Post({ post, onPostDelete }) {
 				</div>
 				<div className="postBottom">
 					<div className="postBottomLeft">
-						<img
+						{/* <img
 							src="/assets/icon/like.png"
 							alt=""
 							className="likeIcon"
 							onClick={likeHandler}
-						/>
-						{/* <img src="/assets/icon/heart.png" alt="" className="likeIcon" onClick={likeHandler} /> */}
+						/> */}
+						<img src="/assets/icon/heart.png" alt="" className="likeIcon" onClick={likeHandler} />
 						<span className="postLikeCounter">{like} Likes</span>
 					</div>
 					<div className="postBottomRight">
-						<AddCommentIcon onClick={() => setShowCommentBox(!showCommentBox)} />
+						<AddCommentIcon className="addCommentIcon" onClick={() => setShowCommentBox(!showCommentBox)} />
 
 						<span className="postCommentText" onClick={fetchComments}>
 							See Comments
@@ -170,19 +170,24 @@ export default function Post({ post, onPostDelete }) {
 				</div>
 				<div className="postBottomCommentBox">
 					{showCommentBox && (
-						<div>
-							<input
+						<div className="writeComment">
+							<textarea
+								className="commentTextbox"
 								type="text"
 								value={commentText}
 								onChange={(e) => setCommentText(e.target.value)}
+								placeholder="Enter your comment here."
+								wrap="soft"
 							/>
-							<button onClick={addComment}>Send</button>
+							<button className="commentTextboxButton" onClick={addComment}>Send</button>
 						</div>
 					)}
 
 				</div>
 				<div className="postBottomCommentList">
+					{showComments && <br></br>}
 					{showComments && <p>All comments:</p>}
+					{showComments && <br></br>}
 					{showComments && comments.map((comment) => (
 						<div className="commentContainer" key={comment._id}>
 							<Link to={`profile/${comment.commenterName}`}>
