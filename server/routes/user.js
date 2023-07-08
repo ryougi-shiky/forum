@@ -1,6 +1,13 @@
 const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const multer = require("multer"); //Handle uploading file
+
+const upload = multer({
+  limits: {
+    fileSize: 256000, // limit icon size to 256KB
+  },
+});
 
 // update users
 router.put("/update/:id", async (req, res) => {
@@ -41,6 +48,7 @@ router.delete("/delete/:id", async (req, res) => {
     return res.status(403).json("You can't delete this account !");
   }
 });
+
 // get users
 router.get('/', async (req, res) => {
 	const uid = req.query.uid;
@@ -100,6 +108,7 @@ router.put('/:id/follow', async (req, res) => {
 		res.status(403).json("You can't follow yourself");
 	}
 })
+
 // unfollow users
 router.put('/:id/unfollow', async (req, res) => {
 	// make sure not follow myself
@@ -121,5 +130,27 @@ router.put('/:id/unfollow', async (req, res) => {
 		res.status(403).json("You can't unfollow yourself");
 	}
 })
+
+// update profile picture
+router.put("/:id/profilePicture", upload.single("profilePicture"), async (req, res) => {
+	// console.log("req: ", req); // add this line
+	console.log("req.file: ", req.file); // add this line
+	console.log("req.file.buffer: ", req.file.buffer);
+	console.log("req.body.userId: ", req.body.userId);
+	console.log("req.params.id: ", req.params.id);
+	if (req.body.userId === req.params.id) {
+		try {
+			const user = await User.findById(req.params.id);
+			// update profile picture with the new file
+			user.profilePicture = req.file.buffer;
+			await user.save();
+			res.status(200).json("Profile picture has been updated");
+		} catch (err) {
+			return res.status(500).json(err);
+		}
+	} else {
+		return res.status(403).json("You can only update your own profile picture");
+	}
+});
 
 module.exports = router;

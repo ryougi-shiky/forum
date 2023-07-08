@@ -13,7 +13,10 @@ import Moments from "./pages/moments/Moments";
 function App() {
   const { user } = useContext(AuthContext);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-
+  // Read user icon from database
+  // if (user.profilePicture) {
+  //   user.profilePicture = Buffer.from(user.profilePicture).toString("base64");
+  // }
   return (
     <BrowserRouter>
         <div>

@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from "axios";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import "./profile.css";
 
@@ -15,6 +17,10 @@ export default function Profile() {
   
   const [user, setUser] = useState({});
   const params = useParams();
+  const fileInput = useRef(); // reference to the file input element
+  const [snackbarOpenOversize, setSnackbarOpenOversize] = useState(false); // Notification window
+  const [snackbarOpenUploading, setSnackbarOpenUploading] = useState(false); // Notification window
+
   console.log("params: ", params);
 
   useEffect(()=>{
@@ -22,12 +28,43 @@ export default function Profile() {
       const res = await axios.get(`${backend_url}/users?username=${params.username}`);
       console.log(res);
       setUser(res.data);
+      console.log("res.data.profilePicture: ", res.data.profilePicture);  // Check if the profilePicture field is correctly populated
+      console.log("user.profilePicture: ", user.profilePicture);  // Check if the profilePicture field is correctly populated
     };
     fetchUser();
   },[params.username]);
 
   var coverImg = "/assets/icon/person/noCover.png";
-  var profilePicture = "/assets/icon/person/noAvatar.png";
+  var defaultProfilePicture = "/assets/icon/person/noAvatar.png";
+
+  const handleProfilePictureClick = () => {
+    fileInput.current.click(); // simulate a click on the file input element
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file && file.size < 256000) { // Ensure file is less than 256KB
+      const formData = new FormData();
+      formData.append('profilePicture', file);
+      formData.append('userId', user._id);
+
+      setSnackbarOpenUploading(true); // Notify user that image is uploading.
+      console.log("img is uploading...");
+
+      // You will need to implement the /users/:id/profilePicture endpoint on your server
+      await axios.put(`${backend_url}/users/${user._id}/profilePicture`, formData);
+    } else {
+      setSnackbarOpenOversize(true); // Notify user that image is too large
+      console.log("img is too large to upload!");
+    }
+  };
+
+  function arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+  };
   
   return (
     <React.Fragment>
@@ -38,7 +75,18 @@ export default function Profile() {
           <div className="profileRightTop">
             <div className="profileCover">
               <img src={user.coverImg ? user.coverImg : coverImg} alt="" className="profileCoverImg" />
-              <img src={user.profilePicture ? user.profilePicture : profilePicture} alt="" className="profileUserImg" />
+              <img
+                src={user.profilePicture ? `data:image/jpeg;base64,${arrayBufferToBase64(user.profilePicture.data)}` : defaultProfilePicture}
+                alt=""
+                className="profileUserImg"
+                onClick={handleProfilePictureClick}
+              />
+              <input
+                ref={fileInput}
+                type="file"
+                hidden
+                onChange={handleFileChange}
+              />
             </div>
             <div className="profileInfo">
               <h4 className="profileInfoName">{user.username}</h4>
@@ -52,6 +100,25 @@ export default function Profile() {
         </div>
         
       </div>
+      <Snackbar
+        open={snackbarOpenOversize}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpenOversize(false)}
+      >
+        <Alert onClose={() => setSnackbarOpenOversize(false)} severity="warning" sx={{ width: '100%' }}>
+          Your image is too large to upload! Please select an image smaller than 256KB.
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={snackbarOpenUploading}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpenOversize(false)}
+      >
+        <Alert onClose={() => setSnackbarOpenUploading(false)} severity="warning" sx={{ width: '100%' }}>
+          Your image is uploading.
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   )
 }

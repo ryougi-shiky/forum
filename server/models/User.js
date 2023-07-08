@@ -21,8 +21,8 @@ const UserSchema = new mongoose.Schema({
     max: 15,
   },
   profilePicture: {
-    type: String,
-    default: "",
+    type: Buffer,
+    default: null,
   },
   followers: {
     type: Array,

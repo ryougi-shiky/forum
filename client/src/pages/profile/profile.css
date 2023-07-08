@@ -28,6 +28,7 @@
   margin: auto;
   top: 150px;
   border: 3px solid white;
+  cursor: pointer;
 }
 
 .profileInfo {
