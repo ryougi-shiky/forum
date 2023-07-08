@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from "axios";
 import Snackbar from '@mui/material/Snackbar';
@@ -10,11 +10,13 @@ import Topbar from "../../components/topbar/Topbar";
 import Rightbar from "../../components/rightbar/Rightbar";
 import Feed from "../../components/feed/Feed";
 import Sidebar from "../../components/sidebar/Sidebar";
+import { AuthContext } from "../../context/AuthContext";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 export default function Profile() {
-  
+  const { user:currentUser } = useContext(AuthContext);
+  console.log("currentUser: ", currentUser);
   const [user, setUser] = useState({});
   const params = useParams();
   const fileInput = useRef(); // reference to the file input element
@@ -38,12 +40,15 @@ export default function Profile() {
   var defaultProfilePicture = "/assets/icon/person/noAvatar.png";
 
   const handleProfilePictureClick = () => {
-    fileInput.current.click(); // simulate a click on the file input element
+    if (user._id === currentUser._id) {
+      fileInput.current.click(); // simulate a click on the file input element
+    }
+    
   };
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (file && file.size < 256000) { // Ensure file is less than 256KB
+    if (file && file.size <= 256000) { // Ensure file is less than 256KB
       const formData = new FormData();
       formData.append('profilePicture', file);
       formData.append('userId', user._id);
@@ -52,7 +57,7 @@ export default function Profile() {
       console.log("img is uploading...");
 
       // You will need to implement the /users/:id/profilePicture endpoint on your server
-      await axios.put(`${backend_url}/users/${user._id}/profilePicture`, formData);
+      await axios.put(`${backend_url}/users/${currentUser._id}/profilePicture`, formData);
     } else {
       setSnackbarOpenOversize(true); // Notify user that image is too large
       console.log("img is too large to upload!");
