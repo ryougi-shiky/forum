@@ -190,21 +190,26 @@ export default function Post({ post, onPostDelete }) {
 					{showComments && <br></br>}
 					{showComments && comments.map((comment) => (
 						<div className="commentContainer" key={comment._id}>
-							<Link to={`profile/${comment.commenterName}`}>
-								<img
-									className="postProfileImg"
-									src={
-										user.profilePicture
-											? user.profilePicture
-											: "/assets/icon/person/noAvatar.png"
-									}
-									alt=""
-								/>
-							</Link>
-							{/* <span>{comment.timestamp.toDateString()}</span> */}
-							<span className="postUsername">{comment.commenterName}</span>
-							<span className="postDate">{new Date(comment.timestamp).toLocaleDateString()}</span>
-							<p>{comment.text}</p>
+							<div className="commentTop">
+								<Link to={`profile/${comment.commenterName}`}>
+									<img
+										className="postProfileImg"
+										src={
+											user.profilePicture
+												? user.profilePicture
+												: "/assets/icon/person/noAvatar.png"
+										}
+										alt=""
+									/>
+								</Link>
+								{/* <span>{comment.timestamp.toDateString()}</span> */}
+								<div className="commentInfo">
+									<span className="commentUsername postUsername">{comment.commenterName}</span>
+									<span className="commentDate postDate">{new Date(comment.timestamp).toLocaleDateString()}</span>
+								</div>
+							</div>
+							
+							<p className="commentText postText">{comment.text}</p>
 						</div>
 					))}
 				</div>
