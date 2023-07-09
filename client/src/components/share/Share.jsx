@@ -6,6 +6,9 @@ import { AuthContext } from '../../context/AuthContext';
 import { useState } from 'react';
 import axios from 'axios';
 
+import { decodeImg } from "../../decodeImg";
+
+
 export default function Share({ onPostCreate }) {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const {user} = useContext(AuthContext);
@@ -31,7 +34,7 @@ export default function Share({ onPostCreate }) {
     <div className='share'>
       <div className="shareWrapper">
         <div className="shareTop">
-          <img className='shareProfileImg' src={user.profilePicture ? user.profilePicture : '/assets/icon/person/noAvatar.png'} alt='' />
+          <img className='shareProfileImg' src={user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : '/assets/icon/person/noAvatar.png'} alt='' />
           <input placeholder="Share something here" type="text" className="shareInput" ref={desc} />
         </div>
         <hr className="shareHr" />

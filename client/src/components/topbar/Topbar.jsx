@@ -18,8 +18,11 @@ import "./topbar.css";
 
 import { AuthContext } from '../../context/AuthContext';
 import { Button } from '@mui/material';
+import { decodeImg } from "../../decodeImg";
+
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
+const defaultProfilePicture = "/assets/icon/person/noAvatar.png";
 
 const menuOptions = [
   'Account', 'Log out'
@@ -128,7 +131,7 @@ export default function Topbar() {
           </div>
         </div>
         <Link to={`/profile/${currentUser.username}`}>
-          <img src={ /*user.profilePicture ? user.profilePicture :*/ '/assets/icon/person/noAvatar.png'} alt="" className="topbarImg" />
+          <img src={ currentUser.profilePicture ? `data:image/jpeg;base64,${decodeImg(currentUser.profilePicture.data)}` : defaultProfilePicture} alt="" className="topbarImg" />
         </Link>
       </div>
     </div>

@@ -11,6 +11,7 @@ import Rightbar from "../../components/rightbar/Rightbar";
 import Feed from "../../components/feed/Feed";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { AuthContext } from "../../context/AuthContext";
+import { decodeImg } from "../../decodeImg";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
@@ -37,7 +38,7 @@ export default function Profile() {
   },[params.username]);
 
   var coverImg = "/assets/icon/person/noCover.png";
-  var defaultProfilePicture = "/assets/icon/person/noAvatar.png";
+  const defaultProfilePicture = "/assets/icon/person/noAvatar.png";
 
   const handleProfilePictureClick = () => {
     if (user._id === currentUser._id) {
@@ -63,13 +64,6 @@ export default function Profile() {
       console.log("img is too large to upload!");
     }
   };
-
-  function arrayBufferToBase64(buffer) {
-    var binary = '';
-    var bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => binary += String.fromCharCode(b));
-    return window.btoa(binary);
-  };
   
   return (
     <React.Fragment>
@@ -81,7 +75,7 @@ export default function Profile() {
             <div className="profileCover">
               <img src={user.coverImg ? user.coverImg : coverImg} alt="" className="profileCoverImg" />
               <img
-                src={user.profilePicture ? `data:image/jpeg;base64,${arrayBufferToBase64(user.profilePicture.data)}` : defaultProfilePicture}
+                src={user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : defaultProfilePicture}
                 alt=""
                 className="profileUserImg"
                 onClick={handleProfilePictureClick}

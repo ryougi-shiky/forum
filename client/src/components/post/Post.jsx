@@ -12,6 +12,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { decodeImg } from "../../decodeImg";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
@@ -27,10 +28,14 @@ export default function Post({ post, onPostDelete }) {
 	const [showComments, setShowComments] = useState(false);
 	const [comments, setComments] = useState(post.comments || []);
 
+	const [commentersIcon, setCommentersIcon] = useState({});
+
+
 	useEffect(() => {
 		setIsLiked(post.likes.includes(currentUser._id));
 	}, [currentUser._id, post.likes]);
 
+	// Get post owner
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
@@ -109,6 +114,27 @@ export default function Post({ post, onPostDelete }) {
 			}
 		}
 	};
+
+	useEffect(() => {
+		const fetchCommentersData = async () => {
+			let uniqueCommenters = [...new Set(comments.map(comment => comment.commenterId))];
+			let fetchedCommentersIcon = {};
+	
+			for (let uid of uniqueCommenters) {
+				try {
+					const res = await axios.get(`${backend_url}/users/${uid}`);
+					fetchedCommentersIcon[uid] = res.data;
+				} catch (err) {
+					console.log("Post component: retriving user info error !");
+					console.log(err);
+				}
+			}
+			
+			setCommentersIcon(fetchedCommentersIcon);
+		};
+	
+		fetchCommentersData();
+	}, [comments]);
 	  
 
 	return (
@@ -119,11 +145,7 @@ export default function Post({ post, onPostDelete }) {
 						<Link to={`profile/${post.username}`}>
 							<img
 								className="postProfileImg"
-								src={
-									user.profilePicture
-										? user.profilePicture
-										: "/assets/icon/person/noAvatar.png"
-								}
+								src={ user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : "/assets/icon/person/noAvatar.png" }
 								alt=""
 							/>
 						</Link>
@@ -196,7 +218,7 @@ export default function Post({ post, onPostDelete }) {
 										className="postProfileImg"
 										src={
 											user.profilePicture
-												? user.profilePicture
+												? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}`
 												: "/assets/icon/person/noAvatar.png"
 										}
 										alt=""
