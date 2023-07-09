@@ -20,7 +20,7 @@ export default function Post({ post, onPostDelete }) {
 	const [like, setLike] = useState(post.likes.length);
 	const [isLiked, setIsLiked] = useState(false);
 	const { user: currentUser } = useContext(AuthContext);
-	const [user, setUser] = useState({});
+	const [user, setUser] = useState({}); // Post owner
 	const postTime = new Date(post.createdAt);
 
 	const [showCommentBox, setShowCommentBox] = useState(false);
@@ -28,7 +28,7 @@ export default function Post({ post, onPostDelete }) {
 	const [showComments, setShowComments] = useState(false);
 	const [comments, setComments] = useState(post.comments || []);
 
-	const [commentersIcon, setCommentersIcon] = useState({});
+	const [commentersData, setCommentersData] = useState({});
 
 
 	useEffect(() => {
@@ -39,7 +39,7 @@ export default function Post({ post, onPostDelete }) {
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
-				const res = await axios.get(`${backend_url}/users/${post.uid}`);
+				const res = await axios.get(`${backend_url}/users?uid=${post.uid}`);
 				console.log(res);
 				setUser(res.data);
 			} catch (err) {
@@ -118,19 +118,24 @@ export default function Post({ post, onPostDelete }) {
 	useEffect(() => {
 		const fetchCommentersData = async () => {
 			let uniqueCommenters = [...new Set(comments.map(comment => comment.commenterId))];
-			let fetchedCommentersIcon = {};
-	
+			let fetchedCommentersData = {};
+			console.log("uniqueCommenters: ", uniqueCommenters);
+
 			for (let uid of uniqueCommenters) {
 				try {
-					const res = await axios.get(`${backend_url}/users/${uid}`);
-					fetchedCommentersIcon[uid] = res.data;
+					const res = await axios.get(`${backend_url}/users?uid=${uid}`);
+					console.log("fetchedCommentersData, res.data:, ", res.data);
+					fetchedCommentersData[uid] = res.data;
+					
 				} catch (err) {
 					console.log("Post component: retriving user info error !");
 					console.log(err);
 				}
 			}
+			setCommentersData(fetchedCommentersData);
+			console.log("commentersData:, ", commentersData);
+			console.log("fetchedCommentersData:, ", fetchedCommentersData);
 			
-			setCommentersIcon(fetchedCommentersIcon);
 		};
 	
 		fetchCommentersData();
@@ -217,8 +222,8 @@ export default function Post({ post, onPostDelete }) {
 									<img
 										className="postProfileImg"
 										src={
-											user.profilePicture
-												? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}`
+											commentersData[comment.commenterId]?.profilePicture
+												? `data:image/jpeg;base64,${decodeImg(commentersData[comment.commenterId].profilePicture.data)}`
 												: "/assets/icon/person/noAvatar.png"
 										}
 										alt=""
