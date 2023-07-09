@@ -16,7 +16,7 @@ import { decodeImg } from "../../decodeImg";
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 export default function Profile() {
-  const { user:currentUser } = useContext(AuthContext);
+  const { user:currentUser, dispatch } = useContext(AuthContext);
   console.log("currentUser: ", currentUser);
   const [user, setUser] = useState({});
   const params = useParams();
@@ -58,7 +58,15 @@ export default function Profile() {
       console.log("img is uploading...");
 
       // You will need to implement the /users/:id/profilePicture endpoint on your server
-      await axios.put(`${backend_url}/users/${currentUser._id}/profilePicture`, formData);
+      const response = await axios.put(`${backend_url}/users/${currentUser._id}/profilePicture`, formData);
+      // after successful upload, dispatch the action to update the user in your context
+      if (response.status === 200) {
+        const updatedUserResponse = await axios.get(`${backend_url}/users?username=${currentUser.username}`);
+        if (updatedUserResponse.status === 200) {
+          // dispatch the action to update the user in your context
+          dispatch({ type: 'UPDATE_USER', payload: updatedUserResponse.data });
+        }
+      }
     } else {
       setSnackbarOpenOversize(true); // Notify user that image is too large
       console.log("img is too large to upload!");

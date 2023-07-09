@@ -54,6 +54,11 @@
   outline: none;
 }
 
+.error-msg {
+  padding-left: 10px;
+  color: red;
+}
+
 .registerButton {
   height: 50px;
   border-radius: 10px;

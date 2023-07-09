@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRef, useContext, useEffect } from 'react';
+import { useRef, useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -17,10 +17,16 @@ export default function Register() {
   const passwordAgain = useRef();
   const {user, isFetching, error, dispatch} = useContext(AuthContext);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const [unameDupErr, setUnameDupErr] = useState(""); // error message when username is already used
+  const [emailDupErr, setEmailDupErr] = useState(""); // error message when email is already used
+
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
     e.preventDefault();
+    setUnameDupErr(""); // reset the error message
+    setEmailDupErr("");
+
     if (passwordAgain.current.value !== password.current.value){
       password.current.setCustomValidity("Passwords don't match !");
     } else {
@@ -33,9 +39,19 @@ export default function Register() {
         const res = await axios.post(`${backend_url}/users/auth/register`, user);
         navigate('/login');
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 400){
+          if (err.response.data.type === "unameDupErr"){
+            setUnameDupErr(err.response.data.message);
+            console.log("setUnameDupErr: ", setUnameDupErr);
+          } else if (err.response.data.type === "emailDupErr"){
+            setEmailDupErr(err.response.data.message);
+            console.log("setEmailDupErr: ", setEmailDupErr);
+          }
+          
+        } else {
+          console.log(err);
+        }
       }
-      
     }
   }
   console.log("register page user: ", user);
@@ -61,7 +77,9 @@ export default function Register() {
           <div className="registerRight">
             <form className="registerBox" onSubmit={handleClick}>
               <input placeholder='Username' type="text" className="registerInput" ref={username} required />
+              {unameDupErr && <p className="error-msg">{unameDupErr}</p>} {/*show username already used error message*/}
               <input placeholder='Email' type="email" className="registerInput" ref={email} required />
+              {emailDupErr && <p className="error-msg">{emailDupErr}</p>} {/*show email already used error message*/}
               <input placeholder='Password' type="password" className="registerInput" ref={password} required minLength={6} />
               <input placeholder='Password Again' type="password" className="registerInput" ref={passwordAgain} required />
               <button className="registerButton" type='submit'>Sign Up</button>
