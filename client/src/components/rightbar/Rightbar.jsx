@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ComposedChart, Bar } from 'recharts';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import "./rightbar.css";
@@ -90,8 +91,34 @@ export default function Rightbar({user}) {
   
   
   const HomeRightbar = () => {
+    // Prepare the data for the composed chart
+    const chartData = weather?.list.map(item => ({
+      date: item.dt_txt,
+      temp: item.main.temp - 273.15, // convert from Kelvin to Celsius
+      windSpeed: item.wind.speed,
+      humidity: item.main.humidity,
+    }));
+
     return (
       <React.Fragment>
+        <ComposedChart
+          width={500}
+          height={400}
+          data={chartData}
+          margin={{
+            top: 5, right: 30, left: 20, bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="windSpeed" barSize={20} fill="#413ea0" />
+          <Line type="monotone" dataKey="temp" stroke="#ff7300" />
+          <Line type="monotone" dataKey="humidity" stroke="#82ca9d" />
+        </ComposedChart>
+
         {weather ? (
         <div>
           <h2>City: </h2>
