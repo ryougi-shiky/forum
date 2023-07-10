@@ -18,6 +18,8 @@ export default function Rightbar({user}) {
   const [friends, setFriends] = useState([]);
   const [followed, setFollowed] = useState(false);
   const { user:currentUser, dispatch } = useContext(AuthContext);
+  const [weather, setWeather] = useState();
+
 
   // useEffect(() => {
   //   // if no user, it will be an error
@@ -50,11 +52,55 @@ export default function Rightbar({user}) {
     }
     setFollowed(!followed);
   }
+
+  // Retrieve weather information
+  const getWeather = async () => {
+    const options = {
+      method: 'GET',
+      url: 'https://open-weather13.p.rapidapi.com/city/fivedaysforcast/30.438/-89.1028',
+      headers: {
+        'X-RapidAPI-Key': '9c4b3c4369msh7ff621c01df1d07p1172edjsn74e33213befb',
+        'X-RapidAPI-Host': 'open-weather13.p.rapidapi.com'
+      }
+    };
+
+    try {
+      const response = await axios.request(options);
+      setWeather(response.data);
+      console.log("weather: ", weather)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
+    getWeather();
+  }, []);
+  
+  
   
   const HomeRightbar = () => {
     return (
       <React.Fragment>
+        {weather ? (
+        <div>
+          <h2>City: {weather.city.name}</h2>
+          <h3>Country: {weather.city.country}</h3>
+          {weather.list.map((item, index) => (
+            <div key={index}>
+              <h3>Date: {item.dt_txt}</h3>
+              <p>Temperature: {item.main.temp}°C</p>
+              <p>Weather: {item.weather[0].main}</p>
+              <p>Description: {item.weather[0].description}</p>
+              <p>Wind Speed: {item.wind.speed} m/s</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>Loading weather...</p>
+      )}
         <div className="birthdayContainer">
+          
           <CakeIcon className="birthdayImg" />
           <span className="birthdayText">
             <b>Tifa</b> and <b>another 5 firends</b> have a birthday today
