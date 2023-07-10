@@ -20,6 +20,20 @@
   padding: 20px 20px 0 0;
 }
 
+.weatherTitle {
+  margin-left: 10px;
+}
+
+.weather7days {
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.37); 
+  box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.37);
+}
+
+.loadingWeatherNotify {
+  margin-left: 10px;
+}
+
 .birthdayContainer {
   display: flex;
   align-items: center;
