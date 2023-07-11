@@ -134,17 +134,17 @@ export default function Weather() {
         {weather && <h3 className="weatherTitle">{weather.city.name},{weather.city.country}</h3>}
 
         {weather ?
-          <ResponsiveContainer className="weather5days" width="100%" height={300}>
+          <ResponsiveContainer className="weather5days glassSty" width="100%" height={300}>
             <ComposedChart
               data={chartDataArray}
               margin={{
                 top: 20, right: 30, left: 0, bottom: 20,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" />
+              <CartesianGrid strokeDasharray="3 3" stroke="none" />
               <XAxis 
                 dataKey="date" 
-                stroke="#ffffff" 
+                stroke="none" 
                 padding={{ left: -20, right: 0 }} 
                 interval={0}
                 tick={({ x, y, payload })=>{
@@ -155,16 +155,16 @@ export default function Weather() {
                     </text>
                     )
                 }}>
-                <Label value="Date" offset={-20} position="insideBottom" fill="#ffffff" />
+                <Label value="Date" offset={-20} position="insideBottom" fill="none" />
 							</XAxis>
-							<YAxis domain={['auto', 'auto']} stroke="#ffffff">
-								<Label value="Temp (°C)" angle={-90} position="insideLeft" fill="#ffffff" />
+							<YAxis domain={['auto', 'auto']} stroke="none">
+								<Label value="Temp (°C)" angle={-90} position="insideLeft" fill="none" />
 							</YAxis>
 							<Line type="linear" dataKey="temp_min" stroke="#8884d8" dot>
 								<LabelList
 									dataKey="temp_min"
 									position="bottom"
-									fill="#8884d8"
+									fill="none"
 									style={{ fontSize: '10px' }}
 									content={({ x, y, value }) => (
 										<text x={x} y={y + 15} fill="#000000" fontSize="10" textAnchor="middle">
@@ -177,7 +177,7 @@ export default function Weather() {
 								<LabelList
 									dataKey="temp_max"
 									position="top"
-									fill="#82ca9d"
+									fill="none"
 									style={{ fontSize: '10px' }}
 									content={({ x, y, value }) => (
 										<text x={x} y={y - 7} fill="#000000" fontSize="10" textAnchor="middle">
@@ -191,7 +191,7 @@ export default function Weather() {
           : <p className="loadingWeatherNotify">Loading weather...</p>}
 
         {weather ?
-          <ResponsiveContainer className="weather24h" width="100%" height={300}>
+          <ResponsiveContainer className="weather24h glassSty" width="100%" height={300}>
             <BarChart
               data={chartData24Hours}
               margin={{

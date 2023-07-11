@@ -7,6 +7,8 @@
     border-radius: 10px;
     -webkit-box-shadow: 0px 1px 7px 0px rgba(0, 0, 0, 0.37);
     box-shadow: 0px 1px 7px 0px rgba(0, 0, 0, 0.37);
+
+    
 }
 
 .weather24h {
@@ -14,6 +16,13 @@
     border-radius: 10px;
     -webkit-box-shadow: 0px 1px 7px 0px rgba(0, 0, 0, 0.37);
     box-shadow: 0px 1px 7px 0px rgba(0, 0, 0, 0.37);
+}
+
+.glassSty {
+    /* frosted glass style */
+    backdrop-filter: blur(10px);
+    background-color: rgba(214, 246, 255, 0.3);
+    border-radius: 10px;
 }
 
 .loadingWeatherNotify {
