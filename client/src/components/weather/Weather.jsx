@@ -76,7 +76,7 @@ export default function Weather() {
     // Get the current date time and the date time 24 hours later
     const now = new Date();
     const next24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-
+		const labelFontSize = '12px';
 
     // Prepare the data for the composed chart
     const chartData5Days = weather?.list
@@ -105,14 +105,14 @@ export default function Weather() {
     const chartDataArray = Object.values(chartData5Days || {});
 
     const chartData24Hours = weather?.list
-        .filter(item => {
-            let itemDate = new Date(item.dt_txt);
-            return itemDate >= now && itemDate <= next24Hours;
-        }).map(item => ({
-            time: item.dt_txt.substring(11, 16),  // take only time part
-            temp: Math.round(item.main.temp - 273.15),// convert from Kelvin to Celsius
-            desc: item.weather[0].description,
-        }));
+			.filter(item => {
+				let itemDate = new Date(item.dt_txt);
+				return itemDate >= now && itemDate <= next24Hours;
+			}).map(item => ({
+				time: item.dt_txt.substring(11, 16),  // take only time part
+				temp: Math.round(item.main.temp - 273.15),// convert from Kelvin to Celsius
+				desc: item.weather[0].description,
+			}));
 
 
     const chartData = weather?.list
@@ -130,10 +130,54 @@ export default function Weather() {
 
     return (
         <React.Fragment>
-        <h2 className="weatherTitle">Weather Forecast</h2>
-        {weather && <h3 className="weatherTitle">{weather.city.name},{weather.city.country}</h3>}
+        {weather && <h3 className="weatherTitle">Weather Forecast: {weather.city.name}, {weather.city.country}</h3>}
+				{weather && <h4 className="chartTitle">24h Forecast</h4>}
+				{weather &&
+					<div style={{ width: '100%', overflowX: 'scroll', overflowY: 'hidden' }}>
+						<ResponsiveContainer className="weather24h glassSty" width={chartData24Hours.length * 60} height={300}>
+							<ComposedChart
+								data={chartData24Hours}
+								margin={{
+									top: 20, right: 30, left: 0, bottom: 20,
+								}}
+							>
+								<CartesianGrid strokeDasharray="3 3" stroke="none" />
+								<XAxis
+									dataKey="time"
+									stroke="none"
+									padding={{ left: -20, right: 0 }}
+									interval={0}
+									tick={({ x, y, payload }) => {
+										return (
+											<text x={x} y={y} fill="#666" textAnchor="middle" dy={20} style={{ fontSize: labelFontSize }}>
+												{payload.value}
+											</text>
+										)
+									}}>
+									<Label value="Time" offset={-5} position="insideBottom" fill="none" />
+								</XAxis>
+								<YAxis domain={['auto', 'auto']} stroke="none">
+									<Label value="Temp (°C)" angle={-90} position="insideLeft" fill="none" />
+								</YAxis>
+								<Line type="linear" dataKey="temp" stroke="#ffa34d" dot>
+									<LabelList
+										dataKey="temp"
+										position="top"
+										fill="#82ca9d"
+										style={{ fontSize: labelFontSize }}
+										content={({ x, y, value }) => (
+											<text x={x} y={y - 7} fill="#000000" fontSize={labelFontSize} textAnchor="middle">
+												{`${value}°`}
+											</text>
+										)}
+									/>
+								</Line>
+							</ComposedChart>
+						</ResponsiveContainer>
+					</div>}
 
-        {weather ?
+{weather && <h4 className="chartTitle">5-Days Forecast</h4>}
+{weather ?
           <ResponsiveContainer className="weather5days glassSty" width="100%" height={300}>
             <ComposedChart
               data={chartDataArray}
@@ -150,7 +194,7 @@ export default function Weather() {
                 tick={({ x, y, payload })=>{
                     const date = payload.value.split('-');
                     return (
-                    <text x={x} y={y} fill="#666" textAnchor="middle" dy={20} style={{fontSize: '10px'}}>
+                    <text x={x} y={y} fill="#666" textAnchor="middle" dy={20} style={{fontSize: labelFontSize}}>
                         {`${date[2]}/${date[1]}`}
                     </text>
                     )
@@ -165,9 +209,9 @@ export default function Weather() {
 									dataKey="temp_min"
 									position="bottom"
 									fill="none"
-									style={{ fontSize: '10px' }}
+									style={{ fontSize: labelFontSize }}
 									content={({ x, y, value }) => (
-										<text x={x} y={y + 15} fill="#000000" fontSize="10" textAnchor="middle">
+										<text x={x} y={y + 15} fill="#000000" fontSize={labelFontSize} textAnchor="middle">
 											{`${value}°`}
 										</text>
 									)}
@@ -178,61 +222,18 @@ export default function Weather() {
 									dataKey="temp_max"
 									position="top"
 									fill="none"
-									style={{ fontSize: '10px' }}
+									style={{ fontSize: labelFontSize }}
 									content={({ x, y, value }) => (
-										<text x={x} y={y - 7} fill="#000000" fontSize="10" textAnchor="middle">
+										<text x={x} y={y - 7} fill="#000000" fontSize={labelFontSize} textAnchor="middle">
 											{`${value}°`}
 										</text>
 									)}
 								/>
 							</Line>
-            </ComposedChart>
-          </ResponsiveContainer>
-          : <p className="loadingWeatherNotify">Loading weather...</p>}
+						</ComposedChart>
+					</ResponsiveContainer>
+					: <p className="loadingWeatherNotify">Loading weather...</p>}
 
-        {weather ?
-          <ResponsiveContainer className="weather24h glassSty" width="100%" height={300}>
-            <BarChart
-              data={chartData24Hours}
-              margin={{
-                top: 5, right: 30, left: 20, bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" />
-              <XAxis dataKey="time" stroke="#ffffff">
-                <Label value="Time" offset={-5} position="insideBottom" fill="#ffffff" />
-              </XAxis>
-              <YAxis stroke="#ffffff">
-                <Label value="Temp (°C)" angle={-90} position="insideLeft" fill="#ffffff" />
-              </YAxis>
-              <Tooltip />
-              <Bar dataKey="temp" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-          : <p className="loadingWeatherNotify">Loading weather...</p>}
-
-        {weather ? 
-        <ResponsiveContainer width="100%" height={300}>
-          <ComposedChart
-            data={chartData}
-            margin={{
-              top: 5, right: 30, left: 20, bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" />
-            <XAxis dataKey="date" stroke="#ffffff">
-              <Label value="Date" offset={-5} position="insideBottom" fill="#ffffff" />
-            </XAxis>
-            <YAxis stroke="#ffffff">
-              <Label value="Temp (°C)" angle={-90} position="insideLeft" fill="#ffffff" />
-            </YAxis>
-            <Tooltip content={<CustomTooltip />} />
-            <Line type="monotone" dataKey="temp" stroke="#ff7300" dot={false} />
-          </ComposedChart>
-        </ResponsiveContainer>
-        : <p className="loadingWeatherNotify">Loading weather...</p>}
-        
-        
       </React.Fragment>
     )
 }
