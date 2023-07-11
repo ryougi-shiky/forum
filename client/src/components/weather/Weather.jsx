@@ -145,7 +145,7 @@ export default function Weather() {
               <XAxis 
                 dataKey="date" 
                 stroke="#ffffff" 
-                padding={{ left: 0, right: 0 }} 
+                padding={{ left: -20, right: 0 }} 
                 interval={0}
                 tick={({ x, y, payload })=>{
                     const date = payload.value.split('-');
@@ -155,20 +155,37 @@ export default function Weather() {
                     </text>
                     )
                 }}>
-                <Label value="Date" offset={-15} position="insideBottom" fill="#ffffff" />
-              </XAxis>
-              <YAxis domain={['auto', 'auto']} stroke="#ffffff">
-                <Label value="Temp (°C)" angle={-90} position="insideLeft" fill="#ffffff" />
-              </YAxis>
-              <Tooltip />
-              <Line type="monotone" dataKey="temp_min" stroke="#8884d8" dot>
-                <LabelList dataKey="temp_min" position="bottom" fill="#8884d8" style={{fontSize: '10px'}}
-                 />
-              </Line>
-              <Line type="monotone" dataKey="temp_max" stroke="#82ca9d" dot>
-                <LabelList dataKey="temp_max" position="top" fill="#82ca9d" style={{fontSize: '10px'}}
-                 />
-              </Line>
+                <Label value="Date" offset={-20} position="insideBottom" fill="#ffffff" />
+							</XAxis>
+							<YAxis domain={['auto', 'auto']} stroke="#ffffff">
+								<Label value="Temp (°C)" angle={-90} position="insideLeft" fill="#ffffff" />
+							</YAxis>
+							<Line type="linear" dataKey="temp_min" stroke="#8884d8" dot>
+								<LabelList
+									dataKey="temp_min"
+									position="bottom"
+									fill="#8884d8"
+									style={{ fontSize: '10px' }}
+									content={({ x, y, value }) => (
+										<text x={x} y={y + 15} fill="#000000" fontSize="10" textAnchor="middle">
+											{`${value}°`}
+										</text>
+									)}
+								/>
+							</Line>
+							<Line type="linear" dataKey="temp_max" stroke="#82ca9d" dot>
+								<LabelList
+									dataKey="temp_max"
+									position="top"
+									fill="#82ca9d"
+									style={{ fontSize: '10px' }}
+									content={({ x, y, value }) => (
+										<text x={x} y={y - 7} fill="#000000" fontSize="10" textAnchor="middle">
+											{`${value}°`}
+										</text>
+									)}
+								/>
+							</Line>
             </ComposedChart>
           </ResponsiveContainer>
           : <p className="loadingWeatherNotify">Loading weather...</p>}
