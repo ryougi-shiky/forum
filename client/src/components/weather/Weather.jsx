@@ -142,10 +142,19 @@ export default function Weather() {
               }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" />
-              <XAxis dataKey="date" stroke="#ffffff" padding={{ left: 30, right: 30 }} tickFormatter={(str) => {
-                const date = str.split('-');
-                return `${date[2]}/${date[1]}`;
-              }}>
+              <XAxis 
+                dataKey="date" 
+                stroke="#ffffff" 
+                padding={{ left: 0, right: 0 }} 
+                interval={0}
+                tick={({ x, y, payload })=>{
+                    const date = payload.value.split('-');
+                    return (
+                    <text x={x} y={y} fill="#666" textAnchor="middle" dy={20} style={{fontSize: '10px'}}>
+                        {`${date[2]}/${date[1]}`}
+                    </text>
+                    )
+                }}>
                 <Label value="Date" offset={-15} position="insideBottom" fill="#ffffff" />
               </XAxis>
               <YAxis domain={['auto', 'auto']} stroke="#ffffff">
@@ -153,10 +162,12 @@ export default function Weather() {
               </YAxis>
               <Tooltip />
               <Line type="monotone" dataKey="temp_min" stroke="#8884d8" dot>
-                <LabelList dataKey="temp_min" position="bottom" fill="#8884d8" />
+                <LabelList dataKey="temp_min" position="bottom" fill="#8884d8" style={{fontSize: '10px'}}
+                 />
               </Line>
               <Line type="monotone" dataKey="temp_max" stroke="#82ca9d" dot>
-                <LabelList dataKey="temp_max" position="top" fill="#82ca9d" />
+                <LabelList dataKey="temp_max" position="top" fill="#82ca9d" style={{fontSize: '10px'}}
+                 />
               </Line>
             </ComposedChart>
           </ResponsiveContainer>
