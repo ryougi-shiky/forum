@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import "./rightbar.css";
@@ -22,6 +22,13 @@ export default function Rightbar({user}) {
   const [followed, setFollowed] = useState(false);
   const { user:currentUser, dispatch } = useContext(AuthContext);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editAge, setEditAge] = useState(user?.age);
+  const [editFrom, setEditFrom] = useState(user?.from);
+  const inputAge = useRef();
+  const inputFrom = useRef();
+  
+
 
   useEffect(() => {
     // if no user, it will be an error
@@ -40,7 +47,7 @@ export default function Rightbar({user}) {
     getFriends();
   }, [currentUser._id]);
 
-  const handleClick = async () => {
+  const handleFollow = async () => {
     try {
       if (followed){
         await axios.put(`${backend_url}/users/${user._id}/unfollow`, {id: currentUser._id});
@@ -53,6 +60,32 @@ export default function Rightbar({user}) {
       console.log(err);
     }
     setFollowed(!followed);
+  }
+
+  const handleEdit = () => {
+    setIsEditing(!isEditing);
+  }
+
+  const handleCancel = () => {
+    // setEditAge(user.age);
+    // setEditFrom(user.from);
+    setIsEditing(false);
+  }
+
+  const handleSave = async (event) => {
+    event.preventDefault();
+    // make the PUT request here to update the user info
+    try {
+      const res = await axios.put(`${backend_url}/users/update/userinfo/${currentUser._id}`, 
+      {age: inputAge.current.value, from: inputFrom.current.value});
+      if (res.status === 200) {
+        currentUser.age = inputAge.current.value;
+        currentUser.from = inputFrom.current.value;
+        setIsEditing(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const HomeRightbar = () => {
@@ -80,24 +113,35 @@ export default function Rightbar({user}) {
     return (
       <React.Fragment>
         {user.username !== currentUser.username && (
-          <button className="rightbarFollowButton" onClick={handleClick}>
+          <button className="rightbarFollowButton" onClick={handleFollow}>
             {followed ? 'Unfollow' : 'Follow'}
             {followed ? <Remove /> : <Add />}
           </button>
         )}
-        <h4 className="rightbarTitle">User Info</h4>
+        <h4 className="rightbarTitle">User Info
+          {user.username === currentUser.username &&
+          (<div className="rightbarUserinfoEditButtons">
+            {!isEditing && <button className="editButton" onClick={handleEdit}>Edit</button>}
+            {isEditing && <button className="saveButton" onClick={handleSave}>Save</button>}
+            {isEditing && <button className="cancelButton" onClick={handleCancel}>Cancel</button>}
+          </div>)}
+        </h4>
         <div className="rightbarInfo">
           <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">City: </span>
-            <span className="rightbarInfoValue">{user.city}</span>
+            <span className="rightbarInfoKey">Age: </span>
+            {
+              isEditing
+                ? <input className="rightbarInfoValue" type="number" ref={inputAge} placeholder="Edit your age" />
+                : <span className="rightbarInfoValue">{user.age}</span>
+            }
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">From: </span>
-            <span className="rightbarInfoValue">{user.from}</span>
-          </div>
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">Relationship: </span>
-            <span className="rightbarInfoValue">{user.relation}</span>
+            {
+              isEditing
+                ? <input className="rightbarInfoValue" type="text" ref={inputFrom} placeholder="Edit your location" />
+                : <span className="rightbarInfoValue">{user.from}</span>
+            }
           </div>
         </div>
         {/* <h4 className="rightbarTitle">Friends</h4>

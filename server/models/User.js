@@ -40,18 +40,19 @@ const UserSchema = new mongoose.Schema({
     type: String,
     max: 50
   },
-  city: {
-    type: String,
-    max: 50
+  age: {
+    type: Number,
+    min: 0,
+    max: 200
   },
   from: {
     type: String,
-    max: 50
+    max: 20
   },
-  relationship: {
-    type: Number,
-    enum: [1, 2, 3],
-  }
+  // relationship: {
+  //   type: Number,
+  //   enum: [1, 2, 3],
+  // }
 },
 {timestamps: true}
 )

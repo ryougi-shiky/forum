@@ -153,4 +153,31 @@ router.put("/:id/profilePicture", upload.single("profilePicture"), async (req, r
 	}
 });
 
+// update user's info
+router.put("/update/userinfo/:id", async (req, res) => {
+	// if (req.body.id === req.params.id || req.body.isAdmin){
+		  // set new password
+	//   if (req.body.password){
+	// 	try {
+	// 	  const salt = await bcrypt.genSalt(10);
+	// 	  req.body.password = await bcrypt.hash(req.body.password, salt);
+	// 	} catch (err){
+	// 	  return res.status(500).json("Password invalid!\n", err);
+	// 	}
+	//   }
+	  try {
+		// Include age and from fields here
+		const updatedUser = await User.findByIdAndUpdate(req.params.id, 
+			{ $set: { age: req.body.age, from: req.body.from } }, { new: true });
+		const {password, updatedAt, ...other} = updatedUser._doc;
+		res.status(200).json(other);
+	  } catch (err) {
+		return res.status(500).json(err);
+	  }
+	// } else {
+	//   return res.status(403).json("You can only update your own account !");
+	// }
+  });
+  
+
 module.exports = router;
