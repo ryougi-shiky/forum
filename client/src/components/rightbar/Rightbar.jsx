@@ -72,6 +72,11 @@ export default function Rightbar({user}) {
     setIsEditing(false);
   }
 
+  const updateLocalUserinfo = () => {
+    user.age = inputAge.current.value;
+    user.from = inputFrom.current.value;
+  }
+
   const handleSave = async (event) => {
     event.preventDefault();
     // make the PUT request here to update the user info
@@ -81,6 +86,7 @@ export default function Rightbar({user}) {
       if (res.status === 200) {
         currentUser.age = inputAge.current.value;
         currentUser.from = inputFrom.current.value;
+        updateLocalUserinfo();
         setIsEditing(false);
       }
     } catch (err) {
@@ -121,9 +127,9 @@ export default function Rightbar({user}) {
         <h4 className="rightbarTitle">User Info
           {user.username === currentUser.username &&
           (<div className="rightbarUserinfoEditButtons">
-            {!isEditing && <button className="editButton" onClick={handleEdit}>Edit</button>}
-            {isEditing && <button className="saveButton" onClick={handleSave}>Save</button>}
-            {isEditing && <button className="cancelButton" onClick={handleCancel}>Cancel</button>}
+            {!isEditing && <button className="rightbarEditButton" onClick={handleEdit}>Edit</button>}
+            {isEditing && <button className="rightbarEditButton" onClick={handleSave}>Save</button>}
+            {isEditing && <button className="rightbarEditButton" onClick={handleCancel}>Cancel</button>}
           </div>)}
         </h4>
         <div className="rightbarInfo">
