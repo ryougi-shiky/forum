@@ -31,8 +31,8 @@ export default function Profile() {
       const res = await axios.get(`${backend_url}/users?username=${params.username}`);
       console.log(res);
       setUser(res.data);
-      console.log("res.data.profilePicture: ", res.data.profilePicture);  // Check if the profilePicture field is correctly populated
-      console.log("user.profilePicture: ", user.profilePicture);  // Check if the profilePicture field is correctly populated
+      console.log("res.data.profilePicture: ", res.data.profilePicture);
+      console.log("user.profilePicture: ", user.profilePicture);
     };
     fetchUser();
   },[params.username]);

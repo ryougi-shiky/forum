@@ -31,7 +31,7 @@ export default function Rightbar({user}) {
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get(`${backend_url}/users/friends/${currentUser._id}`);
+        const friendList = await axios.get(`${backend_url}/users/friends/${user?._id}`);
         setFriends(friendList.data);
       } catch (err) {
         console.log(err);
@@ -100,7 +100,7 @@ export default function Rightbar({user}) {
             <span className="rightbarInfoValue">{user.relation}</span>
           </div>
         </div>
-        <h4 className="rightbarTitle">Friends</h4>
+        {/* <h4 className="rightbarTitle">Friends</h4>
         <div className="rightbarFollowings">
           {friends.map((friend) => (
             <Link to={`/profile/${friend.username}`}>
@@ -113,7 +113,7 @@ export default function Rightbar({user}) {
               </div>
             </Link>
           ))}
-        </div>
+        </div> */}
       </React.Fragment>
     )
   }
