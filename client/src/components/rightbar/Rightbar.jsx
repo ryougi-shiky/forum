@@ -11,6 +11,7 @@ import OnlineFriends from "../onlineFriends/OnlineFriends";
 import { AuthContext } from "../../context/AuthContext";
 
 import { validateProfilePage } from "../../regex/validateUrl";
+import { decodeImg } from "../../decodeImg";
 
 import Weather from "../weather/Weather";
 
@@ -22,10 +23,10 @@ export default function Rightbar({user}) {
   const { user:currentUser, dispatch } = useContext(AuthContext);
 
 
-  // useEffect(() => {
-  //   // if no user, it will be an error
-  //   setFollowed(currentUser.followings.includes(user?.id));
-  // }, [currentUser, user.id])
+  useEffect(() => {
+    // if no user, it will be an error
+    setFollowed(currentUser.followings.includes(user?._id));
+  }, [currentUser.followings, user?._id])
   
   useEffect(() => {
     const getFriends = async () => {
@@ -43,10 +44,10 @@ export default function Rightbar({user}) {
     try {
       if (followed){
         await axios.put(`${backend_url}/users/${user._id}/unfollow`, {id: currentUser._id});
-        // dispatch({type: 'UNFOLLOW', payload:user._id});
+        dispatch({type: 'UNFOLLOW', payload:user._id});
       } else {
         await axios.put(`${backend_url}/users/${user._id}/follow`, {id: currentUser._id});
-        // dispatch({type: 'FOLLOW', payload:user._id});
+        dispatch({type: 'FOLLOW', payload:user._id});
       }
     } catch (err) {
       console.log(err);
@@ -58,25 +59,19 @@ export default function Rightbar({user}) {
     return (
       <React.Fragment>
         <Weather />
-        
-        <div className="birthdayContainer">
-          
+        {/* <div className="birthdayContainer">
           <CakeIcon className="birthdayImg" />
           <span className="birthdayText">
             <b>Tifa</b> and <b>another 5 firends</b> have a birthday today
           </span>
         </div>
-        <img
-          src="/assets/img/2018-04-16 144229.jpg"
-          alt=""
-          className="rightbarAd"
-        />
+        <img src="/assets/img/2018-04-16 144229.jpg" alt="" className="rightbarAd" />
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
           {Users.map((u) => (
             <OnlineFriends key={u.id} user={u} />
           ))}
-        </ul>
+        </ul> */}
       </React.Fragment>
     )
   }
@@ -111,7 +106,7 @@ export default function Rightbar({user}) {
             <Link to={`/profile/${friend.username}`}>
               <div className="rightbarFollowing">
                 <img 
-                  src= {friend.profilePicture ? friend.profilePicture : "/assets/icon/person/noAvatar.png"} 
+                  src= {friend.profilePicture ? `data:image/jpeg;base64,${decodeImg(friend.profilePicture.data)}` : "/assets/icon/person/noAvatar.png"} 
                   alt="" 
                   className="rightbarFollowingImg" />
                 <span className="rightbarFollowingName">{friend.username}</span>
