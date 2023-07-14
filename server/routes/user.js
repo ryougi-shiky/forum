@@ -59,7 +59,6 @@ router.get('/', async (req, res) => {
 			? await User.findById(uid)
 			: await User.findOne({username: username});
 		// const user = await User.findById(uid);
-		console.log("backend retriving user: ", user);
 		const {password, updatedAt, ...other} = user._doc;
 		res.status(200).json(other);
 	} catch (err) {

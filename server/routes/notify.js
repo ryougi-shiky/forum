@@ -3,7 +3,7 @@ const Notification = require('../models/Notification');
 const Post = require('../models/Post');
 const User = require('../models/User');
 
-router.post('/sendFollowNotify', async(req, res) => {
+router.post('/create/follow', async(req, res) => {
     const newNotify = new Notification ({
         notifyFrom: req.body.senderId,
         notifyTo: req.body.receiverId,
@@ -19,7 +19,7 @@ router.post('/sendFollowNotify', async(req, res) => {
     }
 });
 
-router.get('/getFollowNotify/:receiverId', async(req, res) => {
+router.get('/get/follow/:receiverId', async(req, res) => {
     try {
         const followNotify = await Notification.find({
             notifyTo: req.params.receiverId,
@@ -48,7 +48,7 @@ router.get('/getFollowNotify/:receiverId', async(req, res) => {
     }
 });
 
-router.delete("/deleteFollowNotify/:id", async (req, res) => {
+router.delete("/delete/follow/:id", async (req, res) => {
     try {
         const notify = await Notification.findById(req.params.id);
         console.log("deleting notification: ", req.params.id);

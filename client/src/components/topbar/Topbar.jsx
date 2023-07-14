@@ -37,7 +37,7 @@ const onSelect = ({ key }) => {
 }
 
 const onVisibleChange = (visible) => {
-  console.log(visible);
+  // console.log(visible);
 }
 
 export default function Topbar() {
@@ -89,10 +89,19 @@ export default function Topbar() {
     </Menu>
   );
 
+  // Fetch notifications
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const res = await axios.get(`${backend_url}/users/notify/get/follow/${currentUser._id}`);
+      setNotifications(res.data);
+    }
+    fetchNotifications();
+  }, [currentUser]);
+
   // Handler to clear a specific notification. nid means notification._id
   const handleClear = async (nid) => {
     try {
-      const res = await axios.delete(`${backend_url}/users/notify/deleteFollowNotify/${nid}`);
+      const res = await axios.delete(`${backend_url}/users/notify/delete/follow/${nid}`);
       console.log("delete notification res.status: ", res.status);
       console.log("status 200: Notification has been deleted.");
       // Remove notification from state
@@ -118,18 +127,13 @@ export default function Topbar() {
           </div>
         </div>
       ))
-      : <MenuItem className='notificationContent'>No notifications</MenuItem>}
+      : <div className='notificationWrapper'>
+          <MenuItem className='notificationContent'>No notifications</MenuItem>
+        </div>}
     </Menu>
   );
 
-  // Fetch notifications
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const res = await axios.get(`${backend_url}/users/notify/getFollowNotify/${currentUser._id}`);
-      setNotifications(res.data);
-    }
-    fetchNotifications();
-  }, [currentUser]);
+  
 
   return (
     <div className='topbarContainer'>

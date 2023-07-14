@@ -29,10 +29,10 @@ export default function Profile() {
   useEffect(()=>{
     const fetchUser = async () => {
       const res = await axios.get(`${backend_url}/users?username=${params.username}`);
-      console.log(res);
+      // console.log(res);
       setUser(res.data);
-      console.log("res.data.profilePicture: ", res.data.profilePicture);
-      console.log("user.profilePicture: ", user.profilePicture);
+      // console.log("res.data.profilePicture: ", res.data.profilePicture);
+      // console.log("user.profilePicture: ", user.profilePicture);
     };
     fetchUser();
   },[params.username]);

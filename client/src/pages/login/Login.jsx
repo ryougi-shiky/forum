@@ -37,9 +37,9 @@ export default function Login() {
     }
   }, []);
 
-  console.log("currentUser: ", currentUser);
-  console.log("login page cookie: ", cookies);
-  console.log("login dispatch: ", dispatch);
+  // console.log("currentUser: ", currentUser);
+  // console.log("login page cookie: ", cookies);
+  // console.log("login dispatch: ", dispatch);
 
   const redirectToRegister = () => {
     navigate('/register');

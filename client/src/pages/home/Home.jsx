@@ -19,7 +19,7 @@ export default function Home() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const navigate = useNavigate();
 
-  console.log("currentUser: ", currentUser);
+  // console.log("currentUser: ", currentUser);
 
   useEffect(() => {
     if (!cookies){
