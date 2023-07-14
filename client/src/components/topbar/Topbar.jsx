@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -38,12 +38,13 @@ const onVisibleChange = (visible) => {
   console.log(visible);
 }
 
-
-
 export default function Topbar() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const { user:currentUser, feed_display_moments } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [notifications, setNotifications] = useState([]);  // New state to store notifications
+
 
   // const chatButton = () => {
   //   redirect('/messenger');
@@ -59,20 +60,6 @@ export default function Topbar() {
     console.log("topbar redirect to login page");
   }
 
-  const menu = (
-    <Menu onSelect={onSelect}>
-      <Button className='topbarMenuButton'>
-        <MenuItem key="1" >Account</MenuItem>
-      </Button>
-
-      <Divider />
-
-      <Button className='topbarMenuButton' onClick={logout} >
-        <MenuItem key="2" >Log Out</MenuItem>
-      </Button>
-    </Menu>
-  );
-
   // click moments, feed display moments posts
   const displayMoments = () => {
     navigate('/moments');
@@ -86,6 +73,41 @@ export default function Topbar() {
   //   feed_display_moments = false;
   //   console.log("clicked home, feed_display_moments: ", feed_display_moments);
   // }
+
+
+  const menu = (
+    <Menu onSelect={onSelect}>
+      <Button className='topbarMenuButton'>
+        <MenuItem key="1" >Account</MenuItem>
+      </Button>
+      <Divider />
+      <Button className='topbarMenuButton' onClick={logout} >
+        <MenuItem key="2" >Log Out</MenuItem>
+      </Button>
+    </Menu>
+  );
+
+  // New variable to define the dropdown list of notifications
+  const notificationMenu = (
+    <Menu>
+      {notifications.map((notification, index) => (
+        <MenuItem key={index}>{notification.senderName} is following you</MenuItem>
+      ))}
+    </Menu>
+  );
+
+  // const sender = await fetch(`${backend_url}/users/${notification.notifyFrom}`);
+
+
+  // Fetch notifications
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const res = await fetch(`${backend_url}/users/notify/getFollowNotify/${currentUser._id}`);
+      const data = await res.json();
+      setNotifications(data);
+    }
+    fetchNotifications();
+  }, [currentUser]);
 
   return (
     <div className='topbarContainer'>
@@ -126,8 +148,15 @@ export default function Topbar() {
             <span className="topbarIconBadge">3</span>
           </div>
           <div className="topbarIconItem">
-            <Notifications/>
-            <span className="topbarIconBadge">2</span>
+            <Dropdown
+              trigger={['click']}
+              overlay={notificationMenu}
+              animation="slide-up"
+              onVisibleChange={onVisibleChange}
+            >
+              <Notifications/>
+            </Dropdown>
+            <span className="topbarIconBadge">{notifications.length}</span>
           </div>
         </div>
         <Link to={`/profile/${currentUser.username}`}>

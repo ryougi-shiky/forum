@@ -19,4 +19,32 @@ router.post('/sendFollowNotify', async(req, res) => {
     }
 });
 
+router.get('/getFollowNotify/:receiverId', async(req, res) => {
+    try {
+        const followNotify = await Notification.find({
+            notifyTo: req.params.receiverId,
+            type: 'follow',
+            status: 'unread',
+        });
+
+        let notifySenders = [];
+        
+        for (let notify of followNotify) {
+            const user = await User.findById(notify.notifyFrom); // Assuming `User` is your user model
+            
+            let senderDetail = {
+                senderId: notify.notifyFrom,
+                senderName: user.username,
+                senderIcon: user.profilePicture,
+            };
+            
+            notifySenders.push(senderDetail);
+        }
+
+        res.status(200).json(notifySenders);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
+
 module.exports = router;
