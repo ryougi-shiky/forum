@@ -20,6 +20,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { Button } from '@mui/material';
 import { decodeImg } from "../../decodeImg";
 import axios from 'axios';
+import { fontWeight } from '@mui/system';
 
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
@@ -109,13 +110,12 @@ export default function Topbar() {
       ? notifications.map((notification, index) => (
         <div key={index} className='notificationWrapper'>
           <Link to={`/profile/${notification.senderName}`}>
-            <img className="notificationIcon" src={ notification.profilePicture ? `data:image/jpeg;base64,${decodeImg(notification.profilePicture.data)}` : defaultProfilePicture} alt="" />
+            <img className="notificationIcon" src={ notification.senderIcon ? `data:image/jpeg;base64,${decodeImg(notification.senderIcon.data)}` : defaultProfilePicture} alt="" />
           </Link>
           <div className='notificationContainer'>
-            <MenuItem className='notificationContent'>{notification.senderName} is following you</MenuItem>
+            <MenuItem className='notificationContent'><span className='notificationContentUsername'>{notification.senderName}</span> is following you</MenuItem>
             <button className='notificationClearButton' onClick={() => handleClear(notification.nid)}>Clear</button>
           </div>
-          
         </div>
       ))
       : <MenuItem className='notificationContent'>No notifications</MenuItem>}

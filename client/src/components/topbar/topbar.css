@@ -127,14 +127,26 @@
   width: 100%;
 }
 
+.notificationContentUsername {
+  font-weight: bold;
+}
+
 .notificationContent {
   margin: 5px;
   text-align: left;
+  padding-top: 3px;
 }
 
 .notificationClearButton {
    margin: 5px;
    align-items: flex-end;
+   border: none;
+  background-color: #1872f2;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  align-items: center;
+   cursor: pointer;
 }
 
 .topbarIconBadge {

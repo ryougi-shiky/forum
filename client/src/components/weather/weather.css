@@ -1,3 +1,7 @@
+.weatherContainer {
+    width: 100%;
+}
+
 .weatherTitle {
     margin-left: 5px;
 }
