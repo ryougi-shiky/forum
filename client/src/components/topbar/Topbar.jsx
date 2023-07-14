@@ -105,13 +105,20 @@ export default function Topbar() {
   // New variable to define the dropdown list of notifications
   const notificationMenu = (
     <Menu>
-      {notifications.map((notification, index) => (
-        <div key={index}>
-          <MenuItem>{notification.senderName} is following you</MenuItem>
-          <button onClick={() => handleClear(notification.nid)}>Clear</button>
+      {notifications.length > 0 
+      ? notifications.map((notification, index) => (
+        <div key={index} className='notificationWrapper'>
+          <Link to={`/profile/${notification.senderName}`}>
+            <img className="notificationIcon" src={ notification.profilePicture ? `data:image/jpeg;base64,${decodeImg(notification.profilePicture.data)}` : defaultProfilePicture} alt="" />
+          </Link>
+          <div className='notificationContainer'>
+            <MenuItem className='notificationContent'>{notification.senderName} is following you</MenuItem>
+            <button className='notificationClearButton' onClick={() => handleClear(notification.nid)}>Clear</button>
+          </div>
+          
         </div>
-        
-      ))}
+      ))
+      : <MenuItem className='notificationContent'>No notifications</MenuItem>}
     </Menu>
   );
 

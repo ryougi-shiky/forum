@@ -99,6 +99,44 @@
   position: relative;
 }
 
+.notificationWrapper {
+  display: flex;
+  align-items: center;
+  
+  background-color: white;
+  color: black;
+
+  padding: 5px;
+}
+
+.notificationWrapper:hover {
+  background-color: rgb(237, 244, 255);
+}
+
+.notificationIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.notificationContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.notificationContent {
+  margin: 5px;
+  text-align: left;
+}
+
+.notificationClearButton {
+   margin: 5px;
+   align-items: flex-end;
+}
+
 .topbarIconBadge {
   width: 15px;
   height: 15px;
