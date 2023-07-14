@@ -55,6 +55,13 @@ export default function Rightbar({user}) {
       } else {
         await axios.put(`${backend_url}/users/${user._id}/follow`, {id: currentUser._id});
         dispatch({type: 'FOLLOW', payload:user._id});
+
+        // Create a new notification to the user who is been followed
+        await axios.post(`${backend_url}/users/notify/sendFollowNotify`, {
+            senderId: currentUser._id,
+            receiverId: user._id
+        });
+
       }
     } catch (err) {
       console.log(err);

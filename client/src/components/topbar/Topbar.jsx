@@ -19,6 +19,7 @@ import "./topbar.css";
 import { AuthContext } from '../../context/AuthContext';
 import { Button } from '@mui/material';
 import { decodeImg } from "../../decodeImg";
+import axios from 'axios';
 
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
@@ -87,24 +88,39 @@ export default function Topbar() {
     </Menu>
   );
 
+  // Handler to clear a specific notification. nid means notification._id
+  const handleClear = async (nid) => {
+    try {
+      const res = await axios.delete(`${backend_url}/users/notify/deleteFollowNotify/${nid}`);
+      if (res.status === 200) {
+        // Remove notification from state
+        setNotifications(notifications.filter(notification => notification._id !== nid));
+      } else {
+        console.error('Failed to delete notification');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   // New variable to define the dropdown list of notifications
   const notificationMenu = (
     <Menu>
       {notifications.map((notification, index) => (
-        <MenuItem key={index}>{notification.senderName} is following you</MenuItem>
+        <div key={index}>
+          <MenuItem>{notification.senderName} is following you</MenuItem>
+          <button onClick={() => handleClear(notification.nid)}>Clear</button>
+        </div>
+        
       ))}
     </Menu>
   );
 
-  // const sender = await fetch(`${backend_url}/users/${notification.notifyFrom}`);
-
-
   // Fetch notifications
   useEffect(() => {
     const fetchNotifications = async () => {
-      const res = await fetch(`${backend_url}/users/notify/getFollowNotify/${currentUser._id}`);
-      const data = await res.json();
-      setNotifications(data);
+      const res = await axios.get(`${backend_url}/users/notify/getFollowNotify/${currentUser._id}`);
+      setNotifications(res.data);
     }
     fetchNotifications();
   }, [currentUser]);

@@ -144,10 +144,12 @@ export default function Weather() {
 					<List>
 						<ListItem >
 							<ListItemText primary="Weather" secondary={weatherData.weather[0].description} />
+							<span> </span>
 							<ListItemText primary="Wind Speed" secondary={`${weatherData.wind.speed} km/h`} />
 						</ListItem>
 						<ListItem >
 							<ListItemText primary="Humidity" secondary={`${weatherData.main.humidity} %`} />
+							<span> </span>
 							<ListItemText primary="Pressure" secondary={`${weatherData.main.pressure} hPa`} />
 						</ListItem>
 					</List>
