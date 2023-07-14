@@ -92,13 +92,12 @@ export default function Topbar() {
   const handleClear = async (nid) => {
     try {
       const res = await axios.delete(`${backend_url}/users/notify/deleteFollowNotify/${nid}`);
-      if (res.status === 200) {
-        // Remove notification from state
-        setNotifications(notifications.filter(notification => notification._id !== nid));
-      } else {
-        console.error('Failed to delete notification');
-      }
+      console.log("delete notification res.status: ", res.status);
+      console.log("status 200: Notification has been deleted.");
+      // Remove notification from state
+      setNotifications(notifications.filter(notification => notification.nid !== nid));
     } catch (err) {
+      console.error('Failed to delete notification');
       console.error(err);
     }
   }
