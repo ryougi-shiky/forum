@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"ani.posts"}],"uuid":"952bbe0f0d3f4832bdb6b9ab85c76190"}
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"6f8466c1614d4081a211ab7881d6bd68","collectionName":"posts"}

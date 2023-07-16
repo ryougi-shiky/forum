@@ -58,11 +58,12 @@ export default function Sidebar() {
         </ul>
         <button className="sidebarButton">Show More</button>
         <hr className="sidebarHr" />
-        <ul className="sidebarFriendList">
+        <span className="sidebarListItemText">Messages</span>
+        {/* <ul className="sidebarFriendList">
           {Users.map((u) => (
             <LeftFriends key={u.id} user={u} />
           ))}
-        </ul>
+        </ul> */}
       </div>
     </div>
   );

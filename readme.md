@@ -1,3 +1,9 @@
+### MongoDB
+##### How to save database
+1. Navigate to a directory where you want to store the data.
+2. Run `mongodump`. If *dump* exists already, it will be overwrited.
+3. 
+
 start two containers on a single network
 
 docker compose -f docker-compose.yml up -d 

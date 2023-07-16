@@ -51,7 +51,7 @@ export default function Feed({username}) {
       <div className="feedWrapper">
         {(!username || username === user.username) && <Share onPostCreate={handlePostCreate} />}
         {posts && posts.map((p) => (
-          <Post key={p.id} post={p} onPostDelete={handlePostDelete} />
+          <Post key={p._id} post={p} onPostDelete={handlePostDelete} />
         ))}
       </div>
     </div>
