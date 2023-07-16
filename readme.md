@@ -1,9 +1,31 @@
+### Deploy on Azure
+
+
+### Localhost Deploy
+##### Start Frontend Server
+`cd client`
+`npm install`
+`npm start` or `nodemon start`
+Modify `.env` to update backend url and open weather API key.
+##### Start Backend Server
+`cd server`
+`npm install`
+`npm start` or `nodemon start`
+Modify `config.env` to update backend port and MongoDB database address.
+
 ### MongoDB
 ##### How to save database
 1. Navigate to a directory where you want to store the data.
 2. Run `mongodump`. If *dump* exists already, it will be overwrited.
-3. 
+3. To backup a specific database on a specific host: `mongodump --host=mongodb-host:port --db=your-db-name`
 
+##### How to restore database
+1. cd to the `dump` folder
+2. Run `mongorestore`(default on port 27017)
+3. To restore specific database on a specific host: `mongorestore --host mongodb0.example.com --port 27017 --db your_database_name /path/to/your/dump/your_database_name`
+4. 
+
+### Run in Docker
 start two containers on a single network
 
 docker compose -f docker-compose.yml up -d 
