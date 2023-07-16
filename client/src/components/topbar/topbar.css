@@ -41,7 +41,7 @@
 }
 
 .topbarMenuButton:hover {
-  background-color: rgb(26, 110, 234);
+  background-color: rgb(237, 244, 255);
   opacity: 0.7;
   color: rgb(0, 112, 182);
 }
@@ -76,6 +76,24 @@
   outline: none;
 }
 
+.searchResultsWindowWrapper {
+  width: 100%;
+}
+
+.searchResultUserLine {
+  display: flex;
+  align-items: center;
+
+  background-color: white;
+  color: black;
+
+  padding: 5px;
+}
+
+.searchResultUserLine:hover {
+  background-color: rgb(237, 244, 255);
+}
+
 .searchUserIcon {
   width: 32px;
   height: 32px;
@@ -87,8 +105,12 @@
 .searchUsername {
   margin: 5px;
   text-align: left;
-  padding-top: 3px;
   font-weight: bold;
+  font-size: 14px;
+}
+
+.linkNoUnderline {
+  text-decoration: none;
 }
 
 .topbarRight {
@@ -150,7 +172,7 @@
 .notificationContent {
   margin: 5px;
   text-align: left;
-  padding-top: 3px;
+  padding-top: 2.5px;
 }
 
 .notificationClearButton {

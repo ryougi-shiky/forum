@@ -139,20 +139,24 @@ export default function Topbar() {
 
   // Search drop down menu layout
   const searchResults = (
+    <div className='searchResultsWindowWrapper'>
     <Menu onSelect={onSelect}>
       {results.length > 0 ?
         results.map((user, index) => (
           <MenuItem key={index}>
-            <Link to={`/profile/${user.username}`}>
-              <img className="notificationIcon" src={user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : defaultProfilePicture} alt="" />
-              <p className='notificationContent'>{user.username}</p>
+            <Link to={`/profile/${user.username}`} className='linkNoUnderline'>
+              <div className='searchResultUserLine'>
+                <img className="searchUserIcon" src={user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : defaultProfilePicture} alt="" />
+                <p className='searchUsername'>{user.username}</p>
+              </div>
             </Link>
           </MenuItem>
         ))
-        : <div className='notificationWrapper'>
-          <MenuItem className='notificationContent'>No results</MenuItem>
+        : <div className='searchResultUserLine'>
+          <MenuItem className='searchUsername'>No results</MenuItem>
         </div>}
     </Menu>
+    </div>
   );
 
   const handleSearchClick = async (e) => {
