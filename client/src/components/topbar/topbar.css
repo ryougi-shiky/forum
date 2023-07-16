@@ -66,13 +66,29 @@
 
 .searchInput {
   border: none;
-  width: 90%;
+  width: 100%;
   height: 200%;
   padding: 3px;
+  margin: 5px;
 }
 
 .searchInput:focus {
   outline: none;
+}
+
+.searchUserIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.searchUsername {
+  margin: 5px;
+  text-align: left;
+  padding-top: 3px;
+  font-weight: bold;
 }
 
 .topbarRight {

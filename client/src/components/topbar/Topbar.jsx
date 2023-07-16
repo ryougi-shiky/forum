@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -44,8 +44,12 @@ export default function Topbar() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const { user:currentUser, feed_display_moments } = useContext(AuthContext);
   const navigate = useNavigate();
+  
 
   const [notifications, setNotifications] = useState([]);  // New state to store notifications
+  // For search bar
+  const searchValue = useRef();
+  const [results, setResults] = useState([]);
 
 
   // const chatButton = () => {
@@ -133,6 +137,42 @@ export default function Topbar() {
     </Menu>
   );
 
+  // Search drop down menu layout
+  const searchResults = (
+    <Menu onSelect={onSelect}>
+      {results.length > 0 ?
+        results.map((user, index) => (
+          <MenuItem key={index}>
+            <Link to={`/profile/${user.username}`}>
+              <img className="notificationIcon" src={user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : defaultProfilePicture} alt="" />
+              <p className='notificationContent'>{user.username}</p>
+            </Link>
+          </MenuItem>
+        ))
+        : <div className='notificationWrapper'>
+          <MenuItem className='notificationContent'>No results</MenuItem>
+        </div>}
+    </Menu>
+  );
+
+  const handleSearchClick = async (e) => {
+    e.preventDefault(); // Prevent form submission
+    setResults([]); // Clear results when start a new search
+    try {
+      // Solve empty search return all users issue
+      if (searchValue.current.value.trim() !== ""){
+        const res = await axios.get(`${backend_url}/search/users?username=${searchValue.current.value}`);
+        setResults(res.data);
+        console.log("search results.length: ", results.length);
+      } else {
+        setResults([]);
+        console.log("Empty search, return nothing");
+      }
+      
+    } catch (err) {
+      console.error(err);
+    }
+  };
   
 
   return (
@@ -155,8 +195,15 @@ export default function Topbar() {
       
       <div className="topbarCenter">
         <div className="searchBar">
-          <Search className="searchIcon"/>
-          <input type="text" className="searchInput" placeholder='Search People or Posts'/>
+          <Dropdown
+            trigger={['click']}
+            overlay={searchResults}
+            animation="slide-up"
+            onVisibleChange={onVisibleChange}
+          >
+            <Search className="searchIcon" onClick={handleSearchClick} />
+          </Dropdown>
+          <input type="text" className="searchInput" placeholder='Search People or Posts' ref={searchValue} />
         </div>
       </div>
       <div className="topbarRight">

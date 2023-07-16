@@ -9,6 +9,7 @@ const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
 const notifyRouter = require("./routes/notify");
+const searchRouter = require("./routes/search");
 
 const app = express();
 dotenv.config({path: "./config.env"});
@@ -34,6 +35,7 @@ app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);
 app.use("/users/notify", notifyRouter);
+app.use("/search", searchRouter);
 
 app.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);
