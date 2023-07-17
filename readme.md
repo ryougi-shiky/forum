@@ -4,13 +4,19 @@
 ### Localhost Deploy
 ##### Start Frontend Server
 `cd client`
+
 `npm install`
+
 `npm start` or `nodemon start`
+
 Modify `.env` to update backend url and open weather API key.
 ##### Start Backend Server
 `cd server`
+
 `npm install`
+
 `npm start` or `nodemon start`
+
 Modify `config.env` to update backend port and MongoDB database address.
 
 ### MongoDB
@@ -20,7 +26,7 @@ Modify `config.env` to update backend port and MongoDB database address.
 3. To backup a specific database on a specific host: `mongodump --host=mongodb-host:port --db=your-db-name`
 
 ##### How to restore database
-1. cd to the `dump` folder
+1. cd to the folder includes `dump` 
 2. Run `mongorestore`(default on port 27017)
 3. To restore specific database on a specific host: `mongorestore --host mongodb0.example.com --port 27017 --db your_database_name /path/to/your/dump/your_database_name`
 4. 
