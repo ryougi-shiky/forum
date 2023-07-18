@@ -127,8 +127,8 @@ server {
 
 
 
-2. Create new configuration file: `sudo nano /etc/nginx/sites-available/myapp`
-3. Create symbolic link: `sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/`
-4. Test conf: `sudo nginx -t`
-5. Restart Nginx: `sudo systemctl reload nginx`
-6. If have default conf, you can remove it: `sudo rm /etc/nginx/sites-enabled/default`
+1. Create new configuration file: `sudo nano /etc/nginx/sites-available/myapp`
+2. Create symbolic link: `sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/`
+3. Test conf: `sudo nginx -t`
+4. Restart Nginx: `sudo systemctl reload nginx`
+5. If have default conf, you can remove it: `sudo rm /etc/nginx/sites-enabled/default`
