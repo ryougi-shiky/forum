@@ -16,7 +16,43 @@ server {
     }
     
     location /users {
-        proxy_pass http://localhost:5000;
+        proxy_pass http://localhost:5000/users;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /users/auth {
+        proxy_pass http://localhost:5000/users/auth;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /users/post {
+        proxy_pass http://localhost:5000/users/post;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /users/notify {
+        proxy_pass http://localhost:5000/users/notify;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /users/search {
+        proxy_pass http://localhost:5000/users/search;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -44,7 +80,43 @@ server {
     }
 
     location /users {
-        proxy_pass http://localhost:5000;
+        proxy_pass http://localhost:5000/users;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /users/auth {
+        proxy_pass http://localhost:5000/users/auth;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /users/post {
+        proxy_pass http://localhost:5000/users/post;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /users/notify {
+        proxy_pass http://localhost:5000/users/notify;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /users/search {
+        proxy_pass http://localhost:5000/users/search;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -52,6 +124,7 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 }
+
 
 
 2. Create new configuration file: `sudo nano /etc/nginx/sites-available/myapp`
