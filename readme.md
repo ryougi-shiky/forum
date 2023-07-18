@@ -1,7 +1,15 @@
-### Deploy on Azure
+## Deploy on Azure
+### Install SSL certificate
+1. Buy a domain
+2. Set Host records
+ Type          Host         Value         TTL   
+ A Record 	    @    20.239.174.137  Automatic
+ CNAME Record www    aniani.cfd      Automatic
+3. Set Server's 443 port open for inbound traffic
+4. Follow `https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal` instruction to install SSL certificate on your machine.
 
 
-### Localhost Deploy
+## Localhost Deploy
 ##### Start Frontend Server
 `cd client`
 
