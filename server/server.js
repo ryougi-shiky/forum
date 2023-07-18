@@ -35,7 +35,7 @@ app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);
 app.use("/users/notify", notifyRouter);
-app.use("/search", searchRouter);
+app.use("/users/search", searchRouter);
 
 app.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);
