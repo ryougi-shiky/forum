@@ -4,8 +4,6 @@ const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require('cors');
-const https = require('https');
-const fs = require('fs');
 
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
@@ -39,11 +37,6 @@ app.use("/users/post", postRouter);
 app.use("/users/notify", notifyRouter);
 app.use("/search", searchRouter);
 
-const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/aniani.cfd/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/aniani.cfd/fullchain.pem')
-};
-
-https.createServer(options, app).listen(port, () => {
+app.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);
 });
