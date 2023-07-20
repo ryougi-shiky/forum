@@ -1,5 +1,6 @@
 # Introduction
 This is a social website. Please use Chrome to get complete experience.
+
 Available Features:
 1. Register new users
 2. Log in
