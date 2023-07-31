@@ -127,7 +127,8 @@ The VM may shut down the server processes.
 Use PM2 to restart the processed when they are down.
 
 Since we are using `npm start` to run our server, we can run:
-`pm2 start npm --name "server_name" -- start`
+`pm2 start npm --name client -- run start`
+To let pm2 run our start script.
 
 To monitor all pm2 processes, run: 
 `pm2 list`
