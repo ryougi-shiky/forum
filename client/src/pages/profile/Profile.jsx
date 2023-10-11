@@ -57,7 +57,6 @@ export default function Profile() {
       setSnackbarOpenUploading(true); // Notify user that image is uploading.
       console.log("img is uploading...");
 
-      // You will need to implement the /users/:id/profilePicture endpoint on your server
       const response = await axios.put(`${backend_url}/users/${currentUser._id}/profilePicture`, formData);
       // after successful upload, dispatch the action to update the user in your context
       if (response.status === 200) {

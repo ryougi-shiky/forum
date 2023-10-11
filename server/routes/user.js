@@ -132,8 +132,8 @@ router.put('/:id/unfollow', async (req, res) => {
 
 // update profile picture
 router.put("/:id/profilePicture", upload.single("profilePicture"), async (req, res) => {
-	// console.log("req: ", req); // add this line
-	console.log("req.file: ", req.file); // add this line
+	// console.log("req: ", req); 
+	console.log("req.file: ", req.file); 
 	console.log("req.file.buffer: ", req.file.buffer);
 	console.log("req.body.userId: ", req.body.userId);
 	console.log("req.params.id: ", req.params.id);

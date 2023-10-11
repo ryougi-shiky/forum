@@ -31,11 +31,17 @@ app.use(cors());
 
 app.use(express.static("./client/build"));
 
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  methods: ["GET", "POST", "DELETE", "PUT", "UPDATE"],
+  credentials: true
+}));
+
 app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);
 app.use("/users/notify", notifyRouter);
-app.use("/search", searchRouter);
+app.use("/users/search", searchRouter);
 
 app.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);

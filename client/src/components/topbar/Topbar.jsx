@@ -165,7 +165,7 @@ export default function Topbar() {
     try {
       // Solve empty search return all users issue
       if (searchValue.current.value.trim() !== ""){
-        const res = await axios.get(`${backend_url}/search/users?username=${searchValue.current.value}`);
+        const res = await axios.get(`${backend_url}/users/search/users?username=${searchValue.current.value}`);
         setResults(res.data);
         console.log("search results.length: ", results.length);
       } else {
