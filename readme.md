@@ -1,5 +1,7 @@
 # Introduction
-This is a social website. Please use Chrome to get complete experience.
+This is a social website. Please use Chrome to get the full experience.
+
+The weather API is expired. Please purchase it here: https://rapidapi.com/worldapi/api/open-weather13
 
 ## Available Features:
 1. Register new users
