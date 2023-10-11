@@ -1,7 +1,7 @@
 # Introduction
 This is a social website. Please use Chrome to get complete experience.
 
-Available Features:
+## Available Features:
 1. Register new users
 2. Log in
 3. Add posts
@@ -14,6 +14,26 @@ Available Features:
 10. Top bar can show the notifications of new following users
 11. Search bar can find users by entering username or partial letters of the username
 
+## Features Showcases:
+1. Register, Log in, Log out
+
+![register,login,logout](gif/register_login_logout.gif)
+
+2. Update user icon and info
+
+![update_icon_userinfo](gif/update_icon_userinfo.gif)
+
+3. Write post, Like post, Add comment
+
+![post,like,comment](gif/post_like_comment.gif)
+
+4. Click other user icon, Access their profile page, Follow them, Receive new follower notification
+
+![click_icon,follow,notify](gif/click_icon_follow_notify.gif)
+
+5. Search other username, Access their profile page, Unfollow them
+
+![search_name,unfollow](gif/search_name_unfollow.gif)
 
 # User Manual
 ## Localhost Deploy
