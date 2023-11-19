@@ -1,18 +1,21 @@
 # Define variables
-IMAGE_NAME=ryougishiky/forum_server
+SERVER_IMAGE_NAME=ryougishiky/forum_server
 VERSION=latest
 
 # Default target
-docker: build push
+server: server_build server_push
 
 # Build the Docker image
-build:
-	docker build -t $(IMAGE_NAME):$(VERSION) .
+server_build:
+	docker build -t $(SERVER_IMAGE_NAME):$(VERSION) .
 
 # Push the Docker image to Docker Hub
-push:
-	docker push $(IMAGE_NAME):$(VERSION)
+server_push:
+	docker push $(SERVER_IMAGE_NAME):$(VERSION)
+
+server_run:
+	docker run -p 5000:5000 make 
 
 # Target for cleaning up
-clean:
-	docker rmi $(IMAGE_NAME):$(VERSION)
+server_clean:
+	docker rmi $(SERVER_IMAGE_NAME):$(VERSION)
