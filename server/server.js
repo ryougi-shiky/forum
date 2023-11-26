@@ -14,6 +14,9 @@ const searchRouter = require("./routes/search");
 const app = express();
 // dotenv.config({path: "./config.env"});
 const port = process.env.PORT || 5000;
+const client_url = process.env.CLIENT_URL;
+
+console.log("Frontend url: ", client_url);
 
 mongoose.connect(process.env.MONGO, {
   dbName: `ani`,
@@ -27,7 +30,14 @@ mongoose.connect(process.env.MONGO, {
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
-app.use(cors());
+
+const corsOptions = {
+  origin: '*', // 如果前端服务名为client
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
 
 app.use(express.static("./client/build"));
 
