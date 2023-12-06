@@ -3,6 +3,9 @@ FROM node:16-alpine as builder
 
 WORKDIR /usr/src/app
 
+# Install curl
+RUN apk add --no-cache curl
+
 # 复制 package.json 和 package-lock.json 文件
 COPY package*.json ./
 
