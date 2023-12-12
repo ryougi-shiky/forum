@@ -19,7 +19,7 @@ spec:
         - containerPort: 3000
         env:
           - name: REACT_APP_BACKEND_URL
-            value: "http://server.default.svc.cluster.local"
+            value: "http://nginx.default.svc.cluster.local/backend"
           - name: REACT_APP_OPEN_WEATHER_RAPID_API_KEY
             value: "9c4b3c4369msh7ff621c01df1d07p1172edjsn74e33213befb"
 ---
@@ -35,4 +35,3 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 3000
-  type: NodePort
