@@ -32,7 +32,7 @@ app.use(cors());
 app.use(express.static("./client/build"));
 
 app.use(cors({
-  origin: ["http://localhost:3000"],
+  origin: ["http://localhost:3000", "https://20.239.174.137"],
   methods: ["GET", "POST", "DELETE", "PUT", "UPDATE"],
   credentials: true
 }));
