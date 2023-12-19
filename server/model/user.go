@@ -19,14 +19,14 @@ type User struct {
 
 // UserFollower represents a follower of a user
 type UserFollower struct {
-    FollowerID     uint   `gorm:"column:follower_id"`
+    FollowerID     string   `gorm:"type:uuid;column:follower_id"`
     FollowerName   string `gorm:"column:follower_name"`
     ProfilePicture []byte `gorm:"column:profile_picture"`
 }
 
 // UserProfile represents a user's profile
 type UserProfile struct {
-	ID       uint `gorm:"primary_key"`
+	ID       string `gorm:"type:uuid;primary_key"`
 	Age      int
 	Location string
 }

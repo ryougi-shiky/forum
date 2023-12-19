@@ -48,7 +48,7 @@ func (r *UserRepository) DeleteUser(userID string) error {
     return nil
 }
 
-func (r *UserRepository) GetFollowers(userID uint) ([]*model.UserFollower, error) {
+func (r *UserRepository) GetFollowers(userID string) ([]*model.UserFollower, error) {
     var followers []*model.UserFollower
 
     err := r.Db.Table("user_followers").
@@ -66,7 +66,7 @@ func (r *UserRepository) GetFollowers(userID uint) ([]*model.UserFollower, error
 }
 
 
-func (r *UserRepository) Follow(userID, followerID uint) error {
+func (r *UserRepository) Follow(userID, followerID string) error {
     // create a new follower record
     err := r.Db.Exec("INSERT INTO user_followers (user_id, follower_id) VALUES (?, ?)", userID, followerID).Error
     if err != nil {
@@ -76,7 +76,7 @@ func (r *UserRepository) Follow(userID, followerID uint) error {
     return nil
 }
 
-func (r *UserRepository) Unfollow(userID, followerID uint) error {
+func (r *UserRepository) Unfollow(userID, followerID string) error {
     // delete the follower record
     err := r.Db.Exec("DELETE FROM user_followers WHERE user_id = ? AND follower_id = ?", userID, followerID).Error
     if err != nil {
@@ -86,7 +86,7 @@ func (r *UserRepository) Unfollow(userID, followerID uint) error {
     return nil
 }
 
-func (r *UserRepository) UpdateProfilePicture(userID uint, profilePicture []byte) error {
+func (r *UserRepository) UpdateProfilePicture(userID string, profilePicture []byte) error {
     err := r.Db.Model(&model.User{}).Where("id = ?", userID).Update("profile_picture", profilePicture).Error
     if err != nil {
         return err
