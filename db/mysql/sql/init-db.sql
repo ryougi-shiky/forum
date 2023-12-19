@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS ani;
 USE ani;
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id CHAR(36) PRIMARY KEY NOT NULL,
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -9,8 +9,6 @@ CREATE TABLE users (
     is_admin BOOLEAN DEFAULT false,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    email_verification_code VARCHAR(6),
-    is_email_verified BOOLEAN DEFAULT false
 );
 CREATE TABLE user_followers (
     user_id INT,

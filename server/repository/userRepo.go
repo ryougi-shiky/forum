@@ -35,15 +35,18 @@ func (r *UserRepository) Create(user *model.User) error {
     return r.Db.Create(user).Error
 }
 
-func (r *UserRepository) DeleteUser(userID uint) error {
-    err := r.Db.Delete(&model.User{}, userID).Error
+func (r *UserRepository) DeleteUser(userID string) error {
+    // Create an instance of the User model with the ID set to the userID
+    userToDelete := model.User{ID: userID}
+
+    // Use the entire userToDelete object in the Delete method
+    err := r.Db.Delete(&userToDelete).Error
     if err != nil {
         return err
     }
 
     return nil
 }
-
 
 func (r *UserRepository) GetFollowers(userID uint) ([]*model.UserFollower, error) {
     var followers []*model.UserFollower

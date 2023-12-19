@@ -7,7 +7,7 @@ import (
 )
 
 type User struct {
-	ID                    uint `gorm:"primary_key"`
+	ID                    string `gorm:"type:uuid;primary_key"`
 	Username              string
 	Email                 string `gorm:"unique"`
 	Password              string
@@ -15,8 +15,6 @@ type User struct {
 	IsAdmin               bool
 	CreatedAt             time.Time
 	UpdatedAt             time.Time
-	EmailVerificationCode string
-	IsEmailVerified       bool
 }
 
 // UserFollower represents a follower of a user
