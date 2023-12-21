@@ -45,7 +45,7 @@ var _ = Describe("UserRepository", func() {
 			username := "testuser"
 			mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `users` WHERE username = ?")).
 				WithArgs(username).
-				WillReturnRows(sqlmock.NewRows([]string{"id", "username"}).AddRow(1, username))
+				WillReturnRows(sqlmock.NewRows([]string{"user_id", "username"}).AddRow(1, username))
 
 			user, err := repo.FindByUsername(username)
 			Expect(err).ShouldNot(HaveOccurred())
@@ -55,7 +55,7 @@ var _ = Describe("UserRepository", func() {
 			email := "test@example.com"
 			mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `users` WHERE email = ?")).
 				WithArgs(email).
-				WillReturnRows(sqlmock.NewRows([]string{"id", "email"}).AddRow(1, email))
+				WillReturnRows(sqlmock.NewRows([]string{"user_id", "email"}).AddRow(1, email))
 
 			user, err := repo.FindByEmail(email)
 			Expect(err).ShouldNot(HaveOccurred())
@@ -63,7 +63,7 @@ var _ = Describe("UserRepository", func() {
 		})
 		It("should successfully create a new user", func() {
 			newUser := &model.User{
-				ID:             "b2cbd29c-9e3d-11ee-8c90-0242ac120002",
+				UserID:         "b2cbd29c-9e3d-11ee-8c90-0242ac120002",
 				Username:       "testuser",
 				Email:          "test@example.com",
 				Password:       "testpassword",
@@ -74,8 +74,8 @@ var _ = Describe("UserRepository", func() {
 			}
 
 			mock.ExpectBegin()
-			mock.ExpectExec(regexp.QuoteMeta("INSERT INTO `users` (`id`,`username`,`email`,`password`,`profile_picture`,`is_admin`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?,?,?)")).
-				WithArgs(newUser.ID, newUser.Username, newUser.Email, newUser.Password, newUser.ProfilePicture, newUser.IsAdmin, sqlmock.AnyArg(), sqlmock.AnyArg()).
+			mock.ExpectExec(regexp.QuoteMeta("INSERT INTO `users` (`user_id`,`username`,`email`,`password`,`profile_picture`,`is_admin`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?,?,?)")).
+				WithArgs(newUser.UserID, newUser.Username, newUser.Email, newUser.Password, newUser.ProfilePicture, newUser.IsAdmin, sqlmock.AnyArg(), sqlmock.AnyArg()).
 				WillReturnResult(sqlmock.NewResult(1, 1))
 			mock.ExpectCommit()
 
@@ -86,7 +86,7 @@ var _ = Describe("UserRepository", func() {
 			userID := "b2cbd29c-9e3d-11ee-8c90-0242ac120002"
 
 			mock.ExpectBegin()
-			mock.ExpectExec(regexp.QuoteMeta("DELETE FROM `users` WHERE `users`.`id` = ?")).
+			mock.ExpectExec(regexp.QuoteMeta("DELETE FROM `users` WHERE `users`.`user_id` = ?")).
 				WithArgs(userID).
 				WillReturnResult(sqlmock.NewResult(0, 1))
 			mock.ExpectCommit()
@@ -97,19 +97,19 @@ var _ = Describe("UserRepository", func() {
 			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
 		})
 		It("should retrieve followers successfully", func() {
-			id := "b2cbd29c-9e3d-11ee-8c90-0242ac120002"
+			user_id := "b2cbd29c-9e3d-11ee-8c90-0242ac120002"
 			// Mocking the expected query
 			rows := sqlmock.NewRows([]string{"follower_id", "follower_name", "profile_picture"}).
 				AddRow("follower_id_1", "followerUser", []byte("profilepicture"))
 			mock.ExpectQuery(regexp.QuoteMeta(
 				"SELECT user_followers.follower_id, users.username as follower_name, users.profile_picture " +
-					"FROM `user_followers` join users on users.id = user_followers.follower_id " +
+					"FROM `user_followers` join users on users.user_id = user_followers.follower_id " +
 					"WHERE user_followers.user_id = ?")).
-				WithArgs(id).
+				WithArgs(user_id).
 				WillReturnRows(rows)
 
 			// Calling the method
-			followers, err := repo.GetFollowers(id)
+			followers, err := repo.GetFollowers(user_id)
 
 			// Assertions
 			Expect(err).ShouldNot(HaveOccurred())
@@ -171,7 +171,7 @@ var _ = Describe("UserRepository", func() {
 			mock.ExpectBegin()
 
 			// Mocking the expected database operation
-			mock.ExpectExec(regexp.QuoteMeta("UPDATE `users` SET `profile_picture`=?,`updated_at`=? WHERE id = ?")).
+			mock.ExpectExec(regexp.QuoteMeta("UPDATE `users` SET `profile_picture`=?,`updated_at`=? WHERE user_id = ?")).
 				WithArgs(newProfilePicture, sqlmock.AnyArg(), userID).
 				WillReturnResult(sqlmock.NewResult(0, 1)) // Assuming 1 row is affected
 
@@ -193,28 +193,28 @@ var _ = Describe("UserRepository", func() {
 				Age:      30,
 				Location: "New York",
 			}
-		
+
 			// Mocking the transaction begin
 			mock.ExpectBegin()
-		
+
 			// Adjust the expected SQL query to match GORM's generated query
 			mock.ExpectExec(regexp.QuoteMeta("UPDATE `user_profiles` SET `age`=?,`location`=? WHERE user_id = ? AND `user_id` = ?")).
 				WithArgs(userProfile.Age, userProfile.Location, userProfile.UserID, userProfile.UserID).
 				WillReturnResult(sqlmock.NewResult(0, 1)) // Assuming 1 row is affected
-		
+
 			// Mocking the transaction commit
 			mock.ExpectCommit()
-		
+
 			// Calling the method
 			err := repo.UpdateUserProfile(userProfile)
-		
+
 			// Assertions
 			Expect(err).ShouldNot(HaveOccurred())
-		
+
 			// Verify that all expectations were met
 			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
 		})
-		
+
 	})
 })
 
