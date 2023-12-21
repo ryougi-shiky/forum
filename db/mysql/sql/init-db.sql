@@ -11,8 +11,8 @@ CREATE TABLE users (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
 CREATE TABLE user_followers (
-    user_id INT,
-    follower_id INT,
+    user_id CHAR(36) PRIMARY KEY NOT NULL,
+    follower_id CHAR(36) PRIMARY KEY NOT NULL,
     PRIMARY KEY (user_id, follower_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (follower_id) REFERENCES users(id),
@@ -20,10 +20,10 @@ CREATE TABLE user_followers (
     INDEX idx_follower_id (follower_id)
 );
 CREATE TABLE user_profiles (
-    user_id INT PRIMARY KEY,
+    user_id CHAR(36) PRIMARY KEY NOT NULL,
     age INT,
     location VARCHAR(40),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    PRIMARY KEY (user_id)
 );
 CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,

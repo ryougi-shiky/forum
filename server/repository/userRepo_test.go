@@ -121,10 +121,104 @@ var _ = Describe("UserRepository", func() {
 			// Verify that all expectations were met
 			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
 		})
+		It("should successfully create a follow relationship", func() {
+			userID := "b2cbd29c-9e3d-11ee-8c90-0242ac120002"
+			followerID := "b2cbd29c-9e3d-11ee-8c90-0242ac120003"
+
+			// Expect a BEGIN transaction
+			// mock.ExpectBegin()
+
+			// Expect the insert query
+			mock.ExpectExec(regexp.QuoteMeta("INSERT INTO user_followers (user_id, follower_id) VALUES (?, ?)")).
+				WithArgs(userID, followerID).
+				WillReturnResult(sqlmock.NewResult(1, 1)) // Assuming 1 row is affected
+
+			// Expect a COMMIT transaction
+			// mock.ExpectCommit()
+
+			// Call the method
+			err := repo.Follow(userID, followerID)
+
+			// Assertions
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// Verify that all expectations were met
+			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
+		})
+		It("should successfully unfollow a user", func() {
+			userID := "b2cbd29c-9e3d-11ee-8c90-0242ac120002"
+			followerID := "b2cbd29c-9e3d-11ee-8c90-0242ac120003"
+
+			// Expect the delete query
+			mock.ExpectExec(regexp.QuoteMeta("DELETE FROM user_followers WHERE user_id = ? AND follower_id = ?")).
+				WithArgs(userID, followerID).
+				WillReturnResult(sqlmock.NewResult(0, 1)) // Assuming 1 row is affected
+
+			// Call the method
+			err := repo.Unfollow(userID, followerID)
+
+			// Assertions
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// Verify that all expectations were met
+			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
+		})
+		It("should successfully update a user's profile picture with transactions", func() {
+			userID := "b2cbd29c-9e3d-11ee-8c90-0242ac120002"
+			newProfilePicture := []byte("new_picture")
+
+			// Mocking the transaction begin
+			mock.ExpectBegin()
+
+			// Mocking the expected database operation
+			mock.ExpectExec(regexp.QuoteMeta("UPDATE `users` SET `profile_picture`=?,`updated_at`=? WHERE id = ?")).
+				WithArgs(newProfilePicture, sqlmock.AnyArg(), userID).
+				WillReturnResult(sqlmock.NewResult(0, 1)) // Assuming 1 row is affected
+
+			// Mocking the transaction commit
+			mock.ExpectCommit()
+
+			// Calling the method
+			err := repo.UpdateProfilePicture(userID, newProfilePicture)
+
+			// Assertions
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// Verify that all expectations were met
+			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
+		})
+		It("should successfully update a user's profile", func() {
+			userProfile := &model.UserProfile{
+				UserID:   "b2cbd29c-9e3d-11ee-8c90-0242ac120002",
+				Age:      30,
+				Location: "New York",
+			}
+		
+			// Mocking the transaction begin
+			mock.ExpectBegin()
+		
+			// Adjust the expected SQL query to match GORM's generated query
+			mock.ExpectExec(regexp.QuoteMeta("UPDATE `user_profiles` SET `age`=?,`location`=? WHERE user_id = ? AND `user_id` = ?")).
+				WithArgs(userProfile.Age, userProfile.Location, userProfile.UserID, userProfile.UserID).
+				WillReturnResult(sqlmock.NewResult(0, 1)) // Assuming 1 row is affected
+		
+			// Mocking the transaction commit
+			mock.ExpectCommit()
+		
+			// Calling the method
+			err := repo.UpdateUserProfile(userProfile)
+		
+			// Assertions
+			Expect(err).ShouldNot(HaveOccurred())
+		
+			// Verify that all expectations were met
+			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
+		})
+		
 	})
 })
 
-func TestRepository(t *testing.T) {
+func TestUserRepository(t *testing.T) {
 	RegisterFailHandler(Fail) // 注册 Gomega 的失败处理器
 	RunSpecs(t, "UserRepository Suite")
 }
