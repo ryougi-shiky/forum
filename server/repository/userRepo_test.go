@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"regexp"
 	"server/model"
-	"testing"
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -217,8 +216,3 @@ var _ = Describe("UserRepository", func() {
 
 	})
 })
-
-func TestUserRepository(t *testing.T) {
-	RegisterFailHandler(Fail) // 注册 Gomega 的失败处理器
-	RunSpecs(t, "UserRepository Suite")
-}
