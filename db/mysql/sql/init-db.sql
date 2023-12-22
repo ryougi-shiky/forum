@@ -26,7 +26,7 @@ CREATE TABLE user_profiles (
     PRIMARY KEY (user_id)
 );
 CREATE TABLE posts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id CHAR(36) PRIMARY KEY,
     uid VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     description TEXT,
@@ -36,17 +36,17 @@ CREATE TABLE posts (
     INDEX idx_created_at (created_at)
 );
 CREATE TABLE post_likes (
-    post_id INT,
-    user_id INT,
+    post_id CHAR(36),
+    user_id CHAR(36),
     PRIMARY KEY (post_id, user_id),
     FOREIGN KEY (post_id) REFERENCES posts(id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     INDEX idx_post_id (user_id)
 );
 CREATE TABLE comments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    post_id INT,
-    user_id INT,
+    comment_id CHAR(36) AUTO_INCREMENT PRIMARY KEY,
+    post_id CHAR(36),
+    user_id CHAR(36),
     comment_text TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (post_id) REFERENCES posts(id),
