@@ -1,40 +1,27 @@
-# ---- Base Node ----
-FROM node:16-alpine AS base
-# 设置环境变量
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-# 安装node模块
-COPY package*.json ./
-# 如果存在npm-shrinkwrap.json，则复制
-COPY npm-shrinkwrap.json* ./
+# 使用 Go 官方镜像作为构建环境
+FROM golang:1.21 as builder
 
-# ---- Dependencies ----
-FROM base AS dependencies
-# 安装编译所需的依赖，包括Python、make和g++
-RUN apk add --no-cache --virtual .gyp \
-        python3 \
-        make \
-        g++ \
-    && npm install --production \
-    # 移除编译依赖以减小镜像大小
-    && apk del .gyp
+# 设置工作目录
+WORKDIR /app
 
-# 拷贝生产依赖项
-RUN cp -R node_modules prod_node_modules
-# 安装所有依赖项
-RUN npm install
+# 复制 go.mod 和 go.sum 文件并下载依赖信息
+COPY go.mod go.sum ./
+RUN go mod download
 
-# ---- Release ----
-FROM base AS release
-# 拷贝生产依赖项
-COPY --from=dependencies /usr/src/app/prod_node_modules ./node_modules
-# 拷贝项目文件
+# 复制源代码
 COPY . .
-# 改变所有权
-RUN chown -R node /usr/src/app
-# 切换用户
-USER node
-# 暴露端口
-EXPOSE 5000
-# 启动命令
-CMD ["npm", "start"]
+
+# 构建应用程序
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gin-server ./cmd/
+
+# 使用 alpine 镜像作为基础来减小镜像大小
+FROM alpine:latest  
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+
+# 从构建者镜像中复制构建的应用程序
+COPY --from=builder /app/gin-server .
+
+# 运行 gin 应用程序
+CMD ["./gin-server"]

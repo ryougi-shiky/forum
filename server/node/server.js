@@ -12,8 +12,11 @@ const notifyRouter = require("./routes/notify");
 const searchRouter = require("./routes/search");
 
 const app = express();
-dotenv.config({path: "./config.env"});
+// dotenv.config({path: "./config.env"});
 const port = process.env.PORT || 5000;
+const client_url = process.env.CLIENT_URL;
+
+console.log("Frontend url: ", client_url);
 
 mongoose.connect(process.env.MONGO, {
   dbName: `ani`,
@@ -27,16 +30,26 @@ mongoose.connect(process.env.MONGO, {
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
-app.use(cors());
+
+const corsOptions = {
+  origin: '*', // 如果前端服务名为client
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
 
 app.use(express.static("./client/build"));
 
+<<<<<<< HEAD:server/node/server.js
+=======
 app.use(cors({
   origin: ["http://localhost:3000", "https://20.239.174.137"],
   methods: ["GET", "POST", "DELETE", "PUT", "UPDATE"],
   credentials: true
 }));
 
+>>>>>>> main:server/server.js
 app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);
