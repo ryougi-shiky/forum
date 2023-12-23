@@ -41,6 +41,15 @@ app.use(cors(corsOptions));
 
 app.use(express.static("./client/build"));
 
+<<<<<<< HEAD:server/node/server.js
+=======
+app.use(cors({
+  origin: ["http://localhost:3000", "https://20.239.174.137"],
+  methods: ["GET", "POST", "DELETE", "PUT", "UPDATE"],
+  credentials: true
+}));
+
+>>>>>>> main:server/server.js
 app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);
