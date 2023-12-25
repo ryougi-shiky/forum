@@ -1,39 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	// "net/http"
 
+	"server/handler"
 	"server/repository"
+	"server/service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 )
 
+
+
+
+
 func main() {
-	fmt.Println("Starting server...")
+	server := startServer()
 
-	db, err := repository.ConnectToMysql()
-	if err != nil {
-		log.Fatalf("Failed to connect to DB: %s", err.Error())
-	}
-	log.Println("Connected to DB:", db)
-	// userRepository := repository.NewUserRepository(db)
-	// log.Fatal(http.ListenAndServe(":8080", router))
-	server := gin.Default()
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	server.Use(cors.New(config))
+	server.Router.POST("user/register", handler.RegisterUserHandler)
 
-	// server.Use(static.Serve("/", static.LocalFile("./client/build", true)))
-
-	// handlers.UserRoutes(r)
-	// handlers.AuthRoutes(r)
-	// handlers.PostRoutes(r)
-	// handlers.NotifyRoutes(r)
-	// handlers.SearchRoutes(r)
-
-	server.Run()
+	server.Router.Run()
 }
