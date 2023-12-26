@@ -1,28 +1,13 @@
 package main
 
 import (
-	"log"
-
-	// "net/http"
-
-	"server/handler"
-	"server/repository"
-	"server/service"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
-	"gorm.io/gorm"
+	. "server/handler"
 )
 
-
-
-
-
 func main() {
-	server := startServer()
+	server := StartServer()
 
-	server.Router.POST("user/register", handler.RegisterUserHandler)
+	server.Router.POST("user/register", server.RegisterUserHandler)
 
 	server.Router.Run()
 }

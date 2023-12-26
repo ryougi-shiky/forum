@@ -1,19 +1,28 @@
-package service
+package handler
 
 import (
 	"log"
-	. "server/model"
+
+	// "net/http"
+
 	"server/repository"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 )
 
-func startServer() *Server {
+type Server struct {
+	Router    *gin.Engine
+	DB        *gorm.DB
+	Validator *validator.Validate
+}
+
+func StartServer() *Server {
 	log.Println("Starting server...")
 	server := &Server{
-		Router:    gin.Default(),
+		Router: gin.Default(),
 	}
 	db, err := repository.ConnectToMysql()
 	if err != nil {
@@ -21,7 +30,6 @@ func startServer() *Server {
 	}
 	log.Println("Connected to DB:", db)
 	server.DB = db
-	server.UserService = service.NewUserService(repository.NewUserRepository(db))
 
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
