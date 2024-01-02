@@ -5,6 +5,7 @@ import (
 )
 
 func main() {
+
 	server := StartServer()
 
 	server.Router.POST("user/register", server.RegisterUserHandler)
