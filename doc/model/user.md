@@ -56,24 +56,29 @@ This redesign leverages MinIO for efficient large file storage while using MySQL
 
 
 # How this architecture works?
+**Note: Load Balancing** distribute incoming client requests across multiple server instances to prevent any single instance from being overloaded.
 ### Scenario 1: Client Login and Retrieve Own User Information and Icon
 
 ```mermaid
 sequenceDiagram
     participant Client as Client
+    participant LoadBalancer as Load Balancer
     participant Server as Server
+    participant Redis as Redis Cache
     participant MySQL as MySQL Database
     participant MinIO as MinIO Storage
-    participant Redis as Redis Cache
 
-    Client->>Server: Send login credentials
-    Server->>MySQL: Validate credentials
-    MySQL-->>Server: User data
-    Server->>Redis: Get session/cache
-    Redis-->>Server: Session data
+    Client->>LoadBalancer: Send login credentials
+    LoadBalancer->>Server: Forward request
+    Server->>Redis: Check session/cache
+    alt Cache miss
+        Server->>MySQL: Validate credentials
+        MySQL-->>Server: User data
+        Server->>Redis: Update session/cache
+    end
     Server->>MinIO: Retrieve profile picture
     MinIO-->>Server: Profile picture URL
-    Server-->>Client: Send user data & profile picture URL
+    Server-->>Client: User data & profile picture
 ```
 
 In this scenario:
@@ -89,16 +94,18 @@ In this scenario:
 ```mermaid
 sequenceDiagram
     participant Client as Client
+    participant LoadBalancer as Load Balancer
     participant Server as Server
     participant MySQL as MySQL Database
     participant MinIO as MinIO Storage
 
-    Client->>Server: Request posts
+    Client->>LoadBalancer: Request posts
+    LoadBalancer->>Server: Forward request
     Server->>MySQL: Query posts & authors
     MySQL-->>Server: Posts & authors data
     loop For each post
         Server->>MinIO: Retrieve author's icon
-        MinIO-->>Server: Icon URL
+        MinIO-->>Server: Icon Image
     end
     Server-->>Client: Posts data with icons URLs
 ```
