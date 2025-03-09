@@ -7,7 +7,7 @@ import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile"
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
-// import Messenger from "./pages/messenger/Messenger";
+import Messenger from "./pages/messenger/Messenger";
 import Moments from "./pages/moments/Moments";
 
 function App() {

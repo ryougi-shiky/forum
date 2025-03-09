@@ -25,7 +25,7 @@ export default function Profile() {
   const [snackbarOpenUploading, setSnackbarOpenUploading] = useState(false); // Notification window
 
   console.log("params: ", params);
-  
+
   useEffect(()=>{
     const fetchUser = async () => {
       const res = await axios.get(`${backend_url}/users?username=${params.username}`);
