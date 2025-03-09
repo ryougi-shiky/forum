@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"regexp"
 	"server/model"
+	"testing"
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -12,6 +13,11 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
+
+func TestPostRepository(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "PostRepository Suite")
+}
 
 var _ = Describe("PostRepository", func() {
 	var (
@@ -164,17 +170,16 @@ var _ = Describe("PostRepository", func() {
 		Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
 	})
 	It("should remove like if already liked", func() {
-		postID := "b2cbd29c-9e3d-11ee-8c90-0242ac120002"
-		userID := "b2cbd29c-9e3d-11ee-8c90-0242ac120001"
+		postID := "post_id_1"
+		userID := "user_id_1"
 
 		// Expect a database transaction to begin
 		mock.ExpectBegin()
 
 		// Expect the query to check if the like already exists
-		rows := sqlmock.NewRows([]string{"post_id", "user_id"}).AddRow(postID, userID)
 		mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `post_likes` WHERE post_id = ? AND user_id = ?")).
 			WithArgs(postID, userID).
-			WillReturnRows(rows)
+			WillReturnRows(sqlmock.NewRows([]string{"post_id", "user_id"}).AddRow(postID, userID))
 
 		// Expect the delete operation for the existing like
 		mock.ExpectExec(regexp.QuoteMeta("DELETE FROM `post_likes` WHERE")).

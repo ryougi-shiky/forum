@@ -16,11 +16,7 @@ init:
 run:
 	sudo kubectl apply -f db/mysql/mysql.yaml
 	sudo kubectl apply -f server/server.yaml
-
-test:
-	cd server && go test -v ./...
 	
-
 mysql: mysql_init mysql_push
 
 mysql_init:
