@@ -23,7 +23,7 @@ spec:
         - name: PORT
           value: "5000"
         - name: CLIENT_URL
-          value: "http://client.default.svc.cluster.local"
+          value: "http://frontend.local"
 ---
 apiVersion: v1
 kind: Service
