@@ -39,7 +39,7 @@ The weather API is expired. Please purchase it here: https://rapidapi.com/worlda
 
 # User Manual
 ## Localhost Deploy
-##### Start client Server
+##### Start Frontend Server
 `cd client`
 
 `npm install`
@@ -159,19 +159,12 @@ To delete pm2 process, run:
 `pm2 delete id`
 
 ## Local Deploy with k8s and kind
-1. Install kubernetes and Kind
-2. Create a new cluster ```kind create cluster --name <cluster_name>```
-3. Check the all clusters info: ```kubectl config get-contexts```
-4. Switch to the expected cluster ```kubectl config use-context <cluster_name>```
-5. Check current cluster info ```kubectl config current-context```
-6. Navigate to `deploy` directory
-7. Configure the .yaml file. You can configure env variables here.
-8. Run: 
+1. Navigate to `deploy` directory
+2. Configure the .yaml file
+3. Run: 
    ```
     kubectl apply -f mongodb.yaml
-    kubectl apply -f server.yaml
-    kubectl apply -f client.yaml
+    kubectl apply -f node_server.yaml
    ```
-9. Check all pods in the cluster ```kubectl get pods``` Make sure all pods are running.
-10. To expose the cluster port so you can access the app from `localhost`: 
-   ```kubectl port-forward service/client local_port:cluster_port```
+4. To expose the cluster port: 
+   `kubectl port-forward service/nodeapp local_port:cluster_port`

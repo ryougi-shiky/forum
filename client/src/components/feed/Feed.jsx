@@ -9,16 +9,16 @@ import { validateProfilePage } from "../../regex/validateUrl";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
-export default function Feed({ username }) {
+export default function Feed({username}) {
   // const { user:currentUser, isFetching, error, dispatch, feed_display_moments } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
 
   const fetchPosts = async () => {
-    const res = username
+    const res = username 
       ? await axios.get(`${backend_url}/users/post/profile/${username}`)
       : await axios.get(`${backend_url}/users/post/allposts`);
-
+    
     // console.log("posts: ", res.data);
     // console.log("username: ", username);
 
@@ -26,26 +26,26 @@ export default function Feed({ username }) {
     const sortedPosts = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     setPosts(sortedPosts);
-
+    
     // setPosts(res.data.sort((p1, p2) => {
     //   return new Date(p2.createdAt) - new Date(p1.createdAt);
     // }));
   };
 
-  useEffect(() => {
+  useEffect(()=>{
     fetchPosts();
-  }, [username, user._id])
+  },[username, user._id])
 
   // When delete a post, let the feed to filter the deleted post in the displayed posts.
   const handlePostDelete = (postId) => {
     setPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
   };
 
-  // When create a new post, notify the client to refresh the page once.
+  // When create a new post, notify the frontend to refresh the page once.
   const handlePostCreate = () => {
     fetchPosts();
   };
-
+  
   return (
     <div className="feed">
       <div className="feedWrapper">
