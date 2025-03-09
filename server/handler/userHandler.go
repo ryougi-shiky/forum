@@ -21,7 +21,7 @@ func (s *Server) RegisterUserHandler(c *gin.Context) {
 	userRepo := repository.NewUserRepository(s.DB)
 	userService := service.NewUserService(userRepo)
 	// Register user
-	user, err := userService.RegisterUser(registerRequest.Username, registerRequest.Email, registerRequest.Password)
+	user, err := userService.RegisterUser(userRepo, registerRequest.Username, registerRequest.Email, registerRequest.Password)
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return

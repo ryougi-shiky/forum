@@ -23,7 +23,7 @@ var _ = Describe("UserService", func() {
 	BeforeEach(func() {
 		var dbConn *sql.DB
 		var err error
-		var mockDB sqlmock.Sqlmock
+        var mockDB sqlmock.Sqlmock
 		dbConn, mockDB, err = sqlmock.New() // 创建模拟的 SQL 数据库连接
 		Expect(err).ShouldNot(HaveOccurred())
 
@@ -56,5 +56,22 @@ var _ = Describe("UserService", func() {
 			})
 		})
 
+		// Context("when the email is already in use", func() {
+		// 	It("should return an error", func() {
+		// 		// 假设之前已有用户使用了这个邮箱
+		// 		existingUser := &model.User{
+		// 			Username: "existingUser",
+		// 			Email:    "test@example.com",
+		// 			Password: "somehashedpassword",
+		// 		}
+		// 		Expect(db.Create(&existingUser).Error).To(BeNil())
+
+		// 		// 尝试注册使用相同邮箱的新用户
+		// 		_, err := userService.RegisterUser("newUser", "test@example.com", "password")
+
+		// 		Expect(err).To(HaveOccurred())
+		// 		// 可以更具体地检查错误类型和消息
+		// 	})
+		// })
 	})
 })
