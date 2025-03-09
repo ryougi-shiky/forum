@@ -17,7 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to connect to DB: %s", err.Error())
 	}
-	log.Println("Connected to DB:", db)
+	log.Fatalf("Connected to DB: %s", db)
 	// userRepository := repository.NewUserRepository(db)
 	// log.Fatal(http.ListenAndServe(":8080", router))
 }

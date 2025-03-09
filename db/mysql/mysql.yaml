@@ -40,7 +40,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: ryougishiky/forum_mysql
+      - image: mysql:5.6
         name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD

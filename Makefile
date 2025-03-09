@@ -1,6 +1,5 @@
 # Define variables
 SERVER_IMAGE_NAME=ryougishiky/forum_server
-MYSQL_IMAGE_NAME=ryougishiky/forum_mysql
 LABEL=latest
 # Create cluster and load all yaml
 CLUSTER_NAME=forum
@@ -17,13 +16,6 @@ run:
 	sudo kubectl apply -f db/mysql/mysql.yaml
 	sudo kubectl apply -f server/server.yaml
 	
-mysql: mysql_init mysql_push
-
-mysql_init:
-	sudo docker build -t $(MYSQL_IMAGE_NAME):$(LABEL) ./db/mysql
-
-mysql_push:
-	docker push $(MYSQL_IMAGE_NAME):$(LABEL)
 
 # Default target
 server: server_build server_push
