@@ -15,7 +15,7 @@ var user = os.Getenv("MYSQL_USER")
 var password = os.Getenv("MYSQL_PASSWORD")
 var dbname = os.Getenv("MYSQL_DBNAME")
 
-type MySQLRepository struct {
+type MySQLUserRepository struct {
 	db *gorm.DB
 }
 
