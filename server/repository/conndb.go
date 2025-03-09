@@ -1,35 +1,8 @@
 package repository
 
-import (
-	"fmt"
-	"log"
-	"os"
+var user = "doadmin"
+var password = "AVNS_zP2kyuFUoqgF3b4k0AT"
+var server = "db-mysql-syd1-21907-do-user-14450765-0.c.db.ondigitalocean.com"
+var port = 25060
+var database = "defaultdb"
 
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-)
-
-var host = os.Getenv("MYSQL_HOST")
-var port = os.Getenv("MYSQL_PORT")
-var user = os.Getenv("MYSQL_USER")
-var password = os.Getenv("MYSQL_PASSWORD")
-var dbname = os.Getenv("MYSQL_DBNAME")
-
-type MySQLUserRepository struct {
-	db *gorm.DB
-}
-
-// Create a new repository object. Connect to the database.
-func ConnectToMysql() (*gorm.DB, error) {
-	// Build connection string
-	connString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", user, password, host, port, dbname)
-	// Create connection pool
-	db, err := gorm.Open(mysql.Open(connString), &gorm.Config{})
-	if err != nil {
-		log.Printf("Error opening database connection: %s\n", err.Error())
-		return nil, err
-	}
-	fmt.Printf("Mysql Database Connected!")
-
-	return db, err
-}
