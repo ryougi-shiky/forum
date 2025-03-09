@@ -1,0 +1,15 @@
+FROM mongo:6.0.4
+
+COPY ./dump /dump
+
+# RUN chown -R mongodb:mongodb /docker-entrypoint-initdb.d
+
+# RUN echo "#!/bin/bash\nmongorestore --db ani /docker-entrypoint-initdb.d" > /docker-entrypoint-initdb.d/init.sh
+# RUN chmod +x /docker-entrypoint-initdb.d/init.sh
+RUN mongod --bind_ip_all --port 27018
+
+RUN sleep 5
+
+RUN mongorestore --port 27018 --db ani /dump/ani 
+
+# CMD ["sh", "-c", "mongod --bind_ip_all --port 27018 --fork --logpath /var/log/mongodb.log && sleep 5 && mongorestore --host localhost --port 27018 --db ani /docker-entrypoint-initdb.d && tail -f /dev/null"]

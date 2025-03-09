@@ -3,7 +3,7 @@ services:
   client:
     build:
       context: ./client  # 假设你的前端 Dockerfile 在 frontend 文件夹中
-      dockerfile: Dockerfile # 或者你的前端 Dockerfile 的文件名
+      dockerfile: Dockerfile.dev # 或者你的前端 Dockerfile 的文件名
     ports:
       - "3000:3000"
     environment:
@@ -20,12 +20,13 @@ services:
   server:
     build:
       context: ./server  # 假设你的后端 Dockerfile 在 backend 文件夹中
-      dockerfile: Dockerfile # 或者你的后端 Dockerfile 的文件名
+      dockerfile: Dockerfile.dev # 或者你的后端 Dockerfile 的文件名
     ports:
       - "5000:5000"
     environment:
       # 后端应用连接 MongoDB 所需的环境变量
-      MONGODB_URI: "mongodb://mongodb:27017/ani" # 连接到 mongodb 服务，数据库名称为 your_test_database
+      MONGODB_URI: "mongodb://mongodb:27018" # 连接到 mongodb 服务，数据库名称为 your_test_database
+      MONGODB_NAME: "ani" # 数据库名称
       NODE_ENV: "development" # 设置为开发环境，方便测试
       # 其他后端应用需要的环境变量
     depends_on:
@@ -34,17 +35,29 @@ services:
       - app-network
 
   mongodb:
-    image: mongo:6.0.4 # 使用最新版本的 MongoDB 官方镜像
+    image: mongo:6.0.4
     container_name: mongodb
     ports:
-      - "27017:27017"
+      - "27018:27018"  # 修改端口
     volumes:
-      - mongodb_data:/data/db # 将 MongoDB 数据持久化到宿主机的 mongodb_data 卷
+      - mongodb_data:/data/db
     environment:
       - MONGO_INITDB_DATABASE=ani
+    command: ["mongod", "--port", "27018"]  # 指定 MongoDB 使用 27018
+    restart: always
     networks:
       - app-network
 
+  mongo-seed:
+    image: mongo:6.0.4
+    depends_on:
+      - mongodb
+    volumes:
+      - ./db/mongo/dump:/dump
+    entrypoint: [ "sh", "-c", "sleep 5 && mongorestore --host mongodb --port 27018 --db ani /dump/ani" ]
+    networks:
+      - app-network
+  
 networks:
   app-network:
     driver: bridge
