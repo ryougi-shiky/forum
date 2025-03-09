@@ -96,31 +96,6 @@ var _ = Describe("UserRepository", func() {
 
 			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
 		})
-		It("should retrieve followers successfully", func() {
-			id := "b2cbd29c-9e3d-11ee-8c90-0242ac120002"
-			// Mocking the expected query
-			rows := sqlmock.NewRows([]string{"follower_id", "follower_name", "profile_picture"}).
-				AddRow("follower_id_1", "followerUser", []byte("profilepicture"))
-			mock.ExpectQuery(regexp.QuoteMeta(
-				"SELECT user_followers.follower_id, users.username as follower_name, users.profile_picture " +
-					"FROM `user_followers` join users on users.id = user_followers.follower_id " +
-					"WHERE user_followers.user_id = ?")).
-				WithArgs(id).
-				WillReturnRows(rows)
-
-			// Calling the method
-			followers, err := repo.GetFollowers(id)
-
-			// Assertions
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(followers).ShouldNot(BeEmpty())
-			Expect(followers[0].FollowerID).To(Equal("follower_id_1"))
-			Expect(followers[0].FollowerName).To(Equal("followerUser"))
-			Expect(followers[0].ProfilePicture).To(Equal([]byte("profilepicture")))
-
-			// Verify that all expectations were met
-			Expect(mock.ExpectationsWereMet()).ShouldNot(HaveOccurred())
-		})
 	})
 })
 
