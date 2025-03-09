@@ -12,34 +12,30 @@ const notifyRouter = require("./routes/notify");
 const searchRouter = require("./routes/search");
 
 const app = express();
-// dotenv.config({path: "./config.env"});
+// dotenv.config({ path: "./config.env" });
 const port = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGO, {
-  dbName: `ani`,
+mongoose.connect(process.env.MONGODB_URI, {
+  dbName: process.env.MONGODB_NAME,
   useNewUrlParser: true,
   useUnifiedTopology: true
-}, () => {
-  console.log("Backend Server Connected to MongoDB");
-});
+})
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
 //middleware
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
-app.use(cors());
 
 app.use(express.static("./client/build"));
 
-<<<<<<< HEAD:server/node/server.js
-=======
 app.use(cors({
-  origin: ["http://localhost:3000", "https://20.239.174.137"],
-  methods: ["GET", "POST", "DELETE", "PUT", "UPDATE"],
+  origin: '*',
+  methods: '*',
   credentials: true
 }));
 
->>>>>>> main:server/server.js
 app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);

@@ -6,16 +6,16 @@ const bcrypt = require('bcrypt');
 router.post('/register', async (req, res) => {
   try {
     // Check if username exists
-    const existingUser = await User.findOne({username: req.body.username});
+    const existingUser = await User.findOne({ username: req.body.username });
 
-    if(existingUser) {
-      return res.status(400).json({type: "unameDupErr", message: "Username already taken. Please try another one."});
+    if (existingUser) {
+      return res.status(400).json({ type: "unameDupErr", message: "Username already taken. Please try another one." });
     }
 
-    const existingEmail = await User.findOne({email: req.body.email});
+    const existingEmail = await User.findOne({ email: req.body.email });
 
-    if(existingEmail) {
-      return res.status(400).json({type: "emailDupErr", message: "Email already taken. Please try another one."});
+    if (existingEmail) {
+      return res.status(400).json({ type: "emailDupErr", message: "Email already taken. Please try another one." });
     }
 
     // hash password
@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
     const hashedPwd = await bcrypt.hash(req.body.password, salt);
 
     // create user instance
-    const newUser = new User ({
+    const newUser = new User({
       username: req.body.username,
       email: req.body.email,
       password: hashedPwd,
@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
     // store it in database
     const user = await newUser.save();
     res.status(200).json(user);
-  } catch (err){
+  } catch (err) {
     console.error(err); // log the error on server
     res.status(500).json({ message: err.message }); // send detailed error message to client
   }
@@ -47,21 +47,22 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  // console.log("login req.body: ", req.body);
+  console.log("login req.body: ", req.body);
   try {
-    const user = await User.findOne({email: req.body.email});
-    if (!user){
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
       return res.status(404).json("user not exist");
     }
 
     const validPassword = bcrypt.compareSync(req.body.password, user.password);
-    if (!validPassword){
+    if (!validPassword) {
       return res.status(400).json("wrong password");
     }
 
     return res.status(200).json(user);
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err.stack);
+    res.status(500).json({ message: err.message });
   }
 });
 
