@@ -38,7 +38,7 @@ func (r *UserRepository) Create(user *model.User) error {
 
 func (r *UserRepository) DeleteUser(userID string) error {
 	// Create an instance of the User model with the ID set to the userID
-	userToDelete := model.User{UserID: userID}
+	userToDelete := model.User{ID: userID}
 
 	// Use the entire userToDelete object in the Delete method
 	err := r.Db.Delete(&userToDelete).Error
@@ -54,7 +54,7 @@ func (r *UserRepository) GetFollowers(userID string) ([]*model.UserFollower, err
 
 	err := r.Db.Table("user_followers").
 		Select("user_followers.follower_id, users.username as follower_name, users.profile_picture").
-		Joins("join users on users.user_id = user_followers.follower_id").
+		Joins("join users on users.id = user_followers.follower_id").
 		Where("user_followers.user_id = ?", userID).
 		Scan(&followers).
 		Error
@@ -94,7 +94,7 @@ func (r *UserRepository) UpdateProfilePicture(userID string, profilePicture []by
 	}
 
 	// Perform the update operation within the transaction
-	if err := tx.Model(&model.User{}).Where("user_id = ?", userID).Update("profile_picture", profilePicture).Error; err != nil {
+	if err := tx.Model(&model.User{}).Where("id = ?", userID).Update("profile_picture", profilePicture).Error; err != nil {
 		tx.Rollback() // Rollback the transaction in case of an error
 		return err
 	}
