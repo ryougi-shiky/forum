@@ -6,15 +6,15 @@ import (
 
 	// "net/http"
 
-	"server/repository"
-
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
+	"server/repository"
+	"server/handler"
 )
 
 func main() {
 	fmt.Println("Starting server...")
-
+	
 	db, err := repository.ConnectToMysql()
 	if err != nil {
 		log.Fatalf("Failed to connect to DB: %s", err.Error())
@@ -24,16 +24,16 @@ func main() {
 	// log.Fatal(http.ListenAndServe(":8080", router))
 	server := gin.Default()
 	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	server.Use(cors.New(config))
+    config.AllowAllOrigins = true
+    server.Use(cors.New(config))
 
-	// server.Use(static.Serve("/", static.LocalFile("./client/build", true)))
+    server.Use(static.Serve("/", static.LocalFile("./client/build", true)))
 
-	// handlers.UserRoutes(r)
-	// handlers.AuthRoutes(r)
-	// handlers.PostRoutes(r)
-	// handlers.NotifyRoutes(r)
-	// handlers.SearchRoutes(r)
+    handlers.UserRoutes(r)
+    handlers.AuthRoutes(r)
+    handlers.PostRoutes(r)
+    handlers.NotifyRoutes(r)
+    handlers.SearchRoutes(r)
 
-	server.Run()
+    server.Run()
 }
