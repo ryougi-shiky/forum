@@ -7,7 +7,7 @@ package handler
 // 	"github.com/gin-gonic/gin"
 // )
 
-// func RegisterUserHandler(c *gin.Context, userService *service.UserService) {
+// func RegisterUserHandler(c *gin.Context, authService *service.AuthService) {
 //     var req struct {
 //         Username string
 //         Email    string
@@ -18,7 +18,7 @@ package handler
 //         return
 //     }
 
-//     user, err := userService.RegisterUser(req.Username, req.Email, req.Password)
+//     user, err := authService.RegisterUser(req.Username, req.Email, req.Password)
 //     if err != nil {
 //         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 //         return
@@ -27,6 +27,6 @@ package handler
 //     c.JSON(http.StatusOK, user)
 // }
 
-// func AuthenticateUserHandler(c *gin.Context, userService *service.UserService) {
+// func AuthenticateUserHandler(c *gin.Context, authService *service.AuthService) {
 //     // 实现登录逻辑
 // }
