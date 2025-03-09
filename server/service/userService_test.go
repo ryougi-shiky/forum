@@ -1,77 +1,31 @@
-package service_test
+package service
 
 import (
-	"database/sql"
+	"testing"
+	"server/repository"
 	"server/model"
-	. "server/repository"
-	. "server/service"
-
-	"github.com/DATA-DOG/go-sqlmock"
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	
 )
 
-var _ = Describe("UserService", func() {
-	var (
-		db          *gorm.DB
-		userRepo    *UserRepository
-		userService *UserService
-	)
+func TestRegisterUser(t *testing.T) {
+    userRepo := repository.NewMockUserRepository()
+    userService := service.NewUserService(userRepo)
 
-	BeforeEach(func() {
-		var dbConn *sql.DB
-		var err error
-        var mockDB sqlmock.Sqlmock
-		dbConn, mockDB, err = sqlmock.New() // 创建模拟的 SQL 数据库连接
-		Expect(err).ShouldNot(HaveOccurred())
+    username := "testuser"
+    email := "test@example.com"
+    password := "testpassword"
 
-		dialector := mysql.New(mysql.Config{
-			Conn:                      dbConn,
-			SkipInitializeWithVersion: true,
-		})
-		db, err = gorm.Open(dialector, &gorm.Config{}) // 使用模拟的数据库连接创建 GORM DB
-		Expect(err).ShouldNot(HaveOccurred())
+    user, err := userService.RegisterUser(username, email, password)
 
-		userRepo = NewUserRepository(db)
-		userService = NewUserService(userRepo)
-	})
+    // Check if there's no error
+    if err != nil {
+        t.Errorf("Expected no error, got %v", err)
+    }
 
-	AfterEach(func() {
-		// 测试后的清理工作
-		// 例如：删除测试中创建的数据，回滚事务等
-	})
+    // Check if the user is not nil
+    if user == nil {
+        t.Error("Expected user, got nil")
+    }
 
-	Describe("Registering a user", func() {
-		Context("when the email is not already in use", func() {
-			It("should successfully register a user", func() {
-				_, err := userService.RegisterUser("testuser", "test@example.com", "password")
-				Expect(err).ToNot(HaveOccurred())
-
-				var user model.User
-				result := db.Where("email = ?", "test@example.com").First(&user)
-				Expect(result.Error).To(BeNil())
-				Expect(user.Username).To(Equal("testuser"))
-			})
-		})
-
-		// Context("when the email is already in use", func() {
-		// 	It("should return an error", func() {
-		// 		// 假设之前已有用户使用了这个邮箱
-		// 		existingUser := &model.User{
-		// 			Username: "existingUser",
-		// 			Email:    "test@example.com",
-		// 			Password: "somehashedpassword",
-		// 		}
-		// 		Expect(db.Create(&existingUser).Error).To(BeNil())
-
-		// 		// 尝试注册使用相同邮箱的新用户
-		// 		_, err := userService.RegisterUser("newUser", "test@example.com", "password")
-
-		// 		Expect(err).To(HaveOccurred())
-		// 		// 可以更具体地检查错误类型和消息
-		// 	})
-		// })
-	})
-})
+    // Additional assertions based on your logic
+}

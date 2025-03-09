@@ -5,7 +5,7 @@ import (
 	"server/model"
 	"server/repository"
 	"server/service"
-
+	"server/main"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +18,7 @@ func (s *Server) RegisterUserHandler(c *gin.Context) {
 	}
 
 	// Create UserRepository and UserService instances
-	userRepo := repository.NewUserRepository(s.DB)
+	userRepo := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)
 	// Register user
 	user, err := userService.RegisterUser(userRepo, registerRequest.Username, registerRequest.Email, registerRequest.Password)
