@@ -1,0 +1,5 @@
+#!/bin/bash
+cd $(dirname ..)
+
+echo "Building Backend Dev images"
+docker build -t backend-dev -f Dockerfile.dev .
