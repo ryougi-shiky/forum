@@ -1,0 +1,14 @@
+#!/bin/bash
+cd $(dirname ..)
+
+echo "-------------------- Install docker environment --------------------"
+
+sudo apt-get update
+
+sudo apt-get install
+
+sudo apt-get install docker
+
+sudo apt-get install docker-compose-plugin
+
+docker compose version

@@ -1,0 +1,18 @@
+#!/bin/bash
+cd $(dirname ..)
+
+docker compose up -d
+sleep 20
+
+echo "health checking..."
+if curl -s http://localhost:3000/ | grep -q "<title>Ani Ani</title>"; then
+    echo "✅ frontend health check pass"
+    docker compose down
+    exit 0
+else
+    echo "❌ frontend health check failed"
+    echo "docker compose ps:"
+    docker compose ps
+    exit 1
+fi
+

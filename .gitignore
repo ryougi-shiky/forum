@@ -18,3 +18,5 @@ server/models/Message.js
 server/routes/conversation.js
 server/routes/message.js
 socket/
+.idea
+.env

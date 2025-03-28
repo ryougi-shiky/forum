@@ -1,0 +1,42 @@
+name: Docker Compose Build
+
+on:
+  pull_request:
+    
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    - name: Install Docker Environment
+      run: |
+        ./auto/install-github-action-env
+
+    - name: Build with Docker Compose
+      run: |
+        ./auto/build
+      env:
+        REACT_APP_BACKEND_URL: "http://localhost:5000"
+        REACT_APP_SOCKET_URL: "http://localhost:8008"
+        REACT_APP_SOCKET_SERVER_PORT: "8008"
+        REACT_APP_OPEN_WEATHER_RAPID_API_KEY: ${{ secrets.OPEN_WEATHER_API_KEY || '' }}
+        
+    - name: Validate Docker Compose configuration
+      run: |
+        ./auto/validate
+        
+    - name: Test Docker Compose up
+      run: |
+        ./auto/health-check
+      
+    - name: Report build result
+      if: always()
+      run: |
+        echo "Docker Compose build completed with status ${{ job.status }}" 
