@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Install docker environment
-      uses: ./auto/install-github-action-env
-    
     # 第1步：检出代码
     - name: Checkout code
       uses: actions/checkout@v3
+      
+    - name: Install docker environment
+      uses: ./auto/install-github-action-env
       
     # 第2步：设置 Docker Buildx
     - name: Set up Docker Buildx

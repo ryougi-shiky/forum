@@ -11,4 +11,4 @@ apt-get install docker
 
 apt-get install docker-compose-plugin
 
-docker
+docker compose version
