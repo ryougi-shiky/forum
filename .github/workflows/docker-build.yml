@@ -1,0 +1,63 @@
+name: Docker Compose Build
+
+# 触发条件：在 main 分支的 PR 被创建、更新或重新打开时
+on:
+  pull_request:
+    
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 第1步：检出代码
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    # 第2步：设置 Docker Buildx
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    # 第3步：缓存 Docker 层以加速构建
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+      
+    # 第4步：使用 Docker Compose 构建服务
+    - name: Build with Docker Compose
+      run: |
+        docker-compose build
+      env:
+        # 设置环境变量（使用 GitHub Secrets 或默认值）
+        REACT_APP_BACKEND_URL: "http://localhost:5000"
+        REACT_APP_SOCKET_URL: "http://localhost:8008"
+        REACT_APP_SOCKET_SERVER_PORT: "8008"
+        REACT_APP_OPEN_WEATHER_RAPID_API_KEY: ${{ secrets.OPEN_WEATHER_API_KEY || '开发测试密钥' }}
+      
+    # 第5步：显示构建的镜像列表
+    - name: Verify images
+      run: |
+        docker images
+        
+    # 第6步：验证 Docker Compose 配置
+    - name: Validate Docker Compose configuration
+      run: |
+        docker-compose config
+        
+    # 第7步：测试服务能否启动 (可选)
+    - name: Test Docker Compose up (optional)
+      run: |
+        docker-compose up -d
+        sleep 10
+        docker-compose ps
+        docker-compose down
+      
+    # 第8步：报告构建结果
+    - name: Report build result
+      if: always()
+      run: |
+        echo "Docker Compose build completed with status ${{ job.status }}" 
