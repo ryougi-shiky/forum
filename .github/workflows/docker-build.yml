@@ -1,6 +1,5 @@
 name: Docker Compose Build
 
-# 触发条件：在 main 分支的 PR 被创建、更新或重新打开时
 on:
   pull_request:
     
@@ -16,9 +15,12 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
       
-    - name: Build with Docker Compose
+    - name: Install Docker Environment
       run: |
         ./auto/install-github-action-env
+
+    - name: Build with Docker Compose
+      run: |
         ./auto/build
       env:
         REACT_APP_BACKEND_URL: "http://localhost:5000"
