@@ -19,10 +19,22 @@ const UserSchema = new mongoose.Schema({
     required: true,
     min: 8,
     max: 15,
+    required: function () {
+      return !this.googleId; // only non Google login user need password
+    }
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true // allow null
   },
   profilePicture: {
     type: Buffer,
     default: null,
+  },
+  googleProfilePicture: {
+    type: String,
+    default: null
   },
   followers: {
     type: Array,
@@ -54,7 +66,7 @@ const UserSchema = new mongoose.Schema({
   //   enum: [1, 2, 3],
   // }
 },
-{timestamps: true}
+  { timestamps: true }
 )
 
 module.exports = mongoose.model("User", UserSchema);
