@@ -45,8 +45,9 @@ export default function Login() {
     navigate('/register');
   }
 
-  const handleGoogleLogin = () => {
-    window.location.href = `${backend_url}/google`;
+  const handleGoogleLogin = (e) => {
+    e.preventDefault();
+    window.location.href = `${backend_url}/users/auth/google`;
   }
 
   return (

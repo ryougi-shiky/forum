@@ -22,7 +22,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 require('./config/passport');
-
+console.log('Backend URL:', process.env.BACKEND_URL);
+console.log('Callback URL:', `${process.env.BACKEND_URL}/users/auth/google/callback`);
 // 验证环境变量是否正确加载
 console.log('Google Client ID:', process.env.GOOGLE_CLIENT_ID ? '已设置' : '未设置');
 console.log('Google Client Secret:', process.env.GOOGLE_CLIENT_SECRET ? '已设置' : '未设置');
