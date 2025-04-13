@@ -24,11 +24,9 @@ services:
     ports:
       - "5000:5000"
     environment:
-      # 后端应用连接 MongoDB 所需的环境变量
-      MONGODB_URI: "mongodb://mongodb:27018" # 连接到 mongodb 服务，数据库名称为 your_test_database
-      MONGODB_NAME: "ani" # 数据库名称
-      NODE_ENV: "development" # 设置为开发环境，方便测试
-      # 其他后端应用需要的环境变量
+      MONGODB_URI: "mongodb://mongodb:27018"
+      MONGODB_NAME: "ani"
+      NODE_ENV: "development"
     depends_on:
       - mongodb
     networks:

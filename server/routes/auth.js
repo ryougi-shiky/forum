@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 // register
 router.post('/register', async (req, res) => {
@@ -64,6 +65,39 @@ router.post('/login', async (req, res) => {
     console.error(err.stack);
     res.status(500).json({ message: err.message });
   }
+});
+
+// Google 登录路由
+router.get('/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+);
+
+// Google 登录回调
+router.get('/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: `${process.env.CLIENT_URL}/login`,
+    session: true
+  }),
+  (req, res) => {
+    res.redirect(`${process.env.CLIENT_URL}`);
+  }
+);
+
+// 获取当前用户信息
+router.get('/current-user', (req, res) => {
+  if (req.user) {
+    res.json(req.user);
+  } else {
+    res.status(401).json({ message: 'Not authenticated' });
+  }
+});
+
+// 退出登录
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect(`${process.env.CLIENT_URL}`);
 });
 
 module.exports = router;

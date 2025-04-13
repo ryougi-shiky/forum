@@ -20,3 +20,5 @@ server/routes/message.js
 socket/
 .idea
 .env
+client_secret_*.apps.googleusercontent.com.json
+*.env

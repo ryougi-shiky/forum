@@ -16,7 +16,7 @@ export default function Login() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   const email = useRef();
   const password = useRef();
-  const {user: currentUser, isFetching, error, dispatch} = useContext(AuthContext);
+  const { user: currentUser, isFetching, error, dispatch } = useContext(AuthContext);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const navigate = useNavigate();
 
@@ -24,16 +24,16 @@ export default function Login() {
     e.preventDefault();
     console.log("login email: ", email.current.value, " login password: ", password.current.value, " dispatch: ", dispatch);
 
-    await loginCall({email: email.current.value, password: password.current.value}, dispatch);
-    let user = {email: email.current.value, password: password.current.value };
+    await loginCall({ email: email.current.value, password: password.current.value }, dispatch);
+    let user = { email: email.current.value, password: password.current.value };
     // setCookie("email", email.current.value, {path: '/'});
     // setCookie("password", password.current.value, {path: '/'});
-    setCookie("user", user, {path: '/'});
+    setCookie("user", user, { path: '/' });
   }
-  
+
   useEffect(() => {
-    if (cookies.user && !currentUser){
-      loginCall({email: cookies.user.email, password: cookies.user.password}, dispatch);
+    if (cookies.user && !currentUser) {
+      loginCall({ email: cookies.user.email, password: cookies.user.password }, dispatch);
     }
   }, []);
 
@@ -43,6 +43,11 @@ export default function Login() {
 
   const redirectToRegister = () => {
     navigate('/register');
+  }
+
+  const handleGoogleLogin = (e) => {
+    e.preventDefault();
+    window.location.href = `${backend_url}/users/auth/google`;
   }
 
   return (
@@ -57,23 +62,29 @@ export default function Login() {
           </div>
           <div className="loginRight">
             <form className="loginBox" onSubmit={loginSetCookie}>
-              <input 
-                placeholder='Email' 
-                required 
-                type="email" 
-                className="loginInput" 
+              <input
+                placeholder='Email'
+                required
+                type="email"
+                className="loginInput"
                 ref={email} />
-              <input 
-                placeholder='Password' 
-                required 
-                type="password" 
-                className="loginInput" 
-                ref={password} 
+              <input
+                placeholder='Password'
+                required
+                type="password"
+                className="loginInput"
+                ref={password}
                 minLength="6" />
               <button className="loginButton" type='submit' disabled={isFetching}>
-                { isFetching 
-                ? (<CircularProgress value={80} color='white' size='20px' />)
-                : ("Log In") }
+                {isFetching
+                  ? (<CircularProgress value={80} color='white' size='20px' />)
+                  : ("Log In")}
+              </button>
+              <button
+                onClick={handleGoogleLogin}
+                className="google-login-button"
+              >
+                Google Login
               </button>
               <span className="loginForgot">Forgot Password?</span>
               <button className="loginRegisterButton" onClick={redirectToRegister} >Register</button>
