@@ -1,19 +1,26 @@
+# Step 1: Build React App
 FROM node:16-slim as Builder
+
+ARG REACT_APP_BACKEND_URL
+ARG REACT_APP_SOCKET_URL
+ARG REACT_APP_SOCKET_SERVER_PORT
+ARG REACT_APP_OPEN_WEATHER_RAPID_API_KEY
+ARG CORS_WHITELIST
+
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL \
+    REACT_APP_SOCKET_URL=$REACT_APP_SOCKET_URL \
+    REACT_APP_SOCKET_SERVER_PORT=$REACT_APP_SOCKET_SERVER_PORT \
+    REACT_APP_OPEN_WEATHER_RAPID_API_KEY=$REACT_APP_OPEN_WEATHER_RAPID_API_KEY \
+    CORS_WHITELIST=$CORS_WHITELIST
+
+RUN echo "REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL"
+
 WORKDIR /app
-COPY package.json /app
-COPY package-lock.json /app
-RUN npm install
-RUN npm run build
+COPY . .
+RUN npm install && \
+    npm run build
 
-# ======================================
-FROM nginx:alpine
-
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# 可选：自定义 nginx 配置（如果你有）
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Step 2: Export build folder (without nginx here!)
+FROM alpine:latest AS export
+WORKDIR /export
+COPY --from=builder /app/build ./
