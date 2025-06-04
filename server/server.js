@@ -12,8 +12,9 @@ const notifyRouter = require("./routes/notify");
 const searchRouter = require("./routes/search");
 
 const app = express();
-// dotenv.config({ path: "./config.env" });
-const port = process.env.PORT || 5000;
+dotenv.config({ path: "./config.env" });
+const port = process.env.PORT || 17000;
+const whitelist = process.env.CORS_WHITELIST ? process.env.CORS_WHITELIST.split(',') : [];
 
 mongoose.connect(process.env.MONGODB_URI, {
   dbName: process.env.MONGODB_NAME,
@@ -28,7 +29,23 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
-app.use(express.static("./client/build"));
+app.use(express.static("./frontend/build"));
+
+console.log("whitelist:", whitelist);
+const whitelist = process.env.CORS_WHITELIST?.split(',').map(origin => origin.trim());
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(cors({
   origin: '*',
