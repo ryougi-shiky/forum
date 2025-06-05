@@ -4,23 +4,33 @@ cd $(dirname ..)
 docker compose up -d
 sleep 20
 
-echo "health checking..."
-if curl -s http://localhost:3000/ | grep -q "<title>Ani Ani</title>"; then
-    echo "✅ frontend health check pass"
+frontend_response=$(curl -s http://localhost:3000/)
+if echo "$frontend_response" | grep -q "<title>Ani Ani</title>"; then
+    echo "✅ frontend health check passed"
 else
     echo "❌ frontend health check failed"
-    echo "docker compose ps:"
+    echo "🔴 Received HTML:"
+    echo "$frontend_response"
+    echo "🧾 docker compose ps:"
     docker compose ps
+    echo "📜 docker logs (frontend):"
+    docker compose logs frontend
     exit 1
 fi
 
-if curl -s http://localhost:3000/healthcheck | grep -q "Health Check Pass! The frontend is connected to backend!"; then
-    echo "✅ backend health check pass"
+backend_response=$(curl -s http://localhost:3000/healthcheck)
+if echo "$backend_response" | grep -q "Health Check Pass! The frontend is connected to backend!"; then
+    echo "✅ backend health check passed"
 else
     echo "❌ backend health check failed"
-    echo "docker compose ps:"
+    echo "🔴 Response from /healthcheck:"
+    echo "$backend_response"
+    echo "🧾 docker compose ps:"
     docker compose ps
+    echo "📜 docker logs (server):"
+    docker compose logs server
     exit 1
 fi
 
+echo "✅ All health checks passed."
 docker compose down
