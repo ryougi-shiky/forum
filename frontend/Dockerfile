@@ -17,10 +17,6 @@ RUN echo "REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL"
 
 WORKDIR /app
 COPY . .
-RUN npm install && \
-    npm run build
+RUN npm install
+CMD ["npm", "start"]
 
-# Step 2: Export build folder (without nginx here!)
-FROM alpine:latest AS export
-WORKDIR /export
-COPY --from=builder /app/build ./
