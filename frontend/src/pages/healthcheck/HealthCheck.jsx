@@ -20,7 +20,7 @@ export default function HealthCheck() {
 
     return (
         <div>
-            <p>{backendResponse}</p>
+            <p>{backendResponse.message}</p>
         </div>
     );
 }
