@@ -7,7 +7,6 @@ sleep 20
 echo "health checking..."
 if curl -s http://localhost:3000/ | grep -q "<title>Ani Ani</title>"; then
     echo "✅ frontend health check pass"
-    docker compose down
 else
     echo "❌ frontend health check failed"
     echo "docker compose ps:"
@@ -16,9 +15,10 @@ fi
 
 if curl -s http://localhost:3000/healthcheck | grep -q "Health Check Pass! The frontend is connected to backend!"; then
     echo "✅ backend health check pass"
-    docker compose down
 else
     echo "❌ backend health check failed"
     echo "docker compose ps:"
     docker compose ps
 fi
+
+docker compose down
