@@ -4,14 +4,11 @@ Archived_client_1
 Archived_server_1       
 Archived_server_2       
 test
-./client/node_modules
-./client/build
+frontend/node_modules
+frontend/build
 ./server/node_modules
 ./socket/node_modules
 ./server/client/node_modules
-./server/node_modules
-./client/node_modules
-./client/build
 .vscode/
 server/models/Conversation.js
 server/models/Message.js
@@ -20,3 +17,5 @@ server/routes/message.js
 socket/
 .idea
 .env
+*.env
+frontend/cypress/screenshots

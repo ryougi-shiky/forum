@@ -1,0 +1,10 @@
+FROM cypress/browsers:node-16.18.1-chrome-110.0.5481.96-1-ff-109.0-edge-110.0.1587.41-1@sha256:a41f5e5d4303109468fceefaea413c142be8360a9f75af2535e61d7551bf10e9
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+
+RUN npm ci
+RUN npx cypress install
+RUN npm install
+
+COPY . .
