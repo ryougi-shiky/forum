@@ -36,29 +36,29 @@ console.log("whitelist:", whitelist);
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || whitelist.includes(origin)) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
+  credentials: true
 };
 
 app.use(cors(corsOptions));
 
-app.use(cors({
-  origin: '*',
-  methods: '*',
-  credentials: true
-}));
+// app.use(cors({
+//   origin: '*',
+//   methods: '*',
+//   credentials: true
+// }));
 
 app.use("/users", userRouter);
 app.use("/users/auth", authRouter);
 app.use("/users/post", postRouter);
 app.use("/users/notify", notifyRouter);
 app.use("/users/search", searchRouter);
-app.use("/healthcheck/backend", healthCheckRouter)
+app.use("/healthcheck", healthCheckRouter)
 
 app.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);
