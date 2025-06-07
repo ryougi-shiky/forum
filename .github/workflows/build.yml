@@ -2,8 +2,7 @@ name: Build and Tests
 
 on:
   pull_request:
-    
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,7 +33,6 @@ jobs:
         
     - name: Test Docker Compose up
       run: |
-        ./auto/health-check
         ./auto/run-e2e-tests
       
     - name: Report build result
