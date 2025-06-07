@@ -9,9 +9,6 @@ frontend/build
 ./server/node_modules
 ./socket/node_modules
 ./server/client/node_modules
-./server/node_modules
-frontend/node_modules
-frontend/build
 .vscode/
 server/models/Conversation.js
 server/models/Message.js
