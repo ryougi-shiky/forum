@@ -1,11 +1,11 @@
-FROM node:16-slim
+FROM cypress/browsers:node16.17.0-chrome107-ff106
+
 WORKDIR /app
 COPY package.json /app
 COPY package-lock.json /app
-RUN npm install
-RUN apt-get update && apt-get install -y \
-  libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
-  libxtst6 xauth xvfb
+
+RUN npm ci
 RUN npx cypress install
+RUN npm install
 
 COPY . .
