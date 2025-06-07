@@ -70,13 +70,13 @@ export default function Login() {
                 className="loginInput" 
                 ref={password} 
                 minLength="6" />
-              <button className="loginButton" type='submit' disabled={isFetching}>
+              <button className="loginButton" type='submit' data-testid="login-button" disabled={isFetching}>
                 { isFetching 
                 ? (<CircularProgress value={80} color='white' size='20px' />)
                 : ("Log In") }
               </button>
               <span className="loginForgot">Forgot Password?</span>
-              <button className="loginRegisterButton" onClick={redirectToRegister} >Register</button>
+              <button className="loginRegisterButton" data-testid="register-button" onClick={redirectToRegister} >Register</button>
             </form>
           </div>
         </div>

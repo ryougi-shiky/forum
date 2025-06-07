@@ -2,7 +2,6 @@ import axios from "axios";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 console.log("REACT_APP_BACKEND_URL: ", backend_url);
-window.alert("REACT_APP_BACKEND_URL: " + process.env.REACT_APP_BACKEND_URL);
 
 export const loginCall = async (userCredential, dispatch) => {
   dispatch({ type: "LOGIN_START" });
