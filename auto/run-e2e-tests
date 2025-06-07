@@ -6,4 +6,4 @@ auto/run-docker-compose
 
 echo "-------------------- Run E2E Tests --------------------"
 cd frontend
-npx cypress run
+docker run frontend-dev npx cypress run

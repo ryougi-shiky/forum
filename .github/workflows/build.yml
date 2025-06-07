@@ -18,9 +18,10 @@ jobs:
       run: |
         ./auto/install-github-action-env
 
-    - name: Build with Docker Compose
+    - name: Build Docker Images
       run: |
         ./auto/build
+        ./auto/build-frontend-dev
       env:
         REACT_APP_BACKEND_URL: "http://localhost:17000"
         REACT_APP_SOCKET_URL: "http://localhost:8008"
