@@ -20,3 +20,5 @@ server/routes/message.js
 socket/
 .idea
 .env
+*.env
+frontend/cypress/screenshots
