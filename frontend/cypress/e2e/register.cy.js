@@ -50,7 +50,7 @@ describe('Register Flow', () => {
     cy.get('.registerButton').click();
 
     cy.url().should('eq', FRONTEND_URL_REGISTER);
-    cy.get('.error-msg').should('be.visible').and('contain', "Passwords don't match !");
+    cy.get('.error-msg').should('be.visible').and('contain', "Passwords don't match!");
   });
 
   it('should show error when username is already taken', () => {
@@ -69,8 +69,8 @@ describe('Register Flow', () => {
 
     cy.wait('@registerRequest').its('response.statusCode').should('eq', 400);
 
-    cy.get('.error-msg').should('be.visible');
     cy.url().should('eq', FRONTEND_URL_REGISTER);
+    cy.get('.error-msg').should('be.visible').and('contain', "Username already taken. Please try another one.");
   });
 
   it('should show error when email is already taken', () => {
@@ -89,7 +89,7 @@ describe('Register Flow', () => {
 
     cy.wait('@registerRequest').its('response.statusCode').should('eq', 400);
 
-    cy.get('.error-msg').should('be.visible');
     cy.url().should('eq', FRONTEND_URL_REGISTER);
+    cy.get('.error-msg').should('be.visible').and('contain', "Email already taken. Please try another one.");
   });
 });
