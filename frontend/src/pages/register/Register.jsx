@@ -80,53 +80,46 @@ export default function Register() {
         </div>
         <div className="registerRight">
           <form className="registerBox" onSubmit={handleClick}>
-            <div className="inputGroup">
-              <input
-                placeholder="Username"
-                type="text"
-                className="registerInput"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-              <span className="error-msg">{unameDupErr}</span>
-            </div>
+            <input
+              placeholder="Username"
+              type="text"
+              className="registerInput"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <span className="error-msg">{unameDupErr}</span>
 
-            <div className="inputGroup">
-              <input
-                placeholder="Email"
-                type="email"
-                className="registerInput"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <span className="error-msg">{emailDupErr}</span>
-            </div>
+            <input
+              placeholder="Email"
+              type="email"
+              className="registerInput"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <span className="error-msg">{emailDupErr}</span>
 
-            <div className="inputGroup">
-              <input
-                placeholder="Password"
-                type="password"
-                className="registerInput"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                minLength={6}
-                required
-              />
-            </div>
+            <input
+              placeholder="Password"
+              type="password"
+              className="registerInput"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength={6}
+              required
+            />
 
-            <div className="inputGroup">
-              <input
-                placeholder="Password Again"
-                type="password"
-                className="registerInput"
-                value={passwordAgain}
-                onChange={(e) => setPasswordAgain(e.target.value)}
-                required
-              />
-              <span className="error-msg">{passwordMismatch ? errMsgPwdNotMatch : ""}</span>
-            </div>
+            <input
+              placeholder="Password Again"
+              type="password"
+              className="registerInput"
+              value={passwordAgain}
+              onChange={(e) => setPasswordAgain(e.target.value)}
+              required
+            />
+            <span className="error-msg">{passwordMismatch ? errMsgPwdNotMatch : ""}</span>
+
             <button type="submit" className="registerButton">Sign Up</button>
             <span className="registerForgot">Already have an account?</span>
             <Link to="/login">
