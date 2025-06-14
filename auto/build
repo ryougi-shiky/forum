@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $(dirname ..)
+cd "$(dirname "$0")/.."
 
 echo "-------------------- Test docker-compose build --------------------"
 docker compose build

@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route, useParams, Navigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { useCookies } from 'react-cookie';
@@ -9,6 +9,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Messenger from "./pages/messenger/Messenger";
 import Moments from "./pages/moments/Moments";
+import HealthCheck from "./pages/healthcheck/HealthCheck";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -29,6 +30,7 @@ function App() {
             <Route path="/profile/:username" element={<Profile />}></Route>
             <Route exact path="/messenger" element= {user ? <Messenger /> : <Navigate to='/' /> }></Route>
             <Route exact path="/moments" element= {user ? <Moments /> : <Navigate to='/' /> }></Route>
+            <Route exact path="/healthcheck" element= { <HealthCheck /> }></Route>
             {/* <Route exact path="/messenger" element= { <Messenger /> }></Route> */}
 
             {/* <Route path="/login" element={<Login />}></Route>
