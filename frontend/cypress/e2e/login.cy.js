@@ -15,6 +15,7 @@ describe('Login Flow', () => {
     cy.get('[data-testid="login-button"]').click();
 
     cy.url().should('eq', 'http://localhost:3000/');
+
     cy.get('.topbarContainer').should('be.visible');
     cy.get('.sidebar').should('be.visible');
     cy.get('.feed').should('be.visible');
