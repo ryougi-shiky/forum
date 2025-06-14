@@ -19,6 +19,7 @@ export default function Register() {
   const [unameDupErr, setUnameDupErr] = useState("");
   const [emailDupErr, setEmailDupErr] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const {user, dispatch} = useContext(AuthContext);
   const [cookies] = useCookies(["user"]);
@@ -32,20 +33,18 @@ export default function Register() {
     }
   }, [cookies, dispatch]);
 
-  useEffect(() => {
-    setPasswordMismatch(passwordAgain !== password);
-  }, [password, passwordAgain]);
 
   const handleClick = async (e) => {
     e.preventDefault();
+    setFormSubmitted(true);
     setUnameDupErr("");
     setEmailDupErr("");
 
     if (password !== passwordAgain) {
-      console.log("Triggered password !== passwordAgain");
       setPasswordMismatch(true);
       return;
     }
+    setPasswordMismatch(false);
 
     const user = {
       username,
@@ -88,7 +87,7 @@ export default function Register() {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
-            <span className="error-msg">{unameDupErr}</span>
+            {unameDupErr && <span className="error-msg">{unameDupErr}</span>}
 
             <input
               placeholder="Email"
@@ -98,7 +97,7 @@ export default function Register() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <span className="error-msg">{emailDupErr}</span>
+            {emailDupErr && <span className="error-msg">{emailDupErr}</span>}
 
             <input
               placeholder="Password"
@@ -118,7 +117,9 @@ export default function Register() {
               onChange={(e) => setPasswordAgain(e.target.value)}
               required
             />
-            <span className="error-msg">{passwordMismatch ? errMsgPwdNotMatch : ""}</span>
+            {formSubmitted && passwordMismatch && (
+              <span className="error-msg">{errMsgPwdNotMatch}</span>
+            )}
 
             <button type="submit" className="registerButton">Sign Up</button>
             <span className="registerForgot">Already have an account?</span>
