@@ -2,6 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+auto/build-frontend-dev
 auto/run-docker-compose
 
 echo "-------------------- Run E2E Tests --------------------"
