@@ -18,16 +18,6 @@ jobs:
       run: |
         ./auto/install-github-action-env
 
-    - name: Build Docker Images
-      run: |
-        ./auto/build
-        ./auto/build-frontend-dev
-      env:
-        REACT_APP_BACKEND_URL: "http://localhost:17000"
-        REACT_APP_SOCKET_URL: "http://localhost:8008"
-        REACT_APP_SOCKET_SERVER_PORT: "8008"
-        REACT_APP_OPEN_WEATHER_RAPID_API_KEY: ${{ secrets.OPEN_WEATHER_API_KEY || '' }}
-        
     - name: Validate Docker Compose configuration
       run: |
         ./auto/validate

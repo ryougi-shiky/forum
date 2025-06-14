@@ -54,52 +54,41 @@ describe('Register Flow', () => {
   });
 
   it('should show error when username is already taken', () => {
-    const existingUsername = 'didi'; // Assuming this username exists based on the login test
+    const existingUsername = 'didi';
     
     cy.visit(FRONTEND_URL_REGISTER);
 
-    // Fill in the form with an existing username
     cy.get('input[placeholder="Username"]').type(existingUsername);
     cy.get('input[placeholder="Email"]').type('new_email@example.com');
     cy.get('input[placeholder="Password"]').type('password123');
     cy.get('input[placeholder="Password Again"]').type('password123');
 
-    // Intercept the register request
     cy.intercept('POST', '**/register').as('registerRequest');
 
-    // Submit the form
     cy.get('.registerButton').click();
 
-    // Wait for the register request and verify it failed with 400
     cy.wait('@registerRequest').its('response.statusCode').should('eq', 400);
 
-    // Check for error message about duplicate username
     cy.get('.error-msg').should('be.visible');
     cy.url().should('eq', FRONTEND_URL_REGISTER);
   });
 
   it('should show error when email is already taken', () => {
-    // Use an email that we know exists
-    const existingEmail = 'didi@gmail.com'; // Assuming this email exists based on the login test
+    const existingEmail = 'didi@gmail.com';
     
     cy.visit(FRONTEND_URL_REGISTER);
 
-    // Fill in the form with an existing email
     cy.get('input[placeholder="Username"]').type('new_username');
     cy.get('input[placeholder="Email"]').type(existingEmail);
     cy.get('input[placeholder="Password"]').type('password123');
     cy.get('input[placeholder="Password Again"]').type('password123');
 
-    // Intercept the register request
     cy.intercept('POST', '**/register').as('registerRequest');
 
-    // Submit the form
     cy.get('.registerButton').click();
 
-    // Wait for the register request and verify it failed with 400
     cy.wait('@registerRequest').its('response.statusCode').should('eq', 400);
 
-    // Check for error message about duplicate email
     cy.get('.error-msg').should('be.visible');
     cy.url().should('eq', FRONTEND_URL_REGISTER);
   });
