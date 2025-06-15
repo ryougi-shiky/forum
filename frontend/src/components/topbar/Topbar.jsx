@@ -95,11 +95,13 @@ export default function Topbar() {
 
   // Fetch notifications
   useEffect(() => {
-    const fetchNotifications = async () => {
-      const res = await axios.get(`${backend_url}/users/notify/get/follow/${currentUser._id}`);
-      setNotifications(res.data);
+    if (currentUser) {
+      const fetchNotifications = async () => {
+        const res = await axios.get(`${backend_url}/users/notify/get/follow/${currentUser._id}`);
+        setNotifications(res.data);
+      }
+      fetchNotifications();
     }
-    fetchNotifications();
   }, [currentUser]);
 
   // Handler to clear a specific notification. nid means notification._id
@@ -224,21 +226,23 @@ export default function Topbar() {
             <Chat />
             <span className="topbarIconBadge">3</span>
           </div>
-          <div className="topbarIconItem">
-            <Dropdown
-              trigger={['click']}
-              overlay={notificationMenu}
-              animation="slide-up"
-              onVisibleChange={onVisibleChange}
-            >
-              <Notifications/>
-            </Dropdown>
-            <span className="topbarIconBadge">{notifications.length}</span>
-          </div>
+        <div className="topbarIconItem">
+          <Dropdown
+            trigger={['click']}
+            overlay={notificationMenu}
+            animation="slide-up"
+            onVisibleChange={onVisibleChange}
+          >
+            <Notifications/>
+          </Dropdown>
+          <span className="topbarIconBadge">{notifications.length}</span>
         </div>
+      </div>
+      {currentUser && (
         <Link to={`/profile/${currentUser.username}`}>
           <img src={ currentUser.profilePicture ? `data:image/jpeg;base64,${decodeImg(currentUser.profilePicture.data)}` : defaultProfilePicture} alt="" className="topbarImg" />
         </Link>
+      )}
       </div>
     </div>
   )

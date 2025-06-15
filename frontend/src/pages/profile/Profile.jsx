@@ -16,62 +16,117 @@ import { decodeImg } from "../../decodeImg";
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 export default function Profile() {
-  const { user:currentUser, dispatch } = useContext(AuthContext);
-  console.log("currentUser: ", currentUser);
-  const [user, setUser] = useState({});
+  const { user: currentUser, dispatch } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const params = useParams();
   const fileInput = useRef(); // reference to the file input element
   const [snackbarOpenOversize, setSnackbarOpenOversize] = useState(false); // Notification window
   const [snackbarOpenUploading, setSnackbarOpenUploading] = useState(false); // Notification window
 
-  console.log("params: ", params);
-
-  useEffect(()=>{
+  useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`${backend_url}/users?username=${params.username}`);
-      // console.log(res);
-      setUser(res.data);
-      // console.log("res.data.profilePicture: ", res.data.profilePicture);
-      // console.log("user.profilePicture: ", user.profilePicture);
+      if (!params.username) {
+        setError("Username not provided");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const res = await axios.get(`${backend_url}/users?username=${params.username}`);
+        if (res.data) {
+          setUser(res.data);
+        } else {
+          setError("User not found");
+        }
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        setError("Failed to load user data");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchUser();
-  },[params.username]);
+  }, [params.username]);
 
-  var coverImg = "/assets/icon/person/noCover.png";
+  const coverImg = "/assets/icon/person/noCover.png";
   const defaultProfilePicture = "/assets/icon/person/noAvatar.png";
 
   const handleProfilePictureClick = () => {
-    if (user._id === currentUser._id) {
-      fileInput.current.click(); // simulate a click on the file input element
+    if (user && currentUser && user._id === currentUser._id) {
+      fileInput.current?.click(); // simulate a click on the file input element
     }
-    
   };
 
   const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file && file.size <= 256000) { // Ensure file is less than 256KB
-      const formData = new FormData();
-      formData.append('profilePicture', file);
-      formData.append('userId', user._id);
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    if (user && currentUser && user._id && currentUser._id && file.size <= 256000) { // Ensure file is less than 256KB
+      try {
+        const formData = new FormData();
+        formData.append('profilePicture', file);
+        formData.append('userId', user._id);
 
-      setSnackbarOpenUploading(true); // Notify user that image is uploading.
-      console.log("img is uploading...");
+        setSnackbarOpenUploading(true); // Notify user that image is uploading.
 
-      const response = await axios.put(`${backend_url}/users/${currentUser._id}/profilePicture`, formData);
-      // after successful upload, dispatch the action to update the user in your context
-      if (response.status === 200) {
-        const updatedUserResponse = await axios.get(`${backend_url}/users?username=${currentUser.username}`);
-        if (updatedUserResponse.status === 200) {
-          // dispatch the action to update the user in your context
-          dispatch({ type: 'UPDATE_USER', payload: updatedUserResponse.data });
+        const response = await axios.put(`${backend_url}/users/${currentUser._id}/profilePicture`, formData);
+        
+        if (response.status === 200) {
+          try {
+            const updatedUserResponse = await axios.get(`${backend_url}/users?username=${currentUser.username}`);
+            if (updatedUserResponse.status === 200 && updatedUserResponse.data) {
+              // dispatch the action to update the user in your context
+              dispatch({ type: 'UPDATE_USER', payload: updatedUserResponse.data });
+              // Update the local user state as well
+              if (user.username === currentUser.username) {
+                setUser(updatedUserResponse.data);
+              }
+            }
+          } catch (err) {
+            console.error("Error updating user after profile picture change:", err);
+          }
         }
+      } catch (err) {
+        console.error("Error uploading profile picture:", err);
+      } finally {
+        setSnackbarOpenUploading(false);
       }
     } else {
       setSnackbarOpenOversize(true); // Notify user that image is too large
-      console.log("img is too large to upload!");
     }
   };
   
+  if (loading) {
+    return (
+      <React.Fragment>
+        <Topbar />
+        <div className="profile">
+          <Sidebar />
+          <div className="profileRight">
+            <div className="profileLoading">Loading user profile...</div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  if (error) {
+    return (
+      <React.Fragment>
+        <Topbar />
+        <div className="profile">
+          <Sidebar />
+          <div className="profileRight">
+            <div className="profileError">{error}</div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+
   return (
     <React.Fragment>
       <Topbar />
@@ -80,9 +135,15 @@ export default function Profile() {
         <div className="profileRight">
           <div className="profileRightTop">
             <div className="profileCover">
-              <img src={user.coverImg ? user.coverImg : coverImg} alt="" className="profileCoverImg" />
+              <img 
+                src={user && user.coverImg ? user.coverImg : coverImg} 
+                alt="" 
+                className="profileCoverImg" 
+              />
               <img
-                src={user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : defaultProfilePicture}
+                src={user && user.profilePicture && user.profilePicture.data 
+                  ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` 
+                  : defaultProfilePicture}
                 alt=""
                 className="profileUserImg"
                 onClick={handleProfilePictureClick}
@@ -92,19 +153,19 @@ export default function Profile() {
                 type="file"
                 hidden
                 onChange={handleFileChange}
+                accept="image/*"
               />
             </div>
             <div className="profileInfo">
-              <h4 className="profileInfoName">{user.username}</h4>
-              <h4 className="profileInfoDesc">{user.desc}</h4>
+              <h4 className="profileInfoName">{user ? user.username : ''}</h4>
+              <h4 className="profileInfoDesc">{user ? user.desc : ''}</h4>
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed username={params.username}/>
-            <Rightbar user={user}/>
+            <Feed username={params.username} />
+            <Rightbar user={user} />
           </div>
         </div>
-        
       </div>
       <Snackbar
         open={snackbarOpenOversize}

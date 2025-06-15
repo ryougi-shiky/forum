@@ -3,7 +3,7 @@ describe('Profile Page', () => {
   const FRONTEND_URL_HOME = `${Cypress.config().baseUrl}/`;
   const TEST_USERNAME = 'didi';
   const FRONTEND_URL_PROFILE = `${Cypress.config().baseUrl}/profile/${TEST_USERNAME}`;
-  const OWN_PROFILE_URL = `${Cypress.config().baseUrl}/profile/didi`;
+  const OWN_PROFILE_URL = `${Cypress.config().baseUrl}/profile/${TEST_USERNAME}`;
   
   beforeEach(() => {
     cy.visit(FRONTEND_URL_LOGIN);

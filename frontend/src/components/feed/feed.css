@@ -5,3 +5,26 @@
 .feedWrapper {
   padding: 20px;
 }
+
+.feedLoading, .feedError, .feedEmpty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+  font-size: 16px;
+  color: #555;
+  text-align: center;
+  margin: 20px 0;
+  border-radius: 8px;
+}
+
+.feedError {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.feedEmpty {
+  color: #7f8c8d;
+  background-color: rgba(236, 240, 241, 0.5);
+}

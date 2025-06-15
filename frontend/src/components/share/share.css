@@ -75,3 +75,18 @@
   cursor: pointer;
   color: white;
 }
+
+.shareButton:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.shareError {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+  padding: 8px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-size: 14px;
+  text-align: center;
+}
