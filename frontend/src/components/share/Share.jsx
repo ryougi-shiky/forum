@@ -14,69 +14,30 @@ export default function Share({ onPostCreate }) {
   const {user} = useContext(AuthContext);
   const desc = useRef();
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    
-    if (!user || !user._id || !user.username || !desc.current) {
-      setError("User information is missing");
-      return;
-    }
-    
-    if (!desc.current.value.trim()) {
-      setError("Post cannot be empty");
-      return;
-    }
-    
-    setLoading(true);
-    setError(null);
-    
     const newPost = {
       uid: user._id,
       username: user.username,
       desc: desc.current.value
     }
-    
     try {
       await axios.post(`${backend_url}/users/post/create`, newPost);
-      if (onPostCreate) {
-        onPostCreate(); // notify the parent component to refresh posts
-      }
-      desc.current.value = ""; // Clear the input field after successful post
+      onPostCreate(); // notify the parent component to refresh posts
     } catch (err) {
-      console.error("Error creating post:", err);
-      setError("Failed to create post. Please try again.");
-    } finally {
-      setLoading(false);
+      console.log(err);
     }
-  }
-
-  if (!user) {
-    return null; // Don't render the share component if user is not available
   }
 
   return (
     <div className='share'>
       <div className="shareWrapper">
         <div className="shareTop">
-          <img 
-            className='shareProfileImg' 
-            src={user.profilePicture && user.profilePicture.data 
-              ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` 
-              : '/assets/icon/person/noAvatar.png'} 
-            alt='' 
-          />
-          <input 
-            placeholder="Share something here" 
-            type="text" 
-            className="shareInput" 
-            ref={desc} 
-          />
+          <img className='shareProfileImg' src={user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : '/assets/icon/person/noAvatar.png'} alt='' />
+          <input placeholder="Share something here" type="text" className="shareInput" ref={desc} />
         </div>
         <hr className="shareHr" />
-        {error && <div className="shareError">{error}</div>}
         <form className="shareBottom" onSubmit={submitHandler}>
           <div className="shareOptions">
             <label htmlFor='file' className="shareOption">
@@ -87,8 +48,7 @@ export default function Share({ onPostCreate }) {
                 type="file" 
                 id="file" 
                 accept='.png,.jpeg,.jpg' 
-                onChange={(e) => setFile(e.target.files?.[0])} 
-              />
+                onChange={(e) => setFile(e.target.files[0])} />
             </label>
             <div className="shareOption">
               <Label htmlColor='blue' className='shareIcon' />
@@ -103,14 +63,9 @@ export default function Share({ onPostCreate }) {
               <span className="shareOptionText">Feeling</span>
             </div>
           </div>
-          <button 
-            className="shareButton" 
-            type='submit'
-            disabled={loading}
-          >
-            {loading ? 'Sharing...' : 'Share'}
-          </button>
+          <button className="shareButton" type='submit'>Share</button>
         </form>
+        
       </div>
     </div>
   )

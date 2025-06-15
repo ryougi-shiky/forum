@@ -32,41 +32,34 @@ export default function Post({ post, onPostDelete }) {
 
 
 	useEffect(() => {
-		if (currentUser && post.likes) {
-			setIsLiked(post.likes.includes(currentUser._id));
-		}
-	}, [currentUser, post.likes]);
+		setIsLiked(post.likes.includes(currentUser._id));
+	}, [currentUser._id, post.likes]);
 
 	// Get post owner
 	useEffect(() => {
 		const fetchUser = async () => {
-			if (post.uid) {
-				try {
-					const res = await axios.get(`${backend_url}/users?uid=${post.uid}`);
-					if (res.data) {
-						setUser(res.data);
-					}
-				} catch (err) {
-					console.log("Post component: retrieving user info error!");
-					console.log(err);
-				}
+			try {
+				const res = await axios.get(`${backend_url}/users?uid=${post.uid}`);
+				console.log(res);
+				setUser(res.data);
+			} catch (err) {
+				console.log("Post component: retriving user info error !");
+				console.log(err);
 			}
 		};
 		fetchUser();
 	}, [post.uid]);
 
 	const likeHandler = async () => {
-		if (!currentUser) return;
-		
 		try {
 			await axios.put(`${backend_url}/users/post/like/${post._id}`, {
 				uid: currentUser._id,
 			});
-			setLike(isLiked ? like - 1 : like + 1);
-			setIsLiked(!isLiked);
 		} catch (err) {
 			console.log(err);
 		}
+		setLike(isLiked ? like - 1 : like + 1);
+		setIsLiked(!isLiked);
 	};
 
 	// Handle the click of morevert button
@@ -81,15 +74,11 @@ export default function Post({ post, onPostDelete }) {
 	};
 
 	const deletePost = async () => {
-		if (!currentUser) return;
-		
 		try {
 			await axios.delete(`${backend_url}/users/post/delete/${post._id}`, {
 				data: { uid: currentUser._id },
 			});
-			if (onPostDelete) {
-				onPostDelete(post._id); // notify the parent component to remove this post
-			}
+			onPostDelete(post._id); // notify the parent component to remove this post
 			handleClose();
 		} catch (err) {
 			console.log(err);
@@ -97,19 +86,15 @@ export default function Post({ post, onPostDelete }) {
 	};
 
 	const addComment = async () => {
-		if (!currentUser || !commentText.trim()) return;
-		
 		try {
-			await axios.put(`${backend_url}/users/post/postcomment/${post._id}`, {
+			const res = await axios.put(`${backend_url}/users/post/postcomment/${post._id}`, {
 				commenterId: currentUser._id,
 				commenterName: currentUser.username,
 				text: commentText,
 			});
 			setCommentText("");  // Clear comment input field
 			const updatedComments = await axios.get(`${backend_url}/users/post/getpost/${post._id}`);
-			if (updatedComments.data && updatedComments.data.comments) {
-				setComments(updatedComments.data.comments);
-			}
+			setComments(updatedComments.data.comments);
 		} catch (err) {
 			console.log(err);
 		}
@@ -132,25 +117,25 @@ export default function Post({ post, onPostDelete }) {
 
 	useEffect(() => {
 		const fetchCommentersData = async () => {
-			if (!comments || comments.length === 0) return;
-			
-			let uniqueCommenters = [...new Set(comments.filter(comment => comment && comment.commenterId).map(comment => comment.commenterId))];
+			let uniqueCommenters = [...new Set(comments.map(comment => comment.commenterId))];
 			let fetchedCommentersData = {};
+			console.log("uniqueCommenters: ", uniqueCommenters);
 
 			for (let uid of uniqueCommenters) {
-				if (!uid) continue;
-				
 				try {
 					const res = await axios.get(`${backend_url}/users?uid=${uid}`);
-					if (res.data) {
-						fetchedCommentersData[uid] = res.data;
-					}
+					console.log("fetchedCommentersData, res.data:, ", res.data);
+					fetchedCommentersData[uid] = res.data;
+					
 				} catch (err) {
-					console.log("Post component: retrieving user info error!");
+					console.log("Post component: retriving user info error !");
 					console.log(err);
 				}
 			}
 			setCommentersData(fetchedCommentersData);
+			console.log("commentersData:, ", commentersData);
+			console.log("fetchedCommentersData:, ", fetchedCommentersData);
+			
 		};
 	
 		fetchCommentersData();
@@ -162,10 +147,10 @@ export default function Post({ post, onPostDelete }) {
 			<div className="postWrapper">
 				<div className="postTop">
 					<div className="postTopLeft">
-						<Link to={`/profile/${post.username}`}>
+						<Link to={`profile/${post.username}`}>
 							<img
 								className="postProfileImg"
-								src={ user && user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : "/assets/icon/person/noAvatar.png" }
+								src={ user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : "/assets/icon/person/noAvatar.png" }
 								alt=""
 							/>
 						</Link>
@@ -230,32 +215,29 @@ export default function Post({ post, onPostDelete }) {
 					{showComments && <br></br>}
 					{showComments && <p>All comments:</p>}
 					{showComments && <br></br>}
-					{showComments && comments && comments.map((comment) => (
-						comment && comment._id ? (
-							<div className="commentContainer" key={comment._id}>
-								<div className="commentTop">
-									<Link to={`/profile/${comment.commenterName}`}>
-										<img
-											className="postProfileImg"
-											src={
-												commentersData[comment.commenterId]?.profilePicture
-													? `data:image/jpeg;base64,${decodeImg(commentersData[comment.commenterId].profilePicture.data)}`
-													: "/assets/icon/person/noAvatar.png"
-											}
-											alt=""
-										/>
-									</Link>
-									<div className="commentInfo">
-										<span className="commentUsername postUsername">{comment.commenterName}</span>
-										<span className="commentDate postDate">
-											{comment.timestamp ? new Date(comment.timestamp).toLocaleDateString() : ""}
-										</span>
-									</div>
+					{showComments && comments.map((comment) => (
+						<div className="commentContainer" key={comment._id}>
+							<div className="commentTop">
+								<Link to={`profile/${comment.commenterName}`}>
+									<img
+										className="postProfileImg"
+										src={
+											commentersData[comment.commenterId]?.profilePicture
+												? `data:image/jpeg;base64,${decodeImg(commentersData[comment.commenterId].profilePicture.data)}`
+												: "/assets/icon/person/noAvatar.png"
+										}
+										alt=""
+									/>
+								</Link>
+								{/* <span>{comment.timestamp.toDateString()}</span> */}
+								<div className="commentInfo">
+									<span className="commentUsername postUsername">{comment.commenterName}</span>
+									<span className="commentDate postDate">{new Date(comment.timestamp).toLocaleDateString()}</span>
 								</div>
-								
-								<p className="commentText postText">{comment.text}</p>
 							</div>
-						) : null
+							
+							<p className="commentText postText">{comment.text}</p>
+						</div>
 					))}
 				</div>
 			</div>

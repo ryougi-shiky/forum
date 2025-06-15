@@ -50,21 +50,3 @@
   display: flex;
 }
 
-.profileLoading, .profileError {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  width: 100%;
-  font-size: 18px;
-  color: #555;
-  text-align: center;
-  padding: 20px;
-}
-
-.profileError {
-  color: #e74c3c;
-  background-color: rgba(231, 76, 60, 0.1);
-  border-radius: 8px;
-  margin: 20px;
-}
