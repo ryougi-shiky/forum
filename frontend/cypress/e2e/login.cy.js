@@ -1,5 +1,6 @@
 describe('Login Flow', () => {
-  const FRONTEND_URL_LOGIN = 'http://localhost:3000/login';
+  const FRONTEND_URL_LOGIN = `${Cypress.config().baseUrl}/login`;
+  const FRONTEND_URL_HOME = `${Cypress.config().baseUrl}/`;
   beforeEach(() => {
   })
 
@@ -14,7 +15,7 @@ describe('Login Flow', () => {
 
     cy.get('[data-testid="login-button"]').click();
 
-    cy.url().should('eq', 'http://localhost:3000/');
+    cy.url().should('eq', FRONTEND_URL_HOME);
 
     cy.get('.topbarContainer').should('be.visible');
     cy.get('.sidebar').should('be.visible');

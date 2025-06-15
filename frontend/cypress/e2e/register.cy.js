@@ -1,6 +1,6 @@
 describe('Register Flow', () => {
-  const FRONTEND_URL_REGISTER = 'http://localhost:3000/register';
-  const FRONTEND_URL_LOGIN = 'http://localhost:3000/login';
+  const FRONTEND_URL_REGISTER = `${Cypress.config().baseUrl}/register`;
+  const FRONTEND_URL_LOGIN = `${Cypress.config().baseUrl}/login`;
   
   beforeEach(() => {
     // Clear cookies and local storage between tests
