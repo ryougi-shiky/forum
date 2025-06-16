@@ -27,25 +27,27 @@ export default function Rightbar({user}) {
   const [editFrom, setEditFrom] = useState(user?.from);
   const inputAge = useRef();
   const inputFrom = useRef();
-  
 
 
   useEffect(() => {
-    // if no user, it will be an error
-    setFollowed(currentUser.followings.includes(user?._id));
-  }, [currentUser.followings, user?._id])
-  
+    if (currentUser && currentUser.followings && user?._id) {
+      setFollowed(currentUser.followings.includes(user._id));
+    }
+  }, [currentUser, user?._id]);
+
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get(`${backend_url}/users/friends/${user?._id}`);
-        setFriends(friendList.data);
+        if (user?._id) {
+          const friendList = await axios.get(`${backend_url}/users/friends/${user._id}`);
+          setFriends(friendList.data);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getFriends();
-  }, [currentUser._id]);
+  }, [user?._id]);
 
   const handleFollow = async () => {
     try {
@@ -125,7 +127,7 @@ export default function Rightbar({user}) {
   const ProfileRightbar = () => {
     return (
       <React.Fragment>
-        {user.username !== currentUser.username && (
+        {user && user._id && user.username !== currentUser.username && (
           <button className="rightbarFollowButton" onClick={handleFollow}>
             {followed ? 'Unfollow' : 'Follow'}
             {followed ? <Remove /> : <Add />}
