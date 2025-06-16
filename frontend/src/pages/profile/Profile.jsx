@@ -18,7 +18,8 @@ const backend_url = process.env.REACT_APP_BACKEND_URL;
 export default function Profile() {
   const { user:currentUser, dispatch } = useContext(AuthContext);
   console.log("currentUser: ", currentUser);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const params = useParams();
   const fileInput = useRef(); // reference to the file input element
   const [snackbarOpenOversize, setSnackbarOpenOversize] = useState(false); // Notification window
@@ -28,20 +29,25 @@ export default function Profile() {
 
   useEffect(()=>{
     const fetchUser = async () => {
-      const res = await axios.get(`${backend_url}/users?username=${params.username}`);
-      // console.log(res);
-      setUser(res.data);
-      // console.log("res.data.profilePicture: ", res.data.profilePicture);
-      // console.log("user.profilePicture: ", user.profilePicture);
+      try {
+        const res = await axios.get(`${backend_url}/users?username=${params.username}`);
+        setUser(res.data);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchUser();
-  },[params.username]);
+    if (currentUser) {
+      fetchUser();
+    }
+  },[params.username, currentUser]);
 
   var coverImg = "/assets/icon/person/noCover.png";
   const defaultProfilePicture = "/assets/icon/person/noAvatar.png";
 
   const handleProfilePictureClick = () => {
-    if (user._id === currentUser._id) {
+    if (user && currentUser && user._id === currentUser._id) {
       fileInput.current.click(); // simulate a click on the file input element
     }
     
@@ -72,6 +78,10 @@ export default function Profile() {
     }
   };
   
+  if (loading || !currentUser) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <React.Fragment>
       <Topbar />
@@ -80,9 +90,9 @@ export default function Profile() {
         <div className="profileRight">
           <div className="profileRightTop">
             <div className="profileCover">
-              <img src={user.coverImg ? user.coverImg : coverImg} alt="" className="profileCoverImg" />
+              <img src={user?.coverImg ? user.coverImg : coverImg} alt="" className="profileCoverImg" />
               <img
-                src={user.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : defaultProfilePicture}
+                src={user?.profilePicture ? `data:image/jpeg;base64,${decodeImg(user.profilePicture.data)}` : defaultProfilePicture}
                 alt=""
                 className="profileUserImg"
                 onClick={handleProfilePictureClick}
@@ -95,13 +105,13 @@ export default function Profile() {
               />
             </div>
             <div className="profileInfo">
-              <h4 className="profileInfoName">{user.username}</h4>
-              <h4 className="profileInfoDesc">{user.desc}</h4>
+              <h4 className="profileInfoName">{user?.username}</h4>
+              <h4 className="profileInfoDesc">{user?.desc}</h4>
             </div>
           </div>
           <div className="profileRightBottom">
             <Feed username={params.username}/>
-            <Rightbar user={user}/>
+            <Rightbar user={user || {}}/>
           </div>
         </div>
         
