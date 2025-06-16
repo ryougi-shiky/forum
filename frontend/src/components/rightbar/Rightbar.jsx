@@ -27,7 +27,7 @@ export default function Rightbar({user}) {
   const [editFrom, setEditFrom] = useState(user?.from);
   const inputAge = useRef();
   const inputFrom = useRef();
-
+  
 
 
   useEffect(() => {
