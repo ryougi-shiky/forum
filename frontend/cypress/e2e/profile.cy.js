@@ -83,26 +83,18 @@ describe('Profile Page', () => {
 
   it('should show follow/unfollow button when viewing another user\'s profile', () => {
     // First visit another user's profile
-    cy.visit(`${Cypress.config().baseUrl}/profile/john`);
+    cy.visit(`${Cypress.config().baseUrl}/profile/nagi`);
     
     // Check if follow/unfollow button exists
-    cy.get('.rightbarFollowButton').should('be.visible');
-    
-    // Test follow/unfollow functionality
-    cy.get('.rightbarFollowButton').then(($button) => {
-      const initialText = $button.text();
-      
-      cy.wrap($button).click();
-      
-      // Button text should change after clicking
-      cy.get('.rightbarFollowButton').should('not.contain', initialText);
-      
-      // Click again to revert the state
-      cy.get('.rightbarFollowButton').click();
-      
-      // Button should return to initial state
-      cy.get('.rightbarFollowButton').should('contain', initialText);
-    });
+    cy.get('.rightbarFollowButton').should('be.visible').and('contain', 'Follow');
+
+    cy.get('.rightbarFollowButton').click();
+    cy.wait(500); // Wait for API call and state update
+    cy.get('.rightbarFollowButton').should('contain', 'Unfollow');
+
+    cy.get('.rightbarFollowButton').click();
+    cy.wait(500);
+    cy.get('.rightbarFollowButton').should('contain', 'Follow');
   });
 
   it('should not show follow/unfollow button on own profile', () => {
