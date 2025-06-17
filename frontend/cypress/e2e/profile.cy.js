@@ -234,37 +234,24 @@ describe('Profile Page', () => {
   it('should be able to post a comment from the profile page', () => {
     cy.visit(OWN_PROFILE_URL);
 
-    // Ensure there is at least one post to comment on
     cy.get('.post').should('exist').first().within(() => {
       cy.get('.addCommentIcon').click();
       cy.get('.commentTextbox').should('be.visible');
       cy.get('.commentTextbox').type('This is a test comment from the profile page');
-      cy.get('.commentTextboxButton').click();
+      cy.get('.commentTextboxButton').should('be.visible').click();
 
-      // Verify the comment was added
-      cy.get('.postBottomCommentList').should('be.visible');
-      cy.get('.commentItem').should('exist');
-      cy.get('.commentItem').last().should('contain', 'This is a test comment from the profile page');
+      cy.get('.postCommentText').should('be.visible').click()
+
+      cy.get('.commentContainer').should('be.visible').within(() => {
+        cy.get('.commentTop').should('exist');
+        cy.get('.postProfileImg').should('exist');
+        cy.get('.commentInfo').within(() => {
+          cy.get('.commentUsername').should('contain', 'didi');
+          cy.get('.commentDate').should('not.be.empty');
+        });
+        cy.get('.commentText').should('contain', 'This is a test comment from the profile page');
+      });
     });
-
-
-    cy.get('.commentContainer').should('exist')
-      .within(() => {
-        // Check comment structure
-        cy.get('.commentTop').should('exist')
-        cy.get('.postProfileImg').should('exist')
-        cy.get('.commentInfo').should('exist')
-          .within(() => {
-            cy.get('.commentUsername').should('exist')
-            cy.get('.commentDate').should('exist')
-          })
-        cy.get('.commentText').should('exist')
-      })
-
-    // Verify comment data
-    cy.get('.commentUsername').should('contain', 'testUser')
-    cy.get('.commentText').should('contain', 'Test comment')
-    cy.get('.commentDate').should('not.be.empty')
   });
 
   it('should navigate back to home page when clicking on home link', () => {
