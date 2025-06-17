@@ -1,34 +1,35 @@
 version: "3.9"
 services:
-  client:
+  frontend:
     build:
-      context: ./client  # 假设你的前端 Dockerfile 在 frontend 文件夹中
-      dockerfile: Dockerfile.dev # 或者你的前端 Dockerfile 的文件名
-    ports:
-      - "3000:3000"
+      context: frontend
+      dockerfile: Dockerfile
     environment:
-      # 前端应用可能需要的环境变量，例如后端 API 的地址
-      REACT_APP_BACKEND_URL: "http://localhost:5000" # 假设后端运行在 localhost:5000
+      REACT_APP_BACKEND_URL: http://localhost:17000
       REACT_APP_SOCKET_URL: http://localhost:8008
       REACT_APP_SOCKET_SERVER_PORT: 8008
       REACT_APP_OPEN_WEATHER_RAPID_API_KEY: "9c4b3c4369msh7ff621c01df1d07p1172edjsn74e33213befb"
+    ports:
+      - "3000:3000"
     depends_on:
       - server
     networks:
       - app-network
+    volumes:
+      - ./frontend/build:/export
 
   server:
     build:
-      context: ./server  # 假设你的后端 Dockerfile 在 backend 文件夹中
-      dockerfile: Dockerfile.dev # 或者你的后端 Dockerfile 的文件名
+      context: ./server
+      dockerfile: Dockerfile.dev
     ports:
-      - "5000:5000"
+      - "17000:17000"
     environment:
-      # 后端应用连接 MongoDB 所需的环境变量
-      MONGODB_URI: "mongodb://mongodb:27018" # 连接到 mongodb 服务，数据库名称为 your_test_database
-      MONGODB_NAME: "ani" # 数据库名称
-      NODE_ENV: "development" # 设置为开发环境，方便测试
-      # 其他后端应用需要的环境变量
+      MONGODB_URI: "mongodb://mongodb:27018"
+      MONGODB_NAME: "ani"
+      NODE_ENV: "development"
+      PORT: "17000"
+      CORS_WHITELIST: "http://localhost:3000,http://localhost:17000,http://server"
     depends_on:
       - mongodb
     networks:
@@ -38,12 +39,12 @@ services:
     image: mongo:6.0.4
     container_name: mongodb
     ports:
-      - "27018:27018"  # 修改端口
+      - "27018:27018"
     volumes:
       - mongodb_data:/data/db
     environment:
       - MONGO_INITDB_DATABASE=ani
-    command: ["mongod", "--port", "27018"]  # 指定 MongoDB 使用 27018
+    command: [ "mongod", "--port", "27018" ]
     restart: always
     networks:
       - app-network
@@ -57,10 +58,9 @@ services:
     entrypoint: [ "sh", "-c", "sleep 5 && mongorestore --host mongodb --port 27018 --db ani /dump/ani" ]
     networks:
       - app-network
-  
 networks:
   app-network:
     driver: bridge
 
 volumes:
-  mongodb_data: # 定义 mongodb_data 卷
+  mongodb_data:

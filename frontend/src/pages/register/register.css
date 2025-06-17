@@ -1,4 +1,4 @@
-.login {
+.register {
   width: 100vw;
   height: 100vh;
   background-color: #f0f2f5;
@@ -7,33 +7,32 @@
   justify-content: center;
 }
 
-.loginWrapper {
+.registerWrapper {
   width: 70%;
   height: 70%;
   display: flex;
-
 }
 
-.loginLeft,.loginRight {
+.registerLeft,.registerRight {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.loginLogo {
+.registerLogo {
   font-size: 50px;
   font-weight: 800;
   color: #1775ee;
   margin-bottom: 10px;
 }
 
-.loginDesc {
+.registerDesc {
   font-size: 24px;
 }
 
-.loginBox {
-  height: 300px;
+.registerBox {
+  height: 75%;
   padding: 20px;
   background-color: white;
   border-radius: 10px;
@@ -42,19 +41,24 @@
   justify-content: space-between;
 }
 
-.loginInput {
+.registerInput {
   height: 50px;
   border-radius: 10px;
-  border: 1px solide grey;
+  border: 1px solid grey;
   font-size: 18px;
   padding-left: 20px;
 }
 
-.loginInput:focus {
+.registerInput:focus {
   outline: none;
 }
 
-.loginButton {
+.error-msg {
+  padding-left: 10px;
+  color: red;
+}
+
+.registerButton {
   height: 50px;
   border-radius: 10px;
   border: none;
@@ -65,21 +69,14 @@
   cursor: pointer;
 }
 
-.loginButton:focus {
-  outline: none;
-}
-
-.loginButton:disabled {
-  cursor: not-allowed;
-}
-
-.loginForgot {
+.registerForgot {
   text-align: center;
   color: #1775ee;
 }
 
-.loginRegisterButton {
+.registerRegisterButton {
   height: 50px;
+  width: 100%;
   border-radius: 10px;
   border: none;
   background-color: #42b72a;

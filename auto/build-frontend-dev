@@ -1,0 +1,6 @@
+#!/bin/bash
+cd "$(dirname "$0")/.."
+
+echo "-------------------- Build Frontend --------------------"
+docker build -t frontend-dev -f frontend/Dockerfile.dev ./frontend
+#docker run -p 3000:3000 --rm -v "$(pwd)/frontend/build:/app/build" frontend-dev npm run build
