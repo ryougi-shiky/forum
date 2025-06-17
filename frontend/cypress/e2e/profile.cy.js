@@ -245,7 +245,7 @@ describe('Profile Page', () => {
   });
 
   it('should navigate back to home page when clicking on home link', () => {
-    cy.get('.topbarLink').contains('Home').click();
+    cy.get('.logo').should('be.visible').contains('Ani Ani').click();
     cy.url().should('eq', FRONTEND_URL_HOME);
   });
 });
