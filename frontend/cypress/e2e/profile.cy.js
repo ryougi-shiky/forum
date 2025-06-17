@@ -13,7 +13,6 @@ describe('Profile Page', () => {
 
     cy.url().should('eq', FRONTEND_URL_HOME);
 
-    // Navigate to profile page
     cy.visit(FRONTEND_URL_PROFILE);
   });
 
@@ -54,10 +53,8 @@ describe('Profile Page', () => {
     cy.get('.feed').should('be.visible');
     cy.get('.feedWrapper').should('be.visible');
 
-    // Check if posts are loaded
     cy.get('.post').should('exist');
 
-    // Verify post structure for each post
     cy.get('.post').each(($post) => {
       cy.wrap($post).find('.postWrapper').should('be.visible');
       cy.wrap($post).find('.postTop').should('be.visible');
@@ -102,10 +99,8 @@ describe('Profile Page', () => {
   });
 
   it('should show edit button for user info on own profile', () => {
-    // Visit own profile
     cy.visit(OWN_PROFILE_URL);
 
-    // Check if edit button exists
     cy.get('.rightbarUserinfoEditButtons').should('be.visible');
     cy.get('.rightbarEditButton').should('be.visible').and('contain', 'Edit');
   });
@@ -166,30 +161,22 @@ describe('Profile Page', () => {
   });
 
   it('should allow creating a post on own profile', () => {
-    // Visit own profile
     cy.visit(OWN_PROFILE_URL);
 
-    // Create a post
     const postText = 'Test post from Cypress on profile page';
     cy.get('.shareInput').type(postText);
     cy.get('.shareButton').click();
 
-    // Verify post was created
     cy.get('.post').first().find('.postText').should('contain', postText);
   });
 
   it('should allow clicking on profile picture to upload new image on own profile', () => {
-    // Visit own profile
     cy.visit(OWN_PROFILE_URL);
 
-    // Intercept file upload request
     cy.intercept('PUT', '**/users/*/profilePicture').as('uploadProfilePicture');
 
-    // Simulate file upload by triggering the hidden input
     cy.get('.profileUserImg').click();
 
-    // Since we can't actually upload a file in Cypress without plugins,
-    // we'll just verify the file input exists and would be triggered
     cy.get('input[type="file"]').should('exist');
   });
 

@@ -3,6 +3,6 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "-------------------- Starting Docker Compose --------------------"
-docker-compose down -v
-docker-compose up -d
+docker compose down -v
+docker compose up -d
 sleep 20

@@ -1,4 +1,3 @@
-// Custom commands for login flow
 Cypress.Commands.add('login', (email, password) => {
   cy.visit('/login')
   cy.get('input[placeholder="Email"]').type(email)

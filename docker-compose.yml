@@ -25,7 +25,7 @@ services:
     ports:
       - "17000:17000"
     environment:
-      MONGODB_URI: "mongodb://mongodb:27018" # 连接到 mongodb 服务，数据库名称为 your_test_database
+      MONGODB_URI: "mongodb://mongodb:27018"
       MONGODB_NAME: "ani"
       NODE_ENV: "development"
       PORT: "17000"
@@ -44,7 +44,7 @@ services:
       - mongodb_data:/data/db
     environment:
       - MONGO_INITDB_DATABASE=ani
-    command: [ "mongod", "--port", "27018" ]  # 指定 MongoDB 使用 27018
+    command: [ "mongod", "--port", "27018" ]
     restart: always
     networks:
       - app-network

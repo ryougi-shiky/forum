@@ -3,7 +3,6 @@ describe('Register Flow', () => {
   const FRONTEND_URL_LOGIN = `${Cypress.config().baseUrl}/login`;
   
   beforeEach(() => {
-    // Clear cookies and local storage between tests
     cy.clearCookies();
     cy.clearLocalStorage();
   })
