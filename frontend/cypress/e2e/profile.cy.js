@@ -111,36 +111,27 @@ describe('Profile Page', () => {
   });
 
   it('should allow editing user info on own profile', () => {
-    // Visit own profile
     cy.visit(OWN_PROFILE_URL);
 
-    // Click edit button
     cy.get('.rightbarEditButton').contains('Edit').click();
 
-    // Check if input fields are visible
     cy.get('input.rightbarInfoValue').should('have.length', 2);
 
-    // Test editing age
     const newAge = '30';
     cy.get('input.rightbarInfoValue').eq(0).clear().type(newAge);
 
-    // Test editing location
     const newLocation = 'New York';
     cy.get('input.rightbarInfoValue').eq(1).clear().type(newLocation);
 
-    // Save changes
     cy.get('.rightbarEditButton').contains('Save').click();
 
-    // Verify changes were saved
     cy.get('.rightbarInfoValue').eq(0).should('contain', newAge);
     cy.get('.rightbarInfoValue').eq(1).should('contain', newLocation);
   });
 
   it('should allow canceling edit of user info', () => {
-    // Visit own profile
     cy.visit(OWN_PROFILE_URL);
     cy.wait(200)
-    // Get initial values
     let initialAge, initialLocation;
     cy.get('.rightbarInfoValue').eq(0).invoke('text').then((text) => {
       initialAge = text;
@@ -149,17 +140,13 @@ describe('Profile Page', () => {
       initialLocation = text;
     });
 
-    // Click edit button
     cy.get('.rightbarEditButton').contains('Edit').click();
 
-    // Change values
     cy.get('input.rightbarInfoValue').eq(0).clear().type('99');
     cy.get('input.rightbarInfoValue').eq(1).clear().type('Test Location');
 
-    // Cancel changes
     cy.get('.rightbarEditButton').contains('Cancel').click();
 
-    // Verify values were not changed
     cy.get('.rightbarInfoValue').eq(0).invoke('text').then((text) => {
       expect(text).to.equal(initialAge);
     });
@@ -169,16 +156,12 @@ describe('Profile Page', () => {
   });
 
   it('should show share component only on own profile', () => {
-    // Visit own profile
     cy.visit(OWN_PROFILE_URL);
 
-    // Verify share component is visible
     cy.get('.share').should('be.visible');
 
-    // Visit another user's profile
     cy.visit(`${Cypress.config().baseUrl}/profile/john`);
 
-    // Verify share component is not visible
     cy.get('.share').should('not.exist');
   });
 
@@ -210,8 +193,7 @@ describe('Profile Page', () => {
     cy.get('input[type="file"]').should('exist');
   });
 
-  it('should display post interactions correctly', () => {
-    // Test liking a post
+  it('should be able to like a post', () => {
     cy.visit(OWN_PROFILE_URL);
 
     cy.get('.post').first().within(() => {
@@ -225,23 +207,64 @@ describe('Profile Page', () => {
           const newText = $counter.text();
           const newLikes = parseInt(newText.split(' ')[0]);
 
-          expect(Math.abs(newLikes - initialLikes)).to.equal(1);
+          expect(newLikes).to.equal(initialLikes + 1);
         });
       });
     });
+  });
 
-    // Test commenting on a post
+  it('should be able to unlike a post', () => {
+    cy.visit(OWN_PROFILE_URL);
+
     cy.get('.post').first().within(() => {
+      cy.get('.postLikeCounter').invoke('text').then((text) => {
+        const initialLikes = parseInt(text.split(' ')[0]);
+
+        cy.get('.likeIcon').should('be.visible').click();
+        cy.wait(500);
+
+        cy.get('.postLikeCounter').invoke('text').then((text) => {
+          const likesAfterLike = parseInt(text.split(' ')[0]);
+          expect(likesAfterLike).to.equal(initialLikes - 1);
+        });
+      });
+    });
+  });
+
+  it('should be able to post a comment from the profile page', () => {
+    cy.visit(OWN_PROFILE_URL);
+
+    // Ensure there is at least one post to comment on
+    cy.get('.post').should('exist').first().within(() => {
       cy.get('.addCommentIcon').click();
       cy.get('.commentTextbox').should('be.visible');
-      cy.get('.commentTextbox').type('Test comment on profile page');
+      cy.get('.commentTextbox').type('This is a test comment from the profile page');
       cy.get('.commentTextboxButton').click();
 
-      // View comments
-      cy.get('.postCommentText').click();
+      // Verify the comment was added
       cy.get('.postBottomCommentList').should('be.visible');
       cy.get('.commentItem').should('exist');
+      cy.get('.commentItem').last().should('contain', 'This is a test comment from the profile page');
     });
+
+
+    cy.get('.commentContainer').should('exist')
+      .within(() => {
+        // Check comment structure
+        cy.get('.commentTop').should('exist')
+        cy.get('.postProfileImg').should('exist')
+        cy.get('.commentInfo').should('exist')
+          .within(() => {
+            cy.get('.commentUsername').should('exist')
+            cy.get('.commentDate').should('exist')
+          })
+        cy.get('.commentText').should('exist')
+      })
+
+    // Verify comment data
+    cy.get('.commentUsername').should('contain', 'testUser')
+    cy.get('.commentText').should('contain', 'Test comment')
+    cy.get('.commentDate').should('not.be.empty')
   });
 
   it('should navigate back to home page when clicking on home link', () => {
