@@ -7,14 +7,17 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { validateProfilePage } from "../../regex/validateUrl";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function FeedMoments({username}) {
+  // const { user:currentUser, isFetching, error, dispatch, feed_display_moments } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const {user} = useContext(AuthContext);
 
   useEffect(()=>{
     const fetchPosts = async () => {
-      const res = await axios.get(`/users/post/moments/${user._id}`);
-
+      const res = await axios.get(`${backend_url}/users/post/moments/${user._id}`);
+      
       console.log("posts: ", res.data);
       console.log("username: ", username);
       setPosts(res.data);

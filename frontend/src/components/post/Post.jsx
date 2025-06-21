@@ -14,6 +14,8 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { decodeImg } from "../../decodeImg";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Post({ post, onPostDelete }) {
 	const [like, setLike] = useState(post.likes.length);
 	const [isLiked, setIsLiked] = useState(false);
@@ -37,7 +39,7 @@ export default function Post({ post, onPostDelete }) {
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
-				const res = await axios.get(`/users?uid=${post.uid}`);
+				const res = await axios.get(`${backend_url}/users?uid=${post.uid}`);
 				console.log(res);
 				setUser(res.data);
 			} catch (err) {
@@ -50,7 +52,7 @@ export default function Post({ post, onPostDelete }) {
 
 	const likeHandler = async () => {
 		try {
-			await axios.put(`/users/post/like/${post._id}`, {
+			await axios.put(`${backend_url}/users/post/like/${post._id}`, {
 				uid: currentUser._id,
 			});
 		} catch (err) {
@@ -73,7 +75,7 @@ export default function Post({ post, onPostDelete }) {
 
 	const deletePost = async () => {
 		try {
-			await axios.delete(`/users/post/delete/${post._id}`, {
+			await axios.delete(`${backend_url}/users/post/delete/${post._id}`, {
 				data: { uid: currentUser._id },
 			});
 			onPostDelete(post._id); // notify the parent component to remove this post
@@ -85,13 +87,13 @@ export default function Post({ post, onPostDelete }) {
 
 	const addComment = async () => {
 		try {
-			const res = await axios.put(`/users/post/postcomment/${post._id}`, {
+			const res = await axios.put(`${backend_url}/users/post/postcomment/${post._id}`, {
 				commenterId: currentUser._id,
 				commenterName: currentUser.username,
 				text: commentText,
 			});
 			setCommentText("");  // Clear comment input field
-			const updatedComments = await axios.get(`/users/post/getpost/${post._id}`);
+			const updatedComments = await axios.get(`${backend_url}/users/post/getpost/${post._id}`);
 			setComments(updatedComments.data.comments);
 		} catch (err) {
 			console.log(err);
@@ -104,7 +106,7 @@ export default function Post({ post, onPostDelete }) {
 			setShowComments(false);
 		} else {
 			try {
-				const res = await axios.get(`/users/post/getpost/${post._id}`);
+				const res = await axios.get(`${backend_url}/users/post/getpost/${post._id}`);
 				setComments(res.data.comments);
 				setShowComments(true);
 			} catch (err) {
@@ -121,7 +123,7 @@ export default function Post({ post, onPostDelete }) {
 
 			for (let uid of uniqueCommenters) {
 				try {
-					const res = await axios.get(`/users?uid=${uid}`);
+					const res = await axios.get(`${backend_url}/users?uid=${uid}`);
 					console.log("fetchedCommentersData, res.data:, ", res.data);
 					fetchedCommentersData[uid] = res.data;
 					

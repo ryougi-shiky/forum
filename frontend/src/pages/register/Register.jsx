@@ -10,6 +10,7 @@ import {loginCall} from '../../apiCall';
 import axios from 'axios';
 
 export default function Register() {
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,7 +53,7 @@ export default function Register() {
     };
 
     try {
-      await axios.post(`/users/auth/register`, user);
+      await axios.post(`${backend_url}/users/auth/register`, user);
       navigate('/login');
     } catch (err) {
       if (err.response?.status === 400) {

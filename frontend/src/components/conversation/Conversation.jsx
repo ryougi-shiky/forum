@@ -5,6 +5,8 @@ import axios from "axios";
 
 import { AuthContext } from "../../context/AuthContext";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Conversation({conversation}) {
   const {user:currentUser} = useContext(AuthContext);
   const [user, setUser] = useState(null);
@@ -13,7 +15,7 @@ export default function Conversation({conversation}) {
     const friendId = conversation.members.find((m) => m !== currentUser._id);
     const getUser = async ()=> {
       try {
-        const res = await axios(`/users?uid=${friendId}`);
+        const res = await axios(`${backend_url}/users?uid=${friendId}`);
         setUser(res.data);
         console.log("c res: ", res);
       } catch (err) {

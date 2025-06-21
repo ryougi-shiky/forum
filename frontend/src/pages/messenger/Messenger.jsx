@@ -10,6 +10,9 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
+const socket_server_port = process.env.REACT_APP_SOCKET_SERVER_PORT;
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 export default function Messenger() {
   const { user: currentUser } = useContext(AuthContext);
   const [conversations, setConversations] = useState([]);
@@ -18,12 +21,16 @@ export default function Messenger() {
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  // const [socket, setSocket] = useState(null);
+  // const socket = useRef(io(`ws://localhost:${process.env.REACT_APP_SOCKET_SERVER_PORT}`));
   const socket = useRef();
+  // const socket = io(`ws://localhost:${process.env.REACT_APP_SOCKET_SERVER_PORT}`);
   const scrollRef = useRef();
 
   useEffect(() => {
-    // Using relative path which will work with proxy setting
-    socket.current = io("/");
+    socket.current = io(
+      `ws://localhost:${process.env.REACT_APP_SOCKET_SERVER_PORT}`
+    );
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
@@ -40,6 +47,9 @@ export default function Messenger() {
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
+    console.log("connecting to ws://localhost:" + socket_server_port);
+    // setSocket(io('ws://localhost:'+socket_server_port));
+
     socket.current?.emit("addUser", currentUser._id);
     socket.current?.on("getUsers", (users) => {
       console.log("socket users: ", users);
@@ -58,7 +68,9 @@ export default function Messenger() {
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const res = await axios.get(`/conversation/${currentUser._id}`);
+        const res = await axios.get(
+          `${backend_url}/conversation/${currentUser._id}`
+        );
         setConversations(res.data);
         // console.log("conversations res: ", res);
         // console.log("conversations: ", conversations);
@@ -74,7 +86,9 @@ export default function Messenger() {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(`/message/${currentChat?._id}`);
+        const res = await axios.get(
+          `${backend_url}/message/${currentChat?._id}`
+        );
         setMessages(res.data);
       } catch (err) {
         console.log(err);
@@ -103,7 +117,7 @@ export default function Messenger() {
     });
 
     try {
-      const res = await axios.post(`/message`, message);
+      const res = await axios.post(`${backend_url}/message`, message);
       setMessages([...messages, res.data]);
       setNewMessage("");
     } catch (err) {

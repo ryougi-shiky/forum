@@ -2,6 +2,14 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+
+// import Dropdown from 'react-dropdown';
+// import Dropdown from 'react-bootstrap/Dropdown';
+// import DropdownButton from 'react-bootstrap/DropdownButton';
+// import SplitButton from 'react-bootstrap/SplitButton';
+// import ButtonGroup from 'react-bootstrap/ButtonGroup';
+// import { MenuItem } from '@mui/material';
+
 import Dropdown from 'rc-dropdown';
 import Menu, { Item as MenuItem, Divider } from 'rc-menu';
 import 'rc-dropdown/assets/index.css';
@@ -14,7 +22,10 @@ import { decodeImg } from "../../decodeImg";
 import axios from 'axios';
 import { fontWeight } from '@mui/system';
 
+
+const backend_url = process.env.REACT_APP_BACKEND_URL;
 const defaultProfilePicture = "/assets/icon/person/noAvatar.png";
+
 const menuOptions = [
   'Account', 'Log out'
 ];
@@ -85,7 +96,7 @@ export default function Topbar() {
   // Fetch notifications
   useEffect(() => {
     const fetchNotifications = async () => {
-      const res = await axios.get(`/users/notify/get/follow/${currentUser._id}`);
+      const res = await axios.get(`${backend_url}/users/notify/get/follow/${currentUser._id}`);
       setNotifications(res.data);
     }
     fetchNotifications();
@@ -94,7 +105,7 @@ export default function Topbar() {
   // Handler to clear a specific notification. nid means notification._id
   const handleClear = async (nid) => {
     try {
-      const res = await axios.delete(`/users/notify/delete/follow/${nid}`);
+      const res = await axios.delete(`${backend_url}/users/notify/delete/follow/${nid}`);
       console.log("delete notification res.status: ", res.status);
       console.log("status 200: Notification has been deleted.");
       // Remove notification from state
@@ -154,7 +165,7 @@ export default function Topbar() {
     try {
       // Solve empty search return all users issue
       if (searchValue.current.value.trim() !== ""){
-        const res = await axios.get(`/users/search/users?username=${searchValue.current.value}`);
+        const res = await axios.get(`${backend_url}/users/search/users?username=${searchValue.current.value}`);
         setResults(res.data);
         console.log("search results.length: ", results.length);
       } else {

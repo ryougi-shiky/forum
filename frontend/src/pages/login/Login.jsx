@@ -9,9 +9,11 @@ import "./login.css";
 
 import axios from "axios";
 import { loginCall } from '../../apiCall';
+// import { CircularProgress } from '@chakra-ui/react'
 import { CircularProgress } from '@mui/material';
 
 export default function Login() {
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
   const email = useRef();
   const password = useRef();
   const {user: currentUser, isFetching, error, dispatch} = useContext(AuthContext);

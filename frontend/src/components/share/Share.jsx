@@ -10,6 +10,7 @@ import { decodeImg } from "../../decodeImg";
 
 
 export default function Share({ onPostCreate }) {
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
   const {user} = useContext(AuthContext);
   const desc = useRef();
   const [file, setFile] = useState(null);
@@ -22,7 +23,7 @@ export default function Share({ onPostCreate }) {
       desc: desc.current.value
     }
     try {
-      await axios.post(`/users/post/create`, newPost);
+      await axios.post(`${backend_url}/users/post/create`, newPost);
       onPostCreate(); // notify the parent component to refresh posts
     } catch (err) {
       console.log(err);
