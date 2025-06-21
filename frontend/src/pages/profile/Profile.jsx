@@ -13,8 +13,6 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import { AuthContext } from "../../context/AuthContext";
 import { decodeImg } from "../../decodeImg";
 
-const backend_url = process.env.REACT_APP_BACKEND_URL;
-
 export default function Profile() {
   const { user:currentUser, dispatch } = useContext(AuthContext);
   console.log("currentUser: ", currentUser);
@@ -28,7 +26,7 @@ export default function Profile() {
 
   useEffect(()=>{
     const fetchUser = async () => {
-      const res = await axios.get(`${backend_url}/users?username=${params.username}`);
+      const res = await axios.get(`/users?username=${params.username}`);
       // console.log(res);
       setUser(res.data);
       // console.log("res.data.profilePicture: ", res.data.profilePicture);
@@ -57,10 +55,10 @@ export default function Profile() {
       setSnackbarOpenUploading(true); // Notify user that image is uploading.
       console.log("img is uploading...");
 
-      const response = await axios.put(`${backend_url}/users/${currentUser._id}/profilePicture`, formData);
+      const response = await axios.put(`/users/${currentUser._id}/profilePicture`, formData);
       // after successful upload, dispatch the action to update the user in your context
       if (response.status === 200) {
-        const updatedUserResponse = await axios.get(`${backend_url}/users?username=${currentUser.username}`);
+        const updatedUserResponse = await axios.get(`/users?username=${currentUser.username}`);
         if (updatedUserResponse.status === 200) {
           // dispatch the action to update the user in your context
           dispatch({ type: 'UPDATE_USER', payload: updatedUserResponse.data });

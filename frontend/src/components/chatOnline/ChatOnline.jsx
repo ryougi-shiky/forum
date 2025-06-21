@@ -5,8 +5,6 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
-const backend_url = process.env.REACT_APP_BACKEND_URL;
-
 export default function ChatOnline({
   onlineUsers,
   currentUserId,
@@ -18,24 +16,22 @@ export default function ChatOnline({
   useEffect(() => {
     const getFriends = async () => {
       const res = await axios.get(
-        `${backend_url}/users/friends/${currentUserId}`
+        `/users/friends/${currentUserId}`
       );
       setFriends(res.data);
     };
-    getFriends();
+    if (currentUserId) {
+      getFriends();
+    }
   }, [currentUserId]);
-
-  console.log("chatOnline friends: ", friends);
 
   useEffect(() => {
     setOnlineFriends(friends.filter((f) => onlineUsers.includes(f._id)));
   }, [friends, onlineUsers]);
 
-  console.log("onlineUsers: ", onlineUsers);
-
   const handleClick = async (onlineFriend) => {
     try {
-      const res = await axios.get(`${backend_url}/conversation/find/${currentUserId}/${onlineFriend._id}`);
+      const res = await axios.get(`/conversation/find/${currentUserId}/${onlineFriend._id}`);
       setCurrentChat(res.data);
     } catch (err) {
       console.log(err);

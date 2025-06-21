@@ -15,8 +15,6 @@ import { decodeImg } from "../../decodeImg";
 
 import Weather from "../weather/Weather";
 
-const backend_url = process.env.REACT_APP_BACKEND_URL;
-
 export default function Rightbar({user}) {
   const [friends, setFriends] = useState([]);
   const [followed, setFollowed] = useState(false);
@@ -39,7 +37,7 @@ export default function Rightbar({user}) {
     const getFriends = async () => {
       try {
         if (user?._id) {
-          const friendList = await axios.get(`${backend_url}/users/friends/${user._id}`);
+          const friendList = await axios.get(`/users/friends/${user._id}`);
           setFriends(friendList.data);
         }
       } catch (err) {
@@ -52,14 +50,14 @@ export default function Rightbar({user}) {
   const handleFollow = async () => {
     try {
       if (followed){
-        await axios.put(`${backend_url}/users/${user._id}/unfollow`, {id: currentUser._id});
+        await axios.put(`/users/${user._id}/unfollow`, {id: currentUser._id});
         dispatch({type: 'UNFOLLOW', payload:user._id});
       } else {
-        await axios.put(`${backend_url}/users/${user._id}/follow`, {id: currentUser._id});
+        await axios.put(`/users/${user._id}/follow`, {id: currentUser._id});
         dispatch({type: 'FOLLOW', payload:user._id});
 
         // Create a new notification to the user who is been followed
-        await axios.post(`${backend_url}/users/notify/create/follow`, {
+        await axios.post(`/users/notify/create/follow`, {
             senderId: currentUser._id,
             receiverId: user._id
         });
@@ -90,7 +88,7 @@ export default function Rightbar({user}) {
     event.preventDefault();
     // make the PUT request here to update the user info
     try {
-      const res = await axios.put(`${backend_url}/users/update/userinfo/${currentUser._id}`, 
+      const res = await axios.put(`/users/update/userinfo/${currentUser._id}`,
       {age: inputAge.current.value, from: inputFrom.current.value});
       if (res.status === 200) {
         currentUser.age = inputAge.current.value;

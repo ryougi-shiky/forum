@@ -5,7 +5,7 @@ services:
       context: frontend
       dockerfile: Dockerfile
     environment:
-      REACT_APP_BACKEND_URL: http://localhost:17000
+      REACT_APP_BACKEND_URL: ""
       REACT_APP_SOCKET_URL: http://localhost:8008
       REACT_APP_SOCKET_SERVER_PORT: 8008
       REACT_APP_OPEN_WEATHER_RAPID_API_KEY: "9c4b3c4369msh7ff621c01df1d07p1172edjsn74e33213befb"
@@ -22,14 +22,12 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile.dev
-    ports:
-      - "17000:17000"
     environment:
       MONGODB_URI: "mongodb://mongodb:27018"
       MONGODB_NAME: "ani"
       NODE_ENV: "development"
       PORT: "17000"
-      CORS_WHITELIST: "http://localhost:3000,http://localhost:17000,http://server"
+      CORS_WHITELIST: "http://localhost:3000,http://localhost:17000,http://server, http://frontend"
     depends_on:
       - mongodb
     networks:

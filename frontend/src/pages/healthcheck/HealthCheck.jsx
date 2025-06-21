@@ -2,17 +2,14 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Topbar from "../../components/topbar/Topbar";
 
-const backend_url = process.env.REACT_APP_BACKEND_URL;
-
 export default function HealthCheck() {
-    // const { user:currentUser, isFetching, error, dispatch, feed_display_moments } = useContext(AuthContext);
     const [backendResponse, setBackendResponse] = useState("");
     useEffect(() => {
         let mounted = true;
 
         const healthCheckBackend = async () => {
             try {
-                const res = await axios.get(`${backend_url}/healthcheck/backend`);
+                const res = await axios.get(`/healthcheck/backend`);
                 if (mounted) {
                     setBackendResponse(res.data);
                 }
@@ -24,7 +21,6 @@ export default function HealthCheck() {
         };
 
         healthCheckBackend();
-
         return () => {
             mounted = false;
         };
@@ -34,7 +30,8 @@ export default function HealthCheck() {
         <React.Fragment>
             <Topbar/>
             <div>
-                <p>{backendResponse.message}</p>
+                <h1>Health Check Page</h1>
+                <p>Backend Status: {backendResponse}</p>
             </div>
         </React.Fragment>
     );
