@@ -2,10 +2,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+echo "-------------------- Preparing Artifacts for E2E Tests --------------------"
 auto/build-frontend-dev
+auto/build-frontend-artifacts
 auto/run-docker-compose
 
-echo "-------------------- Run E2E Tests --------------------"
+echo "-------------------- Running E2E Tests --------------------"
 cd frontend
 docker rm -f cypress-e2e || true
 docker run --rm --name cypress-e2e --network=host \
