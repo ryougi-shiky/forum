@@ -1,10 +1,10 @@
 version: "3.9"
 services:
 
-  server:
-    container_name: server
+  backend:
+    container_name: backend
     build:
-      context: ./server
+      context: ./backend
       dockerfile: Dockerfile.dev
     ports:
       - "17000:17000"
@@ -13,7 +13,7 @@ services:
       MONGODB_NAME: "ani"
       NODE_ENV: "development"
       PORT: "17000"
-      CORS_WHITELIST: "http://localhost:3000,http://localhost:17000,http://server"
+      CORS_WHITELIST: "http://localhost:3000,http://localhost:17000,http://backend"
     depends_on:
       - mongodb
     networks:
@@ -48,7 +48,7 @@ services:
       context: .
       dockerfile: ./nginx/Dockerfile.dev
     depends_on:
-      - server
+      - backend
     ports:
       - "3000:3000"
     networks:
