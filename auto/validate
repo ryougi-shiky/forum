@@ -3,5 +3,4 @@ cd "$(dirname "$0")/.."
 
 echo "-------------------- Validate docker-compose config --------------------"
 docker compose config
-
 docker images
