@@ -24,7 +24,7 @@ jobs:
       run: |
         ./auto/validate
         
-    - name: Test Docker Compose up
+    - name: Run E2E Tests on Docker Compose
       run: |
         ./auto/run-e2e-tests
       
