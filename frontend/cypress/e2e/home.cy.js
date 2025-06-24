@@ -133,7 +133,8 @@ describe('Home Page', () => {
 
     cy.get('.searchIcon').click();
 
-    cy.get('.searchResultsWindowWrapper').should('exist');
+    cy.get('.searchResultsWindowWrapper').should('be.visible');
+    cy.get('.searchResultUserLine').should('be.visible');
   });
 
   it('should test the functionality of the Menu dropdown', () => {
