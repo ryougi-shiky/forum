@@ -18,6 +18,9 @@ jobs:
         with:
           ref: main
 
+      - name: Make scripts executable
+        run: chmod +x auto/*
+
       - name: Read version from version.txt
         id: get_version
         run: ./auto/read-version
