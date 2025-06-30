@@ -7,7 +7,6 @@ on:
       - version.txt
     branches:
       - main
-      - release-workflow
 
 jobs:
   release:
