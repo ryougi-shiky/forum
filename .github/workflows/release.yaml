@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Make scripts executable
         run: chmod +x auto/*
