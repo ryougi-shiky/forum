@@ -1,0 +1,30 @@
+name: Manual Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Read version from version.txt
+        id: get_version
+        run: ./auto/read-version
+
+      - name: Check if tag already exists
+        id: check_tag
+        run: ./auto/check-tag
+
+      - name: Create Git tag
+        run: ./auto/create-tag
+
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.get_version.outputs.VERSION }}
+          generateReleaseNotes: true
