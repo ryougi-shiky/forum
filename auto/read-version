@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd "$(dirname "$0")/.."
+
+VERSION=$(cat version.txt | tr -d ' \n')
+echo "VERSION=$VERSION"
+echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"

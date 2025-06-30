@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd "$(dirname "$0")/.."
+
+VERSION=$1
+
+if git ls-remote --tags origin "refs/tags/$VERSION" | grep "$VERSION" > /dev/null; then
+  echo "❌ Tag $VERSION already exists. Exiting."
+  exit 1
+else
+  echo "✅ Tag $VERSION not found. Safe to create."
+fi
