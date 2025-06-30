@@ -1,4 +1,4 @@
-FROM mongo:6.0.4@sha256:a4f2db6f54aeabba562cd07e5cb758b55d6192dcc6f36322a334ba0b0120aaf1
+FROM mongo:6.0.24@sha256:2c6f0a6f33856597ad3d467a71af506bec71e73d945ead65b1af119be38b4c43
 
 COPY ./dump /dump
 
