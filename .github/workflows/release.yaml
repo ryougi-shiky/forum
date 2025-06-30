@@ -2,6 +2,12 @@ name: Manual Release
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - version.txt
+    branches:
+      - main
+      - release-workflow
 
 jobs:
   release:
