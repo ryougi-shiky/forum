@@ -2,10 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-echo "-------------------- Preparing Artifacts for E2E Tests --------------------"
-auto/build-frontend-dev
-auto/build-frontend-artifacts
-auto/run-docker-compose
+echo "-------------------- Preparing Environment for E2E Tests --------------------"
+auto/start-dev-environment
 
 echo "-------------------- Running E2E Tests --------------------"
 cd frontend

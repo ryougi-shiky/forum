@@ -2,6 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-echo "-------------------- Starting Docker Compose for Manual Testing --------------------"
-docker compose down -v
-docker compose up
+echo "-------------------- Starting Docker Compose for Development Environment  --------------------"
+auto/build-frontend-dev
+auto/build-frontend-artifacts
+auto/run-docker-compose
