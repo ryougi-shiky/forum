@@ -8,6 +8,9 @@ jobs:
   add-kind-label:
     runs-on: ubuntu-22.04
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Extract kind from PR body and add label
         run: |
           ./auto/add-kind-labels
