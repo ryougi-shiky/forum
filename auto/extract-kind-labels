@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+pr_body="$1"
+
+labels=$(echo "$pr_body" | grep -iE '^\s*-\s*\[x\]\s*/kind\s+[a-zA-Z0-9_-]+' \
+  | sed -E 's@.*\/kind\s+([a-zA-Z0-9_-]+).*@kind/\1@' \
+  | sort -u | tr -d '\r')
+
+if [[ -n "$labels" ]]; then
+  echo "labels<<EOF" >> "$GITHUB_OUTPUT"
+  echo "$labels" >> "$GITHUB_OUTPUT"
+  echo "EOF" >> "$GITHUB_OUTPUT"
+else
+  echo "labels=" >> "$GITHUB_OUTPUT"
+fi
