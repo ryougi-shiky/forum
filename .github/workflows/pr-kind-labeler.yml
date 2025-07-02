@@ -12,5 +12,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Extract kind from PR body and add label
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ./auto/add-kind-labels
