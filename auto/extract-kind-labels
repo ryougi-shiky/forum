@@ -5,8 +5,8 @@ cd "$(dirname "$0")/.."
 
 pr_body="$1"
 
-labels=$(echo "$pr_body" | grep -iE '/kind [a-zA-Z0-9_-]+' \
-  | sed -E 's@.*/kind[[:space:]]+([a-zA-Z0-9_-]+).*@kind/\1@' \
+labels=$(echo "$pr_body" | grep -iE '^\s*-\s*\[x\]\s*/kind\s+[a-zA-Z0-9_-]+' \
+  | sed -E 's@.*\/kind\s+([a-zA-Z0-9_-]+).*@kind/\1@' \
   | sort -u | tr -d '\r')
 
 if [[ -n "$labels" ]]; then
