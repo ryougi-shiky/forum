@@ -19,3 +19,4 @@ socket/
 .env
 *.env
 frontend/cypress/screenshots
+*.iml
