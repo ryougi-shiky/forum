@@ -10,7 +10,9 @@ labels=$(echo "$pr_body" | grep -iE '/kind [a-zA-Z0-9_-]+' \
   | sort -u | tr -d '\r')
 
 if [[ -n "$labels" ]]; then
-  echo "labels=$(echo "$labels" | paste -sd "," -)" >> "$GITHUB_OUTPUT"
+  echo "labels<<EOF" >> "$GITHUB_OUTPUT"
+  echo "$labels" >> "$GITHUB_OUTPUT"
+  echo "EOF" >> "$GITHUB_OUTPUT"
 else
   echo "labels=" >> "$GITHUB_OUTPUT"
 fi
