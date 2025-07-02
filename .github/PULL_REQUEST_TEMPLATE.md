@@ -1,4 +1,3 @@
-<!--  Thanks for sending a pull request!  Here are some tips for you:
 
 #### What type of PR is this?
 
