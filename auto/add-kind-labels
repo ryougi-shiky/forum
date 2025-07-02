@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+if [[ -z "$PR_BODY" || -z "$PR_NUMBER" || -z "$GITHUB_REPOSITORY" || -z "$GITHUB_TOKEN" ]]; then
+  echo "Missing required environment variables."
+  exit 1
+fi
+
+# Extract checked kind checkboxes, e.g. '- [x] /kind bugfix'
+labels=$(echo "$PR_BODY" | grep -iE '^\s*-\s*\[x\]\s*/kind ' | sed -E 's/.*\/kind ([^ ]+).*/kind\/\1/')
+
+if [[ -z "$labels" ]]; then
+  echo "No kind labels found."
+  exit 0
+fi
+
+owner=$(echo "$GITHUB_REPOSITORY" | cut -d/ -f1)
+repo=$(echo "$GITHUB_REPOSITORY" | cut -d/ -f2)
+
+# Convert labels to JSON array
+labels_json=$(printf '%s\n' $labels | jq -R . | jq -s .)
+
+curl -s -X POST \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  "https://api.github.com/repos/$owner/$repo/issues/$PR_NUMBER/labels" \
+  -d "{\"labels\":$labels_json}"

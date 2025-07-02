@@ -1,0 +1,13 @@
+name: PR Kind Labeler
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  add-kind-label:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Extract kind from PR body and add label
+        run: |
+          ./auto/add-kind-labels
