@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+echo "-------------------- Publish Docker Images --------------------"
+DOCKER_USER=$1
+VERSION=$2
+
+docker push $DOCKER_USER/forum-backend:$VERSION
+docker push $DOCKER_USER/forum-nginx:$VERSION

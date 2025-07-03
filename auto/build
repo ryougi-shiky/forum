@@ -3,5 +3,10 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "-------------------- Test docker-compose build --------------------"
-docker compose build
+echo "-------------------- Build Docker Images --------------------"
+DOCKER_USER=$1
+VERSION=$2
+
+auto/build-frontend-artifacts
+docker build -f ./backend/Dockerfile.dev -t $DOCKER_USER/forum-backend:$VERSION ./backend
+docker build -f ./nginx/Dockerfile.dev -t $DOCKER_USER/forum-nginx:$VERSION ./nginx
