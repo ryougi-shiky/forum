@@ -3,7 +3,7 @@ services:
 
   backend:
     build:
-      context: ../backend
+      context: ./backend
       dockerfile: Dockerfile.dev
     ports:
       - "17000:17000"
@@ -33,7 +33,7 @@ services:
 
   nginx:
     build:
-      context: ../
+      context: .
       dockerfile: ./nginx/Dockerfile.dev
     depends_on:
       - backend
