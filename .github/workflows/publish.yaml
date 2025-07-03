@@ -31,4 +31,4 @@ jobs:
       run: auto/build "${{ secrets.DOCKER_HUB_USERNAME }}" "${{ steps.get_version.outputs.VERSION }}"
 
     - name: Publish Docker image
-      run: auto/publish "${{ secrets.DOCKER_HUB_USERNAME }}" "${{ steps.get_version.outputs.VERSION }}"
+      run: auto/publish-images "${{ secrets.DOCKER_HUB_USERNAME }}" "${{ steps.get_version.outputs.VERSION }}"
