@@ -25,12 +25,10 @@ else
   exit 1
 fi
 
-docker_compose_config="-f deploy/docker-compose.yml -f ${docker_compose_template}"
-
 if [ "${ENV}" == "test"  ]; then
-  docker compose "${docker_compose_config}" down -v
+  docker compose -f deploy/docker-compose.yml "${docker_compose_template}" down -v
 fi
 
-docker compose "${docker_compose_config}" up -d
+docker compose -f deploy/docker-compose.yml "${docker_compose_template}" up -d
 
 sleep 20
