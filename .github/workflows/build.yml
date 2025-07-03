@@ -24,7 +24,7 @@ jobs:
       run: |
         ./auto/validate
         
-    - name: Run E2E Tests on Docker Compose
+    - name: Run E2E Tests with Local Build
       run: |
         ./auto/run-e2e-tests
       
