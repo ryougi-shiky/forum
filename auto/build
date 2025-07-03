@@ -16,5 +16,5 @@ VERSION=$2
 auto/build-frontend-dev
 auto/build-frontend-artifacts
 
-docker build -f ./backend/Dockerfile.dev -t $DOCKER_USER/forum-backend:$VERSION .
+docker build -f ./backend/Dockerfile.dev -t $DOCKER_USER/forum-backend:$VERSION ./backend
 docker build -f ./nginx/Dockerfile.dev -t $DOCKER_USER/forum-nginx:$VERSION .
