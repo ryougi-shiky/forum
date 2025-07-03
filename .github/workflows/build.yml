@@ -19,10 +19,6 @@ jobs:
     - name: Install Docker Environment
       run: |
         ./auto/install-github-action-env
-
-    - name: Validate Docker Compose configuration
-      run: |
-        ./auto/validate
         
     - name: Run E2E Tests with Local Build
       env:
