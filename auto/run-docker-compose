@@ -4,6 +4,33 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "-------------------- Starting Docker Compose --------------------"
-docker compose down -v
-docker compose up -d
+
+#if [[ $# -ne 1 ]]; then
+#  echo "Usage: $0 <ENV>"
+#  exit 1
+#fi
+#
+#ENV=$1
+ENV=${ENV}
+
+if [ "${ENV}" == "test"  ]; then
+  echo "Using test environment configuration"
+  docker_compose_template="deploy/docker-compose.test.yml"
+elif [ "${ENV}" == "staging" ]; then
+  echo "Using staging environment configuration"
+elif [ "${ENV}" == "prod" ]; then
+  echo "Using prod environment configuration"
+else
+  echo "ENV is not set or invalid, exiting..."
+  exit 1
+fi
+
+docker_compose_config="-f deploy/docker-compose.yml -f ${docker_compose_template}"
+
+if [ "${ENV}" == "test"  ]; then
+  docker compose "${docker_compose_config}" down -v
+fi
+
+docker compose "${docker_compose_config}" up -d
+
 sleep 20

@@ -25,9 +25,11 @@ jobs:
         ./auto/validate
         
     - name: Run E2E Tests with Local Build
+      env:
+        ENV: "test"
       run: |
         ./auto/run-e2e-tests
-      
+
     - name: Report build result
       if: always()
       run: |
