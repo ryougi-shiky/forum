@@ -43,7 +43,8 @@ The weather API key is not configured yet. Please purchase it here: https://rapi
 ## How to run development environment
 1. Make sure you have installed [Docker](https://docs.docker.com/compose/install/)
 2. Modify the `deploy/docker-compose.*.yml` files to set your own environment variables.
-3. Run `./auto/launch-app` to 
+3. Run `./auto/launch-app` to launch the application.
+4. Run `./auto/run-e2e-tests` to ensure your modifications do not break the application.
 
 
 # Architecture
