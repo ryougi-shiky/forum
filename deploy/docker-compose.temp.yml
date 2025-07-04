@@ -13,12 +13,6 @@ services:
     networks:
       - app-network
 
-  mongo-seed:
-    depends_on:
-      - mongodb
-    networks:
-      - app-network
-
   nginx:
     depends_on:
       - backend
