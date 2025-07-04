@@ -9,6 +9,6 @@ template=$1
 params=$2
 output=$3
 
-output="rendered-docker-compose.${ENV}.yml"
 docker compose -f "${template}" -f "${params}" config > "${output}"
+
 echo "✅ Rendered file saved to ${output}"
