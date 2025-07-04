@@ -3,7 +3,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "-------------------- Building Frontend Artifacts --------------------"
+echo "-------------------- 📦 Building Frontend Artifacts --------------------"
 
 cd frontend
 rm -rf build

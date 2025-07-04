@@ -2,9 +2,8 @@ version: "3.9"
 services:
 
   backend:
-    container_name: backend
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile.dev
     ports:
       - "17000:17000"
@@ -14,14 +13,9 @@ services:
       NODE_ENV: "development"
       PORT: "17000"
       CORS_WHITELIST: "http://localhost:3000,http://localhost:17000,http://backend"
-    depends_on:
-      - mongodb
-    networks:
-      - app-network
 
   mongodb:
     image: mongo:6.0.24
-    container_name: mongodb
     ports:
       - "27018:27018"
     volumes:
@@ -30,33 +24,18 @@ services:
       - MONGO_INITDB_DATABASE=ani
     command: [ "mongod", "--port", "27018" ]
     restart: always
-    networks:
-      - app-network
 
   mongo-seed:
     image: mongo:6.0.24
-    depends_on:
-      - mongodb
     volumes:
-      - ./db/mongo/dump:/dump
+      - ../db/mongo/dump:/dump
     entrypoint: [ "sh", "-c", "sleep 5 && mongorestore --host mongodb --port 27018 --db ani /dump/ani" ]
-    networks:
-      - app-network
 
   nginx:
     build:
-      context: .
+      context: ..
       dockerfile: ./nginx/Dockerfile.dev
     depends_on:
       - backend
     ports:
       - "3000:3000"
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
-
-volumes:
-  mongodb_data:

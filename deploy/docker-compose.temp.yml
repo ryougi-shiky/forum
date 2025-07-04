@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+
+  backend:
+    container_name: backend
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  mongodb:
+    container_name: mongodb
+    networks:
+      - app-network
+
+  mongo-seed:
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  nginx:
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
