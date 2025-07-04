@@ -3,5 +3,5 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "-------------------- Building Frontend --------------------"
+echo "-------------------- ⚒️ Building Frontend --------------------"
 docker build -t frontend-dev -f frontend/Dockerfile.dev ./frontend

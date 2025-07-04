@@ -3,10 +3,10 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "-------------------- Preparing Environment for E2E Tests --------------------"
-auto/start-dev-environment
+echo "-------------------- 🍱 Preparing Environment for E2E Tests --------------------"
+auto/launch-app
 
-echo "-------------------- Running E2E Tests --------------------"
+echo "-------------------- 🧪 Running E2E Tests --------------------"
 cd frontend
 docker rm -f cypress-e2e || true
 docker run --rm --name cypress-e2e --network=host \
