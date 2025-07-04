@@ -22,7 +22,7 @@ jobs:
         
     - name: Run E2E Tests with Local Build
       env:
-        ENV: "test"
+        ENV: "local"
       run: |
         ./auto/run-e2e-tests
 
