@@ -3,7 +3,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "-------------------- Starting Docker Compose --------------------"
+echo "-------------------- 🐳 Starting Docker Compose --------------------"
 
 ENV=${ENV}
 
@@ -12,16 +12,19 @@ if [ "${ENV}" == "local"  ]; then
   docker_compose_params="deploy/docker-compose.local.yml"
 elif [ "${ENV}" == "test" ]; then
   echo "Using test environment configuration"
+  docker_compose_params="deploy/docker-compose.test.yml"
 else
   echo "ENV is not set or invalid, please set ENV to 'test', or 'test'."
   echo "Exiting..."
   exit 1
 fi
 
-if [ "${ENV}" == "local"  ]; then
-  docker compose -f docker-compose.temp.yml -f "${docker_compose_params}" down -v
-fi
+echo "Render compose files..."
+output="rendered-docker-compose.${ENV}.yml"
+docker compose -f deploy/docker-compose.temp.yml -f "${docker_compose_params}" config > "${output}"
+echo "Rendered file saved to ${output}"
 
-docker compose -f docker-compose.temp.yml -f "${docker_compose_params}" up -d
+docker compose -f "${output}" down -v
+docker compose -f "${output}" up -d
 
 sleep 20

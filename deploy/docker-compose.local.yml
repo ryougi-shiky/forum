@@ -28,7 +28,7 @@ services:
   mongo-seed:
     image: mongo:6.0.24
     volumes:
-      - ./db/mongo/dump:/dump
+      - ../db/mongo/dump:/dump
     entrypoint: [ "sh", "-c", "sleep 5 && mongorestore --host mongodb --port 27018 --db ani /dump/ani" ]
 
   nginx:
