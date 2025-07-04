@@ -3,7 +3,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "-------------------- Build Docker Images --------------------"
+echo "-------------------- 🐳 Build Docker Images --------------------"
 
 if [[ $# -ne 2 ]]; then
   echo "Usage: $0 <DOCKER_USER> <VERSION>"
