@@ -6,10 +6,10 @@ on:
     types:
       - completed
   push:
-#    paths:
-#      - version.txt
-#    branches:
-#      - 'release/**'
+    paths:
+      - version.txt
+    branches:
+      - 'release/**'
 
 jobs:
   publish-docker-images:
@@ -29,9 +29,9 @@ jobs:
       id: get_version
       run: ./auto/read-version
 
-#    - name: Check if tag already exists
-#      id: check_tag
-#      run: ./auto/check-tag "${{ steps.get_version.outputs.VERSION }}"
+    - name: Check if tag already exists
+      id: check_tag
+      run: ./auto/check-tag "${{ steps.get_version.outputs.VERSION }}"
 
     - name: Build Docker image
       run: ./auto/build "${{ secrets.DOCKER_HUB_USERNAME }}" "${{ steps.get_version.outputs.VERSION }}"
