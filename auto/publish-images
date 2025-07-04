@@ -16,5 +16,3 @@ VERSION=$2
 docker push $DOCKER_USER/forum-backend:$VERSION
 docker push $DOCKER_USER/forum-nginx:$VERSION
 docker push $DOCKER_USER/forum-mongodb:$VERSION
-
-wait
