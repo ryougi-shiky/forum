@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+echo "-------------------- 🎨 Rendering Docker Compose --------------------"
+
+template=$1
+params=$2
+output=$3
+
+docker compose -f "${template}" -f "${params}" config > "${output}"
+
+echo "✅ Rendered file saved to ${output}"
