@@ -5,30 +5,23 @@ cd "$(dirname "$0")/.."
 
 echo "-------------------- Starting Docker Compose --------------------"
 
-#if [[ $# -ne 1 ]]; then
-#  echo "Usage: $0 <ENV>"
-#  exit 1
-#fi
-#
-#ENV=$1
 ENV=${ENV}
 
-if [ "${ENV}" == "test"  ]; then
+if [ "${ENV}" == "local"  ]; then
+  echo "Using local environment configuration"
+  docker_compose_params="deploy/docker-compose.local.yml"
+elif [ "${ENV}" == "test" ]; then
   echo "Using test environment configuration"
-  docker_compose_template="deploy/docker-compose.test.yml"
-elif [ "${ENV}" == "staging" ]; then
-  echo "Using staging environment configuration"
-elif [ "${ENV}" == "prod" ]; then
-  echo "Using prod environment configuration"
 else
-  echo "ENV is not set or invalid, exiting..."
+  echo "ENV is not set or invalid, please set ENV to 'test', or 'test'."
+  echo "Exiting..."
   exit 1
 fi
 
-if [ "${ENV}" == "test"  ]; then
-  docker compose -f docker-compose.yml -f "${docker_compose_template}" down -v
+if [ "${ENV}" == "local"  ]; then
+  docker compose -f docker-compose.temp.yml -f "${docker_compose_params}" down -v
 fi
 
-docker compose -f docker-compose.yml -f "${docker_compose_template}" up -d
+docker compose -f docker-compose.temp.yml -f "${docker_compose_params}" up -d
 
 sleep 20
