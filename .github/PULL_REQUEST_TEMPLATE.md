@@ -13,6 +13,7 @@
 - [ ] /kind flake
 - [ ] /kind regression
 - [ ] /kind rollback
+- [ ] /kind release
 
 #### What this PR does / why we need it:
 
