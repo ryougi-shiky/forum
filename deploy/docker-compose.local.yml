@@ -12,7 +12,7 @@ services:
       MONGODB_NAME: "ani"
       NODE_ENV: "development"
       PORT: "17000"
-      CORS_WHITELIST: "http://nginx"
+      CORS_WHITELIST: "http://localhost:3000"
 
   mongodb:
     build:
