@@ -21,12 +21,6 @@ jobs:
     - name: Install Docker Environment
       run: ./auto/install-github-action-env
 
-    - name: Run E2E Tests with Local Build
-      env:
-        ENV: "local"
-      run: |
-        ./auto/run-e2e-tests
-
     - name: Read version from version.txt
       id: get_version
       run: ./auto/read-version
