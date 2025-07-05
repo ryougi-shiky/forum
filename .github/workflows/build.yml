@@ -2,8 +2,8 @@ name: Local Tests
 
 on:
   push:
-    branches:
-      - '**'
+    branches-ignore:
+      - 'release/**'
 
 jobs:
   build:
