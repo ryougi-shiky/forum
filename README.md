@@ -1,5 +1,7 @@
 # Introduction
-This is a social website. Please use Chrome to get the full experience.
+COMP30022 IT Project, from the University of Melbourne.
+
+This is a forum website. Please use Chrome to get the full experience.
 
 The weather API key is not configured yet. Please purchase it here: https://rapidapi.com/worldapi/api/open-weather13
 
