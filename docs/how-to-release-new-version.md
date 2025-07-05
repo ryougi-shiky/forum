@@ -1,5 +1,6 @@
 # How to release new version?
 
+## Overview
 ```mermaid
 flowchart
     A[Make sure the main branch is up to date] --> B[Checkout new branch from main, named `release/X.Y.Z`]
