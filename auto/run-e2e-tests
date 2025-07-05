@@ -4,9 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "-------------------- 🍱 Preparing Environment for E2E Tests --------------------"
-if [ "${ENV}" != "test" ]; then
-  auto/launch-app
-fi
+auto/launch-app
 
 echo "-------------------- 🧪 Running E2E Tests --------------------"
 cd frontend
