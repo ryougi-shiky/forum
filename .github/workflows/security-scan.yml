@@ -4,30 +4,59 @@ on:
   push:
     branches:
       - "**"
-    pull_request:
+  pull_request:
 
 jobs:
-  sonarqube-scan:
+  sonarcloud-frontend:
+    name: SonarCloud Scan - Frontend
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-      - name: Install dependencies
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
         run: npm ci
-      - name: SonarCloud Scan
+
+      - name: SonarCloud Scan (frontend)
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          projectBaseDir: .
+          projectBaseDir: frontend
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  sonarcloud-backend:
+    name: SonarCloud Scan - Backend
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: SonarCloud Scan (backend)
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: backend
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   trivy-scan:
+    name: Trivy Vulnerability Scan
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.13.1
         with:
@@ -38,9 +67,11 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
   trufflehog-scan:
+    name: TruffleHog Secrets Scan
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+
       - name: Run TruffleHog
         uses: trufflesecurity/trufflehog@v3.67.3
         with:
