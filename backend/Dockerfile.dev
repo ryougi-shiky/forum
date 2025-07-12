@@ -8,5 +8,8 @@ COPY package-lock.json /app
 RUN npm install
 
 COPY . .
+
+USER node
+
 EXPOSE 17000
 CMD ["npm", "start"]
