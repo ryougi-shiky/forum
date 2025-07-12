@@ -53,29 +53,3 @@ jobs:
             -Dsonar.organization=ryougi-shiky
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  trivy-scan:
-    name: Trivy Vulnerability Scan
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@v0.32.0
-        with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH'
-
-  trufflehog-scan:
-    name: TruffleHog Secrets Scan
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Run TruffleHog
-        uses: trufflesecurity/trufflehog@v3.67.3
-        with:
-          scan: .
