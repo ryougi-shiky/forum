@@ -1,0 +1,55 @@
+name: Security Scan
+
+on:
+  pull_request:
+
+jobs:
+  sonarcloud-frontend:
+    name: SonarCloud Scan - Frontend
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: SonarCloud Scan (frontend)
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: frontend
+          args: >
+            -Dsonar.projectKey=ryougi-shiky_COMP30022-IT-Project
+            -Dsonar.organization=ryougi-shiky
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  sonarcloud-backend:
+    name: SonarCloud Scan - Backend
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: SonarCloud Scan (backend)
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: backend
+          args: >
+            -Dsonar.projectKey=ryougi-shiky_COMP30022-IT-Project
+            -Dsonar.organization=ryougi-shiky
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
