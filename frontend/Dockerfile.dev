@@ -6,7 +6,3 @@ COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts && npx cypress install
 
 COPY . .
-
-# Set /app ownership to the non-root user
-RUN chown -R node:node /app
-USER node
