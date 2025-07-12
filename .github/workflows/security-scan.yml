@@ -87,6 +87,7 @@ jobs:
           output: trivy-report.txt
 
       - name: Show Trivy results in PR summary
+        if: always()
         run: |
           echo '### 🛡️ Trivy Scan Results' >> $GITHUB_STEP_SUMMARY
           cat trivy-report.txt >> $GITHUB_STEP_SUMMARY
