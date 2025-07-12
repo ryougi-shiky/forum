@@ -75,7 +75,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: 'fs'
-          ignore-unfixed: true
+          ignore-unfixed: false
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
