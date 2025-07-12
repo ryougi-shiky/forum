@@ -10,7 +10,7 @@ RUN groupadd -g $GID cypress && \
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci && npx cypress install
+RUN npm ci --ignore-scripts && npx cypress install
 
 COPY . .
 
