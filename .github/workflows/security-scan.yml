@@ -25,6 +25,9 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           projectBaseDir: frontend
+          args: >
+            -Dsonar.projectKey=ryougi-shiky_COMP30022-IT-Project
+            -Dsonar.organization=ryougi-shiky
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
